@@ -44,7 +44,11 @@ namespace PokePlanner.Controls
         /// <summary>
         /// The display's species.
         /// </summary>
-        public string Species => searchBox.Text.ToLower();
+        public string Species
+        {
+            get => searchBox.Text.ToLower();
+            set { searchBox.Text = value; }
+        }
 
         /// <summary>
         /// Set the types in the display.

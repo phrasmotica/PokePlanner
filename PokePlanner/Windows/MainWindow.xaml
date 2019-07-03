@@ -21,11 +21,11 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <controls:PokemonDisplay Grid.Row="0" Grid.Column="0" />
-        <controls:PokemonDisplay Grid.Row="0" Grid.Column="1" />
-        <controls:PokemonDisplay Grid.Row="0" Grid.Column="2" />
-        <controls:PokemonDisplay Grid.Row="1" Grid.Column="0" />
-        <controls:PokemonDisplay Grid.Row="1" Grid.Column="1" />
-        <controls:PokemonDisplay Grid.Row="1" Grid.Column="2" />
+        <controls:PokemonDisplay Grid.Row="0" Grid.Column="0" x:Name="display1" />
+        <controls:PokemonDisplay Grid.Row="0" Grid.Column="1" x:Name="display2" />
+        <controls:PokemonDisplay Grid.Row="0" Grid.Column="2" x:Name="display3" />
+        <controls:PokemonDisplay Grid.Row="1" Grid.Column="0" x:Name="display4" />
+        <controls:PokemonDisplay Grid.Row="1" Grid.Column="1" x:Name="display5" />
+        <controls:PokemonDisplay Grid.Row="1" Grid.Column="2" x:Name="display6" />
     </Grid>
 </Window>
