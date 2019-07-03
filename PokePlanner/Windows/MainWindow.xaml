@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PokePlanner"
         xmlns:controls="clr-namespace:PokePlanner.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="PokePlanner" Height="450" Width="800">
 
     <!-- Pokemon selection grid -->
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Height="400" Width="750">
