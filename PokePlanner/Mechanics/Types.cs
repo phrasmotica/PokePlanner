@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
+using PokeAPI;
+using PokePlanner.Util;
 
 namespace PokePlanner.Mechanics
 {
@@ -21,6 +25,11 @@ namespace PokePlanner.Mechanics
     public class Types
     {
         /// <summary>
+        /// Internal storage for Type effectiveness.
+        /// </summary>
+        private Dictionary<Type, Dictionary<Type, double>> Eff;
+
+        /// <summary>
         /// Map from a type to its colour.
         /// </summary>
         public Dictionary<Type, Brush> TypeColours = new Dictionary<Type, Brush>(Enum.GetValues(typeof(Type)).Length);
@@ -31,12 +40,60 @@ namespace PokePlanner.Mechanics
         private Types()
         {
             SetTypeColours();
+            LoadTypeData();
         }
 
         /// <summary>
         /// Singleton instance.
         /// </summary>
         public static Types Instance { get; } = new Types();
+
+        /// <summary>
+        /// Reads Type data into Eff.
+        /// </summary>
+        private void LoadTypeData()
+        {
+            var typeNames = Enum.GetValues(typeof(Type)).Cast<Type>()
+                                                        .Select(t => t.ToString().ToLower());
+            var typeArray = new List<PokemonType>();
+            Parallel.ForEach(typeNames, async name =>
+            {
+                Console.WriteLine($@"Getting {name} type data...");
+                var typeObj = await DataFetcher.GetNamedApiObject<PokemonType>(name);
+                Console.WriteLine($@"Got {name} type data.");
+
+                typeArray.Add(typeObj);
+            });
+
+            Eff = new Dictionary<Type, Dictionary<Type, double>>();
+            foreach (var type in typeArray)
+            {
+                // initialise dictionary for this type
+                var typeName = type.Name.ToEnum<Type>();
+                Eff[typeName] = new Dictionary<Type, double>();
+
+                // populate damage relations for this type
+                var damageRelations = type.DamageRelations;
+
+                foreach (var x in damageRelations.DoubleDamageTo)
+                {
+                    var typeTo = x.Name.ToEnum<Type>();
+                    Eff[typeName].Add(typeTo, 2);
+                }
+
+                foreach (var x in damageRelations.HalfDamageTo)
+                {
+                    var typeTo = x.Name.ToEnum<Type>();
+                    Eff[typeName].Add(typeTo, 0.5);
+                }
+
+                foreach (var x in damageRelations.NoDamageTo)
+                {
+                    var typeTo = x.Name.ToEnum<Type>();
+                    Eff[typeName].Add(typeTo, 0);
+                }
+            }
+        }
 
         /// <summary>
         /// Sets colours for each type.
@@ -62,6 +119,33 @@ namespace PokePlanner.Mechanics
             TypeColours[Type.Dark] = CreateBrush("#705848");
             TypeColours[Type.Fairy] = CreateBrush("#EE99AC");
             TypeColours[Type.Unknown] = CreateBrush("#68A090");
+        }
+
+        /// <summary>
+        /// Returns the effectiveness of a move of a given type on a single-typed Pokémon.
+        /// </summary>
+        public double GetEff(Type offType, Type defType)
+        {
+            if (!Eff.ContainsKey(offType))
+            {
+                return 1;
+            }
+
+            var offDict = Eff[offType];
+            if (!offDict.ContainsKey(defType))
+            {
+                return 1;
+            }
+
+            return offDict[defType];
+        }
+
+        /// <summary>
+        /// Returns the effectiveness of a move of a given type on a dual-typed Pokémon.
+        /// </summary>
+        public double GetEff(Type offType, Type defType1, Type defType2)
+        {
+            return GetEff(offType, defType1) * GetEff(offType, defType2);
         }
 
         /// <summary>
