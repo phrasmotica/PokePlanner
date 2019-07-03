@@ -156,5 +156,21 @@ namespace PokePlanner.Mechanics
             var converted = ColorConverter.ConvertFromString(hex);
             return converted == null ? Brushes.Black : new SolidColorBrush((Color) converted);
         }
+
+        /// <summary>
+        /// Returns a brush for the given string representing a type.
+        /// </summary>
+        public Brush GetTypeBrush(string type)
+        {
+            return GetTypeBrush(type.ToEnum<Type>());
+        }
+
+        /// <summary>
+        /// Returns a brush for the given type.
+        /// </summary>
+        public Brush GetTypeBrush(Type type)
+        {
+            return TypeColours.ContainsKey(type) ? TypeColours[type] : null;
+        }
     }
 }
