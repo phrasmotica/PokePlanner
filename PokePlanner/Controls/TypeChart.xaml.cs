@@ -31,7 +31,10 @@ namespace PokePlanner.Controls
         /// </summary>
         private void CreateTypeColumns()
         {
-            var types = Enum.GetValues(typeof(Type)).Cast<Type>().Select(t => t.ToString()).ToArray();
+            var types = Enum.GetValues(typeof(Type)).Cast<Type>()
+                                                    .Skip(1)
+                                                    .Take(18)
+                                                    .Select(t => t.ToString()).ToArray();
             for (var i = 0; i < types.Length; i++)
             {
                 // create column for type
