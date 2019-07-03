@@ -15,25 +15,46 @@
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+        <TabControl Padding="0">
+            <!-- Pokemon selection grid -->
+            <TabItem Header="Team">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.5*" />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition Height="0.5*" />
+                    </Grid.RowDefinitions>
 
-        <controls:PokemonDisplay Grid.Row="0" Grid.Column="0" x:Name="display1" />
-        <controls:PokemonDisplay Grid.Row="1" Grid.Column="0" x:Name="display2" />
-        <controls:PokemonDisplay Grid.Row="2" Grid.Column="0" x:Name="display3" />
-        <controls:PokemonDisplay Grid.Row="3" Grid.Column="0" x:Name="display4" />
-        <controls:PokemonDisplay Grid.Row="4" Grid.Column="0" x:Name="display5" />
-        <controls:PokemonDisplay Grid.Row="5" Grid.Column="0" x:Name="display6" />
+                    <controls:PokemonDisplay Grid.Row="1" Grid.Column="0" x:Name="display1" />
+                    <controls:PokemonDisplay Grid.Row="2" Grid.Column="0" x:Name="display2" />
+                    <controls:PokemonDisplay Grid.Row="3" Grid.Column="0" x:Name="display3" />
+                    <controls:PokemonDisplay Grid.Row="4" Grid.Column="0" x:Name="display4" />
+                    <controls:PokemonDisplay Grid.Row="5" Grid.Column="0" x:Name="display5" />
+                    <controls:PokemonDisplay Grid.Row="6" Grid.Column="0" x:Name="display6" />
+                </Grid>
+            </TabItem>
+        </TabControl>
 
-        <TabControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="6">
-            <TabItem Header="Type Effectiveness">
-
+        <TabControl Grid.Row="0" Grid.Column="1" Padding="0">
+            <!-- Type effectiveness grid -->
+            <TabItem Header="Type Effectiveness" Name="typeChartItem">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.5*" />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition Height="0.5*" />
+                    </Grid.RowDefinitions>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>
