@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using PokePlanner.Properties;
 
@@ -24,7 +24,6 @@ namespace PokePlanner
             Loaded += OnLoaded;
         }
         
-
         protected void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
             // set settings file
@@ -62,6 +61,8 @@ namespace PokePlanner
         /// </summary>
         private void SaveTeam()
         {
+            Console.WriteLine(@"Saving current team...");
+
             settings.pokemon1 = display1.Species;
             settings.pokemon2 = display2.Species;
             settings.pokemon3 = display3.Species;
@@ -69,6 +70,8 @@ namespace PokePlanner
             settings.pokemon5 = display5.Species;
             settings.pokemon6 = display6.Species;
             settings.Save();
+
+            Console.WriteLine(@"Current team saved.");
         }
     }
 }
