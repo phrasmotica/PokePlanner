@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using PokePlanner.Properties;
 
 namespace PokePlanner
@@ -11,7 +12,7 @@ namespace PokePlanner
         /// <summary>
         /// The settings file.
         /// </summary>
-        private readonly Settings settings;
+        private Settings settings;
 
         /// <summary>
         /// Default constructor.
@@ -20,13 +21,14 @@ namespace PokePlanner
         {
             InitializeComponent();
 
-            // set settings file
-            settings = Settings.Default;
+            Loaded += OnLoaded;
         }
         
-        protected override void OnActivated(EventArgs e)
+
+        protected void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            base.OnActivated(e);
+            // set settings file
+            settings = Settings.Default;
 
             LoadTeam();
         }
@@ -43,12 +45,16 @@ namespace PokePlanner
         /// </summary>
         private void LoadTeam()
         {
+            Console.WriteLine(@"Loading saved team...");
+
             display1.Species = settings.pokemon1;
             display2.Species = settings.pokemon2;
             display3.Species = settings.pokemon3;
             display4.Species = settings.pokemon4;
             display5.Species = settings.pokemon5;
             display6.Species = settings.pokemon6;
+
+            Console.WriteLine(@"Saved team loaded.");
         }
 
         /// <summary>
