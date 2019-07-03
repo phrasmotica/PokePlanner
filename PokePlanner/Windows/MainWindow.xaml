@@ -4,9 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PokePlanner"
+        xmlns:controls="clr-namespace:PokePlanner.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
 
+    <!-- Pokemon selection grid -->
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Height="400" Width="750">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <controls:PokemonDisplay Grid.Row="0" Grid.Column="0" />
+        <controls:PokemonDisplay Grid.Row="0" Grid.Column="1" />
+        <controls:PokemonDisplay Grid.Row="0" Grid.Column="2" />
+        <controls:PokemonDisplay Grid.Row="1" Grid.Column="0" />
+        <controls:PokemonDisplay Grid.Row="1" Grid.Column="1" />
+        <controls:PokemonDisplay Grid.Row="1" Grid.Column="2" />
     </Grid>
 </Window>
