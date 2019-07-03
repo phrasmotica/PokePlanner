@@ -30,5 +30,11 @@
         <controls:PokemonDisplay Grid.Row="3" Grid.Column="0" x:Name="display4" />
         <controls:PokemonDisplay Grid.Row="4" Grid.Column="0" x:Name="display5" />
         <controls:PokemonDisplay Grid.Row="5" Grid.Column="0" x:Name="display6" />
+
+        <TabControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="6">
+            <TabItem Header="Type Effectiveness">
+
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
