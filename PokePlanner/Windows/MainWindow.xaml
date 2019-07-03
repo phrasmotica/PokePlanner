@@ -6,10 +6,12 @@
         xmlns:local="clr-namespace:PokePlanner"
         xmlns:controls="clr-namespace:PokePlanner.Controls"
         mc:Ignorable="d"
-        Title="PokePlanner" Height="450" Width="800">
+        Title="PokePlanner"
+        Height="450" Width="800"
+        MinHeight="450" MinWidth="800"
+        ResizeMode="CanResize">
 
-    <!-- Pokemon selection grid -->
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Height="400" Width="750">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="5*" />
