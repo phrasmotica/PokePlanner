@@ -45,18 +45,7 @@
         <TabControl Grid.Row="0" Grid.Column="1" Padding="0">
             <!-- Type effectiveness grid -->
             <TabItem Header="Type Effectiveness" Name="typeChartItem">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0.5*" />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition Height="0.5*" />
-                    </Grid.RowDefinitions>
-                </Grid>
+                <controls:TypeChart />
             </TabItem>
         </TabControl>
     </Grid>

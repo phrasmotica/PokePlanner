@@ -100,6 +100,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\TypeChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -110,6 +114,9 @@
     </Compile>
     <Compile Include="Controls\PokemonDisplay.xaml.cs">
       <DependentUpon>PokemonDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TypeChart.xaml.cs">
+      <DependentUpon>TypeChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="Mechanics\Types.cs" />
     <Compile Include="Util\Ext.cs" />
