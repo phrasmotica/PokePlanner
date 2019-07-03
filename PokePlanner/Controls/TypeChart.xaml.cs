@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using PokePlanner.Mechanics;
+using PokePlanner.Util;
 using Type = PokePlanner.Mechanics.Type;
 
 namespace PokePlanner.Controls
@@ -54,9 +55,7 @@ namespace PokePlanner.Controls
                 };
 
                 // add label to grid's header row
-                Grid.SetRow(label, 0);
-                Grid.SetColumn(label, i);
-                grid.Children.Add(label);
+                label.AddToGrid(grid, i, 0);
             }
         }
     }
