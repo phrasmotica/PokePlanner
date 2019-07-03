@@ -7,17 +7,17 @@
         xmlns:controls="clr-namespace:PokePlanner.Controls"
         mc:Ignorable="d"
         Title="PokePlanner"
-        Height="450" Width="800"
-        MinHeight="450" MinWidth="800"
-        ResizeMode="CanResize">
+        MinHeight="420"
+        ResizeMode="CanResize"
+        SizeToContent="WidthAndHeight">
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="9*" />
         </Grid.ColumnDefinitions>
 
-        <TabControl Padding="0">
+        <TabControl Padding="0" MinWidth="120">
             <!-- Pokemon selection grid -->
             <TabItem Header="Team">
                 <Grid>
@@ -44,8 +44,8 @@
 
         <TabControl Grid.Row="0" Grid.Column="1" Padding="0">
             <!-- Type effectiveness grid -->
-            <TabItem Header="Type Effectiveness" Name="typeChartItem">
-                <controls:TypeChart />
+            <TabItem Header="Type Effectiveness">
+                <controls:TypeChart x:Name="typeChart" MinWidth="1080" />
             </TabItem>
         </TabControl>
     </Grid>

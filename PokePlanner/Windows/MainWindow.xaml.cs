@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows;
 using PokePlanner.Properties;
 
@@ -30,6 +30,9 @@ namespace PokePlanner
             settings = Settings.Default;
 
             LoadTeam();
+
+            // set minimum window width
+            MinWidth = Width;
         }
         
         protected override void OnClosed(EventArgs e)
