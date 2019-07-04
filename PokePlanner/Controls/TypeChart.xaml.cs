@@ -76,7 +76,8 @@ namespace PokePlanner.Controls
                     {
                         HorizontalContentAlignment = HorizontalAlignment.Center,
                         VerticalContentAlignment = VerticalAlignment.Center,
-                        Foreground = Brushes.White
+                        Foreground = Brushes.White,
+                        FontSize = 16
                     }.AddToGrid(grid, i, j);
                 }
             }
@@ -126,6 +127,7 @@ namespace PokePlanner.Controls
                 var label = (Label) grid.GetChild(col, row + 1);
 
                 var eff = kvp.Value;
+                label.FontWeight = eff > 2 || eff < 0.5 ? FontWeights.Bold : FontWeights.Normal;
                 label.Content = GetEffDescription(eff);
                 label.Background = GetEffBrush(eff);
             }
