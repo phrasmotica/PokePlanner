@@ -23,7 +23,7 @@ namespace PokePlanner
 
             Loaded += OnLoaded;
         }
-        
+
         protected void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
             // set settings file
@@ -34,7 +34,7 @@ namespace PokePlanner
             // set minimum window width
             MinWidth = Width;
         }
-        
+
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
