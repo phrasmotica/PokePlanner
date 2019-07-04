@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using PokeAPI;
@@ -27,12 +28,25 @@ namespace PokePlanner.Controls
         private readonly DispatcherTimer timer;
 
         /// <summary>
+        /// The main window.
+        /// </summary>
+        private readonly MainWindow mainWindow;
+
+        /// <summary>
+        /// The type chart control.
+        /// </summary>
+        private TypeChart typeChart;
+
+        /// <summary>
         /// Initialise types.
         /// </summary>
         public PokemonDisplay()
         {
             InitializeComponent();
             SetTypes(Type.Unknown);
+
+            mainWindow = (MainWindow) Application.Current.MainWindow;
+            mainWindow.Loaded += (s, a) => FindTypeChart();
 
             timer = new DispatcherTimer
             {
@@ -48,6 +62,14 @@ namespace PokePlanner.Controls
         {
             get => searchBox.Text.ToLower();
             set { searchBox.Text = value; }
+        }
+
+        /// <summary>
+        /// Creates a reference to the type chart.
+        /// </summary>
+        private void FindTypeChart()
+        {
+            typeChart = mainWindow.typeChart;
         }
 
         /// <summary>
@@ -86,6 +108,10 @@ namespace PokePlanner.Controls
                 {
                     SetTypes(types[0]);
                 }
+
+                // set type chart row
+                var row = Grid.GetRow(this) - 1;
+                typeChart.SetDefensiveMap(row, pokemon);
             }
             else
             {
