@@ -32,7 +32,7 @@ namespace PokePlanner.Mechanics
         /// <summary>
         /// Map from a type to its colour.
         /// </summary>
-        public Dictionary<Type, Brush> TypeColours = new Dictionary<Type, Brush>(Enum.GetValues(typeof(Type)).Length);
+        public Dictionary<Type, Brush> TypeColours = new Dictionary<Type, Brush>(AllTypes.Count);
 
         /// <summary>
         /// Private constructor.
@@ -93,6 +93,26 @@ namespace PokePlanner.Mechanics
                 }
             }
         }
+
+        /// <summary>
+        /// Returns an array of all types.
+        /// </summary>
+        public static List<Type> AllTypes => Enum.GetValues(typeof(Type)).Cast<Type>().ToList();
+
+        /// <summary>
+        /// Returns an array of all types a Pokemon can have.
+        /// </summary>
+        public static List<Type> PokemonTypes => AllTypes.Where(t => t != Type.Unknown).ToList();
+
+        /// <summary>
+        /// Returns an array of all types a Move can have.
+        /// </summary>
+        public static List<Type> MoveTypes => AllTypes.Where(t => t != Type.Shadow).ToList();
+
+        /// <summary>
+        /// Returns an array of all concrete types.
+        /// </summary>
+        public static List<Type> ConcreteTypes => AllTypes.Where(t => t != Type.Shadow && t != Type.Unknown).ToList();
 
         /// <summary>
         /// Sets colours for each type.
