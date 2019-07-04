@@ -121,25 +121,25 @@ namespace PokePlanner.Mechanics
         /// </summary>
         private void SetTypeColours()
         {
-            TypeColours[Type.Normal] = CreateBrush("#A8A878");
-            TypeColours[Type.Fighting] = CreateBrush("#C03028");
-            TypeColours[Type.Flying] = CreateBrush("#A890F0");
-            TypeColours[Type.Poison] = CreateBrush("#A040A0");
-            TypeColours[Type.Ground] = CreateBrush("#E0C068");
-            TypeColours[Type.Rock] = CreateBrush("#B8A038");
-            TypeColours[Type.Bug] = CreateBrush("#A8B820");
-            TypeColours[Type.Ghost] = CreateBrush("#705898");
-            TypeColours[Type.Steel] = CreateBrush("#B8B8D0");
-            TypeColours[Type.Fire] = CreateBrush("#F08030");
-            TypeColours[Type.Water] = CreateBrush("#6890F0");
-            TypeColours[Type.Grass] = CreateBrush("#78C850");
-            TypeColours[Type.Electric] = CreateBrush("#F8D030");
-            TypeColours[Type.Psychic] = CreateBrush("#F85888");
-            TypeColours[Type.Ice] = CreateBrush("#98D8D8");
-            TypeColours[Type.Dragon] = CreateBrush("#7038F8");
-            TypeColours[Type.Dark] = CreateBrush("#705848");
-            TypeColours[Type.Fairy] = CreateBrush("#EE99AC");
-            TypeColours[Type.Unknown] = CreateBrush("#68A090");
+            TypeColours[Type.Normal] = "#A8A878".ToBrush();
+            TypeColours[Type.Fighting] = "#C03028".ToBrush();
+            TypeColours[Type.Flying] = "#A890F0".ToBrush();
+            TypeColours[Type.Poison] = "#A040A0".ToBrush();
+            TypeColours[Type.Ground] = "#E0C068".ToBrush();
+            TypeColours[Type.Rock] = "#B8A038".ToBrush();
+            TypeColours[Type.Bug] = "#A8B820".ToBrush();
+            TypeColours[Type.Ghost] = "#705898".ToBrush();
+            TypeColours[Type.Steel] = "#B8B8D0".ToBrush();
+            TypeColours[Type.Fire] = "#F08030".ToBrush();
+            TypeColours[Type.Water] = "#6890F0".ToBrush();
+            TypeColours[Type.Grass] = "#78C850".ToBrush();
+            TypeColours[Type.Electric] = "#F8D030".ToBrush();
+            TypeColours[Type.Psychic] = "#F85888".ToBrush();
+            TypeColours[Type.Ice] = "#98D8D8".ToBrush();
+            TypeColours[Type.Dragon] = "#7038F8".ToBrush();
+            TypeColours[Type.Dark] = "#705848".ToBrush();
+            TypeColours[Type.Fairy] = "#EE99AC".ToBrush();
+            TypeColours[Type.Unknown] = "#68A090".ToBrush();
         }
 
         /// <summary>
@@ -176,6 +176,22 @@ namespace PokePlanner.Mechanics
         {
             var converted = ColorConverter.ConvertFromString(hex);
             return converted == null ? Brushes.Black : new SolidColorBrush((Color) converted);
+        }
+
+        /// <summary>
+        /// Returns the effectiveness dictionary for the given defensive type.
+        /// </summary>
+        public IDictionary<Type, double> GetEffDict(Type defType)
+        {
+            return DefensiveEff[defType];
+        }
+
+        /// <summary>
+        /// Returns the effectiveness dictionary for the given defensive types.
+        /// </summary>
+        public IDictionary<Type, double> GetEffDict(Type defType1, Type defType2)
+        {
+            return GetEffDict(defType1).Product(GetEffDict(defType2));
         }
 
         /// <summary>
