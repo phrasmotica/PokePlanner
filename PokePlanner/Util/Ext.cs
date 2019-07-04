@@ -36,16 +36,6 @@ namespace PokePlanner.Util
         }
 
         /// <summary>
-        /// Adds a Control to the given Grid in the given cell with the given spans.
-        /// </summary>
-        public static void AddToGrid(this UIElement element, Grid grid, int col, int row, int colspan, int rowspan)
-        {
-            Grid.SetColumnSpan(element, colspan);
-            Grid.SetRowSpan(element, rowspan);
-            AddToGrid(element, grid, col, row);
-        }
-
-        /// <summary>
         /// Returns the child element at the given position in the grid.
         /// </summary>
         public static UIElement GetChild(this Grid grid, int col, int row)

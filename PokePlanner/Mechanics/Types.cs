@@ -143,42 +143,6 @@ namespace PokePlanner.Mechanics
         }
 
         /// <summary>
-        /// Returns the effectiveness of a move of a given type on a single-typed Pokémon.
-        /// </summary>
-        public double GetEff(Type offType, Type defType)
-        {
-            if (!DefensiveEff.ContainsKey(offType))
-            {
-                return 1;
-            }
-
-            var offDict = DefensiveEff[offType];
-            if (!offDict.ContainsKey(defType))
-            {
-                return 1;
-            }
-
-            return offDict[defType];
-        }
-
-        /// <summary>
-        /// Returns the effectiveness of a move of a given type on a dual-typed Pokémon.
-        /// </summary>
-        public double GetEff(Type offType, Type defType1, Type defType2)
-        {
-            return GetEff(offType, defType1) * GetEff(offType, defType2);
-        }
-
-        /// <summary>
-        /// Returns a solid colour brush of the supplied hex value.
-        /// </summary>
-        private static SolidColorBrush CreateBrush(string hex)
-        {
-            var converted = ColorConverter.ConvertFromString(hex);
-            return converted == null ? Brushes.Black : new SolidColorBrush((Color) converted);
-        }
-
-        /// <summary>
         /// Returns the effectiveness dictionary for the given defensive type.
         /// </summary>
         public IDictionary<Type, double> GetEffDict(Type defType)
@@ -192,14 +156,6 @@ namespace PokePlanner.Mechanics
         public IDictionary<Type, double> GetEffDict(Type defType1, Type defType2)
         {
             return GetEffDict(defType1).Product(GetEffDict(defType2));
-        }
-
-        /// <summary>
-        /// Returns a brush for the given string representing a type.
-        /// </summary>
-        public Brush GetTypeBrush(string type)
-        {
-            return GetTypeBrush(type.ToEnum<Type>());
         }
 
         /// <summary>
