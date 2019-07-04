@@ -138,7 +138,7 @@ namespace PokePlanner.Controls
         /// </summary>
         private static string GetEffDescription(double eff)
         {
-            return eff == 0 ? "immune" : eff.ToString("0.##'x'");
+            return eff.ToString("0.##'x'");
         }
 
         /// <summary>
