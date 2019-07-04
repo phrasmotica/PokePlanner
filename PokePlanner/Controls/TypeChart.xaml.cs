@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using PokePlanner.Mechanics;
 using PokePlanner.Util;
 using Type = PokePlanner.Mechanics.Type;
@@ -56,6 +57,17 @@ namespace PokePlanner.Controls
 
                 // add label to grid's header row
                 label.AddToGrid(grid, i, 0);
+
+                // create labels for each row
+                for (int j = 1; j < grid.RowDefinitions.Count - 1; j++)
+                {
+                    new Label
+                    {
+                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        Foreground = Brushes.White
+                    }.AddToGrid(grid, i, j);
+                }
             }
         }
     }
