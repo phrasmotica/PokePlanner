@@ -25,9 +25,10 @@ namespace PokePlanner.Mechanics
     public class Types
     {
         /// <summary>
-        /// Internal storage for Type effectiveness.
+        /// Internal storage for defensive Type effectiveness.
+        /// Keys are defensive types, values are offensive types mapped to their effectivenesses against the key.
         /// </summary>
-        private Dictionary<Type, Dictionary<Type, double>> Eff;
+        private Dictionary<Type, Dictionary<Type, double>> DefensiveEff;
 
         /// <summary>
         /// Map from a type to its colour.
@@ -48,53 +49,6 @@ namespace PokePlanner.Mechanics
         public static Types Instance { get; } = new Types();
 
         /// <summary>
-        /// Reads Type data into Eff.
-        /// </summary>
-        private void LoadTypeData()
-        {
-            var typeNames = Enum.GetValues(typeof(Type)).Cast<Type>()
-                                                        .Select(t => t.ToString().ToLower());
-            var typeArray = new List<PokemonType>();
-            Parallel.ForEach(typeNames, async name =>
-            {
-                Console.WriteLine($@"Getting {name} type data...");
-                var typeObj = await DataFetcher.GetNamedApiObject<PokemonType>(name);
-                Console.WriteLine($@"Got {name} type data.");
-
-                typeArray.Add(typeObj);
-            });
-
-            Eff = new Dictionary<Type, Dictionary<Type, double>>();
-            foreach (var type in typeArray)
-            {
-                // initialise dictionary for this type
-                var typeName = type.Name.ToEnum<Type>();
-                Eff[typeName] = new Dictionary<Type, double>();
-
-                // populate damage relations for this type
-                var damageRelations = type.DamageRelations;
-
-                foreach (var x in damageRelations.DoubleDamageTo)
-                {
-                    var typeTo = x.Name.ToEnum<Type>();
-                    Eff[typeName].Add(typeTo, 2);
-                }
-
-                foreach (var x in damageRelations.HalfDamageTo)
-                {
-                    var typeTo = x.Name.ToEnum<Type>();
-                    Eff[typeName].Add(typeTo, 0.5);
-                }
-
-                foreach (var x in damageRelations.NoDamageTo)
-                {
-                    var typeTo = x.Name.ToEnum<Type>();
-                    Eff[typeName].Add(typeTo, 0);
-                }
-            }
-        }
-
-        /// <summary>
         /// Returns an array of all types.
         /// </summary>
         public static List<Type> AllTypes => Enum.GetValues(typeof(Type)).Cast<Type>().ToList();
@@ -113,6 +67,54 @@ namespace PokePlanner.Mechanics
         /// Returns an array of all concrete types.
         /// </summary>
         public static List<Type> ConcreteTypes => AllTypes.Where(t => t != Type.Shadow && t != Type.Unknown).ToList();
+
+        /// <summary>
+        /// Reads Type data into the defensive effectiveness map.
+        /// </summary>
+        public async void LoadTypeData()
+        {
+            DefensiveEff = new Dictionary<Type, Dictionary<Type, double>>();
+            
+            var tasks = ConcreteTypes.Select(async defType =>
+            {
+                // retrieve type object from PokeAPI
+                var typeName = defType.ToString().ToLower();
+                Console.WriteLine($@"Getting {typeName} type data...");
+                var typeObj = await DataFetcher.GetNamedApiObject<PokemonType>(typeName);
+                Console.WriteLine($@"Got {typeName} type data.");
+            
+                // now set its defensive effectivenesses
+                Console.WriteLine($@"Setting defensive {typeName} effectiveness data...");
+
+                // initialise dictionary
+                DefensiveEff[defType] = new Dictionary<Type, double>();
+                DefensiveEff[defType].Initialise(ConcreteTypes, 1);
+
+                // populate defensive damage relations
+                var damageRelations = typeObj.DamageRelations;
+
+                foreach (var x in damageRelations.DoubleDamageFrom)
+                {
+                    var typeFrom = x.Name.ToEnum<Type>();
+                    DefensiveEff[defType][typeFrom] = 2;
+                }
+
+                foreach (var x in damageRelations.HalfDamageFrom)
+                {
+                    var typeFrom = x.Name.ToEnum<Type>();
+                    DefensiveEff[defType][typeFrom] = 0.5;
+                }
+
+                foreach (var x in damageRelations.NoDamageFrom)
+                {
+                    var typeFrom = x.Name.ToEnum<Type>();
+                    DefensiveEff[defType][typeFrom] = 0;
+                }
+
+                Console.WriteLine($@"Set defensive {typeName} effectiveness data.");
+            });
+            await Task.WhenAll(tasks);
+        }
 
         /// <summary>
         /// Sets colours for each type.
@@ -145,12 +147,12 @@ namespace PokePlanner.Mechanics
         /// </summary>
         public double GetEff(Type offType, Type defType)
         {
-            if (!Eff.ContainsKey(offType))
+            if (!DefensiveEff.ContainsKey(offType))
             {
                 return 1;
             }
 
-            var offDict = Eff[offType];
+            var offDict = DefensiveEff[offType];
             if (!offDict.ContainsKey(defType))
             {
                 return 1;
