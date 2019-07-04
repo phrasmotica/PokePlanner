@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using PokePlanner.Mechanics;
 using PokePlanner.Properties;
 
 namespace PokePlanner
@@ -20,6 +21,9 @@ namespace PokePlanner
         public MainWindow()
         {
             InitializeComponent();
+
+            // load type data
+            Types.Instance.LoadTypeData();
 
             Loaded += OnLoaded;
         }

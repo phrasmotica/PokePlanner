@@ -40,7 +40,6 @@ namespace PokePlanner.Mechanics
         private Types()
         {
             SetTypeColours();
-            LoadTypeData();
         }
 
         /// <summary>
