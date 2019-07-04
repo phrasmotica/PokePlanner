@@ -7,6 +7,7 @@ using System.Windows.Media;
 using PokeAPI;
 using PokePlanner.Mechanics;
 using PokePlanner.Util;
+using Type = PokePlanner.Mechanics.Type;
 
 namespace PokePlanner.Controls
 {
@@ -58,19 +59,16 @@ namespace PokePlanner.Controls
 
                 // create label for type
                 var type = types[i];
-                var label = new Label
+                new Label
                 {
                     Content = type,
                     HorizontalContentAlignment = HorizontalAlignment.Center,
                     VerticalContentAlignment = VerticalAlignment.Center,
                     Background = Types.Instance.GetTypeBrush(type)
-                };
-
-                // add label to grid's header row
-                label.AddToGrid(grid, i, 0);
+                }.AddToGrid(grid, i, 0);
 
                 // create labels for each row
-                for (int j = 1; j < grid.RowDefinitions.Count - 1; j++)
+                for (int j = 1; j < grid.RowDefinitions.Count - 2; j++)
                 {
                     new Label
                     {
@@ -80,6 +78,26 @@ namespace PokePlanner.Controls
                         FontSize = 16
                     }.AddToGrid(grid, i, j);
                 }
+
+                // weakness count label
+                new Label
+                {
+                    HorizontalContentAlignment = HorizontalAlignment.Center,
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    Foreground = Brushes.White,
+                    Background = GetEffBrush(1),
+                    Content = "0 weak"
+                }.AddToGrid(grid, i, 7);
+
+                // resistance count label
+                new Label
+                {
+                    HorizontalContentAlignment = HorizontalAlignment.Center,
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    Foreground = Brushes.White,
+                    Background = GetEffBrush(1),
+                    Content = "0 resist"
+                }.AddToGrid(grid, i, 8);
             }
         }
 
@@ -123,13 +141,45 @@ namespace PokePlanner.Controls
         {
             foreach (var kvp in pokemonEff[row])
             {
-                var col = typeColumns[kvp.Key];
-                var label = (Label) grid.GetChild(col, row + 1);
+                var type = kvp.Key;
+                var col = typeColumns[type];
+                var effLabel = (Label) grid.GetChild(col, row + 1);
 
                 var eff = kvp.Value;
-                label.FontWeight = eff > 2 || eff < 0.5 ? FontWeights.Bold : FontWeights.Normal;
-                label.Content = GetEffDescription(eff);
-                label.Background = GetEffBrush(eff);
+                effLabel.FontWeight = eff > 2 || eff < 0.5 ? FontWeights.Bold : FontWeights.Normal;
+                effLabel.Content = GetEffDescription(eff);
+                effLabel.Background = GetEffBrush(eff);
+
+                // count up weaknesses and resistances
+                var typeEffs = pokemonEff.Select(d => d?[type] ?? 1).ToArray();
+
+                var totalWeak = typeEffs.Count(x => x > 1);
+                var weakLabel = (Label) grid.GetChild(col, 7);
+                weakLabel.Content = $"{totalWeak} weak";
+                if (totalWeak > 3)
+                {
+                    weakLabel.FontWeight = FontWeights.Bold;
+                    weakLabel.Background = GetEffBrush(2);
+                }
+                else
+                {
+                    weakLabel.FontWeight = FontWeights.Normal;
+                    weakLabel.Background = GetEffBrush(0.5);
+                }
+
+                var totalResist = typeEffs.Count(x => x < 1);
+                var resistLabel = (Label) grid.GetChild(col, 8);
+                resistLabel.Content = $"{totalResist} resist";
+                if (totalResist < 1)
+                {
+                    resistLabel.FontWeight = FontWeights.Bold;
+                    resistLabel.Background = GetEffBrush(2);
+                }
+                else
+                {
+                    resistLabel.FontWeight = FontWeights.Normal;
+                    resistLabel.Background = GetEffBrush(0.5);
+                }
             }
         }
 
