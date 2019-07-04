@@ -16,7 +16,7 @@ namespace PokePlanner.Util
         {
             if (string.IsNullOrEmpty(st))
             {
-                return default(T);
+                return default;
             }
 
             return (T) Enum.Parse(typeof(T), st, true);
