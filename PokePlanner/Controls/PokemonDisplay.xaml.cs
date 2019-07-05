@@ -92,7 +92,7 @@ namespace PokePlanner.Controls
         /// </summary>
         private async void Update(object sender, EventArgs eventArgs)
         {
-            timer.IsEnabled = false;
+            timer.Stop();
 
             // get pokemon data
             var pokemon = await Retrieve();
@@ -160,8 +160,6 @@ namespace PokePlanner.Controls
             if (shouldUpdate)
             {
                 timer.Stop();
-
-                timer.IsEnabled = true;
                 timer.Start();
             }
         }
