@@ -52,7 +52,7 @@ namespace PokePlanner.Controls
         /// </summary>
         private void CreatePokemonLabels()
         {
-            ((Label) grid.GetChild(0, 0)).Background = GetEffBrush(1);
+            typeRowLabel.Background = GetEffBrush(1);
 
             for (var i = 1; i <= 6; i++)
             {
@@ -68,8 +68,8 @@ namespace PokePlanner.Controls
                 pokemonLabel.AddToGrid(grid, 0, i);
             }
 
-            ((Label) grid.GetChild(0, 7)).Background = GetEffBrush(1);
-            ((Label) grid.GetChild(0, 8)).Background = GetEffBrush(1);
+            weaknessesRowLabel.Background = GetEffBrush(1);
+            resistancesRowLabel.Background = GetEffBrush(1);
         }
 
         /// <summary>

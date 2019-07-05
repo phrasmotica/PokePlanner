@@ -24,17 +24,17 @@
             <ColumnDefinition MinWidth="120"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0"
-               Content="Pokemon" BorderThickness="2" BorderBrush="White"
+        <Label Grid.Row="0" Name="typeRowLabel"
+               Content="Type" BorderThickness="2" BorderBrush="White"
                HorizontalContentAlignment="Right" VerticalContentAlignment="Center"
                FontWeight="Bold"/>
 
-        <Label Grid.Row="7"
+        <Label Grid.Row="7" Name="weaknessesRowLabel"
                Content="Weaknesses" BorderThickness="2" BorderBrush="White"
                HorizontalContentAlignment="Right" VerticalContentAlignment="Center"
                FontWeight="Bold"/>
 
-        <Label Grid.Row="8"
+        <Label Grid.Row="8" Name="resistancesRowLabel"
                Content="Resistances" BorderThickness="2" BorderBrush="White"
                HorizontalContentAlignment="Right" VerticalContentAlignment="Center"
                FontWeight="Bold"/>
