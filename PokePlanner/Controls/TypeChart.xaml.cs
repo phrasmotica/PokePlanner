@@ -284,30 +284,26 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Returns a brush for the given effectiveness multiplier.
         /// </summary>
-        private static SolidColorBrush GetEffBrush(double mult)
+        private static Brush GetEffBrush(double mult)
         {
             if (mult == 0)
             {
-                // grey
-                return "#DBDBDB".ToBrush();
+                return MyBrushes.LightGrey;
             }
 
             if (mult == 1)
             {
-                // blue
-                return "#BAE8FF".ToBrush();
+                return MyBrushes.PastelBlue;
             }
 
             if (mult > 1)
             {
-                // red
-                return "#FFA1A1".ToBrush();
+                return MyBrushes.PastelRed;
             }
 
             if (mult < 1)
             {
-                // green
-                return "#C7FFC7".ToBrush();
+                return MyBrushes.PastelGreen;
             }
 
             return null;
