@@ -202,8 +202,21 @@ namespace PokePlanner.Controls
                     effLabel.Background = GetEffBrush(eff.Value);
 
                     var name = pokemonNames[row];
-                    var desc = eff > 1 ? "super effective" : eff < 1 ? "not very effective" : "normal";
-                    effLabel.ToolTip = $"{name} takes {desc} damage from {type}-type moves";
+                    var desc = "takes normal damage from";
+                    if (eff == 0)
+                    {
+                        desc = "is immune to";
+                    }
+                    else if (eff > 1)
+                    {
+                        desc = "takes super effective damage from";
+                    }
+                    else if (eff < 1)
+                    {
+                        desc = "takes not very effective damage from";
+                    }
+
+                    effLabel.ToolTip = $"{name} {desc} {type}-type moves";
                 }
                 else
                 {
