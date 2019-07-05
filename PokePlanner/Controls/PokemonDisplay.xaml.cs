@@ -110,7 +110,7 @@ namespace PokePlanner.Controls
                 }
 
                 // set type chart row
-                var row = Grid.GetRow(this) - 1;
+                var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
                 typeChart.SetDefensiveMap(row, pokemon);
             }
             else

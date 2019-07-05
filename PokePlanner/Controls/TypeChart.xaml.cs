@@ -52,10 +52,7 @@ namespace PokePlanner.Controls
             for (var i = 0; i < types.Count; i++)
             {
                 // create column for type
-                grid.ColumnDefinitions.Add(new ColumnDefinition
-                {
-                    MinWidth = 60
-                });
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
 
                 // create label for type
                 var type = types[i];

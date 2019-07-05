@@ -12,40 +12,33 @@
         SizeToContent="WidthAndHeight">
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="9*" />
-        </Grid.ColumnDefinitions>
-
-        <TabControl Padding="0" MinWidth="120">
+        <TabControl MinWidth="1200">
             <!-- Pokemon selection grid -->
             <TabItem Header="Team">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.5*" />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <controls:PokemonDisplay Grid.Row="1" Grid.Column="0" x:Name="display1" />
-                    <controls:PokemonDisplay Grid.Row="2" Grid.Column="0" x:Name="display2" />
-                    <controls:PokemonDisplay Grid.Row="3" Grid.Column="0" x:Name="display3" />
-                    <controls:PokemonDisplay Grid.Row="4" Grid.Column="0" x:Name="display4" />
-                    <controls:PokemonDisplay Grid.Row="5" Grid.Column="0" x:Name="display5" />
-                    <controls:PokemonDisplay Grid.Row="6" Grid.Column="0" x:Name="display6" />
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <controls:PokemonDisplay Grid.Row="0" Grid.Column="0" x:Name="display1" />
+                    <controls:PokemonDisplay Grid.Row="0" Grid.Column="1" x:Name="display2" />
+                    <controls:PokemonDisplay Grid.Row="0" Grid.Column="2" x:Name="display3" />
+                    <controls:PokemonDisplay Grid.Row="1" Grid.Column="0" x:Name="display4" />
+                    <controls:PokemonDisplay Grid.Row="1" Grid.Column="1" x:Name="display5" />
+                    <controls:PokemonDisplay Grid.Row="1" Grid.Column="2" x:Name="display6" />
                 </Grid>
             </TabItem>
-        </TabControl>
 
-        <TabControl Grid.Row="0" Grid.Column="1" Padding="0">
             <!-- Type effectiveness grid -->
             <TabItem Header="Type Effectiveness">
-                <controls:TypeChart x:Name="typeChart" MinWidth="1080" />
+                <controls:TypeChart x:Name="typeChart" />
             </TabItem>
         </TabControl>
     </Grid>
