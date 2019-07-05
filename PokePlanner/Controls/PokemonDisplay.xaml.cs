@@ -33,6 +33,11 @@ namespace PokePlanner.Controls
         private readonly MainWindow mainWindow;
 
         /// <summary>
+        /// Whether the display should be updated after the search box text changes.
+        /// </summary>
+        private bool shouldUpdate = true;
+
+        /// <summary>
         /// The type chart control.
         /// </summary>
         private TypeChart typeChart;
@@ -109,6 +114,13 @@ namespace PokePlanner.Controls
                     SetTypes(types[0]);
                 }
 
+                // make name title case without updating display
+                var idx = searchBox.CaretIndex;
+                shouldUpdate = false;
+                searchBox.Text = searchBox.Text.ToTitle();
+                shouldUpdate = true;
+                searchBox.CaretIndex = idx;
+
                 // set type chart row
                 var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
                 typeChart.SetDefensiveMap(row, pokemon);
@@ -145,10 +157,13 @@ namespace PokePlanner.Controls
         /// </summary>
         private void SearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            timer.Stop();
+            if (shouldUpdate)
+            {
+                timer.Stop();
 
-            timer.IsEnabled = true;
-            timer.Start();
+                timer.IsEnabled = true;
+                timer.Start();
+            }
         }
     }
 }
