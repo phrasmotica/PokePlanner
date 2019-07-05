@@ -25,6 +25,7 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                         <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
                     <controls:PokemonDisplay Grid.Row="0" Grid.Column="0" x:Name="display1" />
@@ -33,6 +34,9 @@
                     <controls:PokemonDisplay Grid.Row="1" Grid.Column="0" x:Name="display4" />
                     <controls:PokemonDisplay Grid.Row="1" Grid.Column="1" x:Name="display5" />
                     <controls:PokemonDisplay Grid.Row="1" Grid.Column="2" x:Name="display6" />
+
+                    <!-- TODO: create options panel for setting game/generation/etc. -->
+                    <controls:Options Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" />
                 </Grid>
             </TabItem>
 
