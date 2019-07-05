@@ -62,14 +62,13 @@ namespace PokePlanner.Util
             return grid.Children.Cast<UIElement>()
                        .FirstOrDefault(e => Grid.GetColumn(e) == col && Grid.GetRow(e) == row);
         }
-
+        
         /// <summary>
-        /// Returns a solid colour brush of the supplied hex value.
+        /// Creates a brush from this colour.
         /// </summary>
-        public static SolidColorBrush ToBrush(this string hex)
+        public static Brush MakeBrush(this Color c)
         {
-            var converted = ColorConverter.ConvertFromString(hex);
-            return converted == null ? Brushes.Black : new SolidColorBrush((Color) converted);
+            return new SolidColorBrush(c);
         }
 
         /// <summary>

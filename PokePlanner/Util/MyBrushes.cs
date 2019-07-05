@@ -10,29 +10,21 @@ namespace PokePlanner.Util
         /// <summary>
         /// A neutral light grey.
         /// </summary>
-        public static Brush LightGrey => MakeBrush(Color.FromRgb(219, 219, 219));
+        public static Brush LightGrey => Color.FromRgb(219, 219, 219).MakeBrush();
 
         /// <summary>
         /// A cool pastel blue!
         /// </summary>
-        public static Brush PastelBlue => MakeBrush(Color.FromRgb(186, 232, 255));
+        public static Brush PastelBlue => Color.FromRgb(186, 232, 255).MakeBrush();
 
         /// <summary>
         /// A pastoral green...
         /// </summary>
-        public static Brush PastelGreen => MakeBrush(Color.FromRgb(199, 255, 199));
+        public static Brush PastelGreen => Color.FromRgb(199, 255, 199).MakeBrush();
 
         /// <summary>
         /// A sultry pastel red.
         /// </summary>
-        public static Brush PastelRed => MakeBrush(Color.FromRgb(255, 161, 161));
-
-        /// <summary>
-        /// Creates a brush from the given colour.
-        /// </summary>
-        private static Brush MakeBrush(Color c)
-        {
-            return new SolidColorBrush(c);
-        }
+        public static Brush PastelRed => Color.FromRgb(255, 161, 161).MakeBrush();
     }
 }

@@ -121,25 +121,26 @@ namespace PokePlanner.Mechanics
         /// </summary>
         private void SetTypeColours()
         {
-            TypeColours[Type.Normal] = "#A8A878".ToBrush();
-            TypeColours[Type.Fighting] = "#C03028".ToBrush();
-            TypeColours[Type.Flying] = "#A890F0".ToBrush();
-            TypeColours[Type.Poison] = "#A040A0".ToBrush();
-            TypeColours[Type.Ground] = "#E0C068".ToBrush();
-            TypeColours[Type.Rock] = "#B8A038".ToBrush();
-            TypeColours[Type.Bug] = "#A8B820".ToBrush();
-            TypeColours[Type.Ghost] = "#705898".ToBrush();
-            TypeColours[Type.Steel] = "#B8B8D0".ToBrush();
-            TypeColours[Type.Fire] = "#F08030".ToBrush();
-            TypeColours[Type.Water] = "#6890F0".ToBrush();
-            TypeColours[Type.Grass] = "#78C850".ToBrush();
-            TypeColours[Type.Electric] = "#F8D030".ToBrush();
-            TypeColours[Type.Psychic] = "#F85888".ToBrush();
-            TypeColours[Type.Ice] = "#98D8D8".ToBrush();
-            TypeColours[Type.Dragon] = "#7038F8".ToBrush();
-            TypeColours[Type.Dark] = "#705848".ToBrush();
-            TypeColours[Type.Fairy] = "#EE99AC".ToBrush();
-            TypeColours[Type.Unknown] = "#68A090".ToBrush();
+            TypeColours[Type.Unknown] = TypeBrushes.Unknown;
+            TypeColours[Type.Normal] = TypeBrushes.Normal;
+            TypeColours[Type.Fighting] = TypeBrushes.Fighting;
+            TypeColours[Type.Flying] = TypeBrushes.Flying;
+            TypeColours[Type.Poison] = TypeBrushes.Poison;
+            TypeColours[Type.Ground] = TypeBrushes.Ground;
+            TypeColours[Type.Rock] = TypeBrushes.Rock;
+            TypeColours[Type.Bug] = TypeBrushes.Bug;
+            TypeColours[Type.Ghost] = TypeBrushes.Ghost;
+            TypeColours[Type.Steel] = TypeBrushes.Steel;
+            TypeColours[Type.Fire] = TypeBrushes.Fire;
+            TypeColours[Type.Water] = TypeBrushes.Water;
+            TypeColours[Type.Grass] = TypeBrushes.Grass;
+            TypeColours[Type.Electric] = TypeBrushes.Electric;
+            TypeColours[Type.Psychic] = TypeBrushes.Psychic;
+            TypeColours[Type.Ice] = TypeBrushes.Ice;
+            TypeColours[Type.Dragon] = TypeBrushes.Dragon;
+            TypeColours[Type.Dark] = TypeBrushes.Dark;
+            TypeColours[Type.Fairy] = TypeBrushes.Fairy;
+            TypeColours[Type.Shadow] = TypeBrushes.Shadow;
         }
 
         /// <summary>

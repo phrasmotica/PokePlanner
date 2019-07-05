@@ -123,6 +123,7 @@
     <Compile Include="Mechanics\Types.cs" />
     <Compile Include="Util\Ext.cs" />
     <Compile Include="Util\MyBrushes.cs" />
+    <Compile Include="Util\TypeBrushes.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
