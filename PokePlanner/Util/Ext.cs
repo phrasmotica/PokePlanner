@@ -36,6 +36,15 @@ namespace PokePlanner.Util
         }
 
         /// <summary>
+        /// Adds a border to this Control.
+        /// </summary>
+        public static void AddBorder(this Control element)
+        {
+            element.BorderThickness = new Thickness(2);
+            element.BorderBrush = Brushes.White;
+        }
+
+        /// <summary>
         /// Adds a Control to the given Grid in the given cell.
         /// </summary>
         public static void AddToGrid(this UIElement element, Grid grid, int col, int row)

@@ -52,17 +52,24 @@ namespace PokePlanner.Controls
         /// </summary>
         private void CreatePokemonLabels()
         {
+            ((Label) grid.GetChild(0, 0)).Background = GetEffBrush(1);
+
             for (var i = 1; i <= 6; i++)
             {
                 // create label for pokemon
-                new Label
+                var pokemonLabel = new Label
                 {
                     Content = "-",
                     HorizontalContentAlignment = HorizontalAlignment.Right,
                     VerticalContentAlignment = VerticalAlignment.Center,
-                    Background = Brushes.White
-                }.AddToGrid(grid, 0, i);
+                    Background = GetEffBrush(1)
+                };
+                pokemonLabel.AddBorder();
+                pokemonLabel.AddToGrid(grid, 0, i);
             }
+
+            ((Label) grid.GetChild(0, 7)).Background = GetEffBrush(1);
+            ((Label) grid.GetChild(0, 8)).Background = GetEffBrush(1);
         }
 
         /// <summary>
@@ -80,13 +87,15 @@ namespace PokePlanner.Controls
 
                 // create label for type name
                 var type = types[i - 1];
-                new Label
+                var typeLabel = new Label
                 {
                     Content = type,
                     HorizontalContentAlignment = HorizontalAlignment.Center,
                     VerticalContentAlignment = VerticalAlignment.Center,
                     Background = Types.Instance.GetTypeBrush(type)
-                }.AddToGrid(grid, i, 0);
+                };
+                typeLabel.AddBorder();
+                typeLabel.AddToGrid(grid, i, 0);
 
                 // create labels for each row
                 for (int j = 1; j < grid.RowDefinitions.Count - 2; j++)
@@ -100,6 +109,7 @@ namespace PokePlanner.Controls
                         FontSize = 16
                     };
                     ToolTipService.SetInitialShowDelay(effLabel, 1000);
+                    effLabel.AddBorder();
                     effLabel.AddToGrid(grid, i, j);
                 }
 
@@ -113,6 +123,7 @@ namespace PokePlanner.Controls
                     Content = 0
                 };
                 ToolTipService.SetInitialShowDelay(weakLabel, 1000);
+                weakLabel.AddBorder();
                 weakLabel.AddToGrid(grid, i, 7);
 
                 // resistance count label
@@ -125,6 +136,7 @@ namespace PokePlanner.Controls
                     Content = 0
                 };
                 ToolTipService.SetInitialShowDelay(resistLabel, 1000);
+                resistLabel.AddBorder();
                 resistLabel.AddToGrid(grid, i, 8);
             }
         }
