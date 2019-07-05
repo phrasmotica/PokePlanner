@@ -127,6 +127,7 @@
     <Compile Include="Controls\TypeChart.xaml.cs">
       <DependentUpon>TypeChart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\VersionComboBox.cs" />
     <Compile Include="Mechanics\Types.cs" />
     <Compile Include="Util\Ext.cs" />
     <Compile Include="Util\MyBrushes.cs" />

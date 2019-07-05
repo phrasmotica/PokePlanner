@@ -3,10 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:PokePlanner.Controls"
+             xmlns:controls="clr-namespace:PokePlanner.Controls"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="300">
     <Grid Name="grid">
         <Label BorderThickness="2" BorderBrush="White"/>
+
+        <controls:VersionComboBox Grid.Row="0" Grid.Column="0"
+                                  Width="100"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  x:Name="versionComboBox" />
     </Grid>
 </UserControl>
