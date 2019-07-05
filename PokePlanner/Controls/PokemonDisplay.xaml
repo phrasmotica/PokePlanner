@@ -12,10 +12,10 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Rectangle Grid.Row="0" Grid.Column="0"
-                   Name="type1" />
-        <Rectangle Grid.Row="0" Grid.Column="1"
-                   Name="type2" />
+        <Label Grid.Row="0" Grid.Column="0" BorderThickness="2" BorderBrush="White"
+               Name="type1" />
+        <Label Grid.Row="0" Grid.Column="1" BorderThickness="2" BorderBrush="White"
+               Name="type2" />
 
         <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                  Width="100"

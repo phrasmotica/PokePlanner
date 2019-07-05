@@ -83,8 +83,18 @@ namespace PokePlanner.Controls
         public void SetTypes(Type t1, Type? t2 = null)
         {
             var prim = Types.Instance.TypeColours[t1];
-            type1.Fill = prim;
-            type2.Fill = t2 == null ? prim : Types.Instance.TypeColours[t2.Value];
+            type1.Background = prim;
+            if (t2 != null)
+            {
+                Grid.SetColumnSpan(type1, 1);
+                type2.Visibility = Visibility.Visible;
+                type2.Background = Types.Instance.TypeColours[t2.Value];
+            }
+            else
+            {
+                Grid.SetColumnSpan(type1, 2);
+                type2.Visibility = Visibility.Hidden;
+            }
         }
 
         /// <summary>
