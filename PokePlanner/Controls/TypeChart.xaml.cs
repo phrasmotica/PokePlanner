@@ -47,15 +47,15 @@ namespace PokePlanner.Controls
         private void CreateTypeColumns()
         {
             var types = Types.ConcreteTypes;
-            typeColumns = types.ToIndexMap();
+            typeColumns = types.ToIndexMap(1);
 
-            for (var i = 0; i < types.Count; i++)
+            for (var i = 1; i <= types.Count; i++)
             {
                 // create column for type
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
 
                 // create label for type
-                var type = types[i];
+                var type = types[i - 1];
                 new Label
                 {
                     Content = type,
@@ -83,7 +83,7 @@ namespace PokePlanner.Controls
                     VerticalContentAlignment = VerticalAlignment.Center,
                     Foreground = Brushes.Black,
                     Background = GetEffBrush(1),
-                    Content = "0 weak"
+                    Content = 0
                 }.AddToGrid(grid, i, 7);
 
                 // resistance count label
@@ -93,7 +93,7 @@ namespace PokePlanner.Controls
                     VerticalContentAlignment = VerticalAlignment.Center,
                     Foreground = Brushes.Black,
                     Background = GetEffBrush(1),
-                    Content = "0 resist"
+                    Content = 0
                 }.AddToGrid(grid, i, 8);
             }
         }
@@ -152,7 +152,7 @@ namespace PokePlanner.Controls
 
                 var totalWeak = typeEffs.Count(x => x > 1);
                 var weakLabel = (Label) grid.GetChild(col, 7);
-                weakLabel.Content = $"{totalWeak} weak";
+                weakLabel.Content = totalWeak;
                 if (totalWeak > 3)
                 {
                     weakLabel.FontWeight = FontWeights.Bold;
@@ -166,7 +166,7 @@ namespace PokePlanner.Controls
 
                 var totalResist = typeEffs.Count(x => x < 1);
                 var resistLabel = (Label) grid.GetChild(col, 8);
-                resistLabel.Content = $"{totalResist} resist";
+                resistLabel.Content = totalResist;
                 if (totalResist < 1)
                 {
                     resistLabel.FontWeight = FontWeights.Bold;

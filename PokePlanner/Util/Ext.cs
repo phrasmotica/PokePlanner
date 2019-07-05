@@ -66,12 +66,12 @@ namespace PokePlanner.Util
         }
 
         /// <summary>
-        /// Returns a dictionary mapping each item to its index in the collection.
+        /// Returns a dictionary mapping each item to its index in the collection plus an offset.
         /// </summary>
-        public static IDictionary<T, int> ToIndexMap<T>(this IEnumerable<T> items)
+        public static IDictionary<T, int> ToIndexMap<T>(this IEnumerable<T> items, int offset = 0)
         {
             return items.Select((item, index) => new { item, index })
-                        .ToDictionary(pair => pair.item, pair => pair.index);
+                        .ToDictionary(pair => pair.item, pair => pair.index + offset);
         }
 
         /// <summary>

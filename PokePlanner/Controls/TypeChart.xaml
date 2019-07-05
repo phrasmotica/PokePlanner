@@ -19,5 +19,19 @@
             <RowDefinition Height="0.5*" />
             <RowDefinition Height="0.5*" />
         </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="120"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="7"
+               Content="Weaknesses" Background="White"
+               HorizontalContentAlignment="Right" VerticalContentAlignment="Center"
+               FontWeight="Bold"/>
+
+        <Label Grid.Row="8"
+               Content="Resistances" Background="White"
+               HorizontalContentAlignment="Right" VerticalContentAlignment="Center"
+               FontWeight="Bold"/>
     </Grid>
 </UserControl>
