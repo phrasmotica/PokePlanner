@@ -74,7 +74,7 @@ namespace PokePlanner.Controls
                     {
                         HorizontalContentAlignment = HorizontalAlignment.Center,
                         VerticalContentAlignment = VerticalAlignment.Center,
-                        Foreground = Brushes.White,
+                        Foreground = Brushes.Black,
                         FontSize = 16
                     }.AddToGrid(grid, i, j);
                 }
@@ -84,7 +84,7 @@ namespace PokePlanner.Controls
                 {
                     HorizontalContentAlignment = HorizontalAlignment.Center,
                     VerticalContentAlignment = VerticalAlignment.Center,
-                    Foreground = Brushes.White,
+                    Foreground = Brushes.Black,
                     Background = GetEffBrush(1),
                     Content = "0 weak"
                 }.AddToGrid(grid, i, 7);
@@ -94,7 +94,7 @@ namespace PokePlanner.Controls
                 {
                     HorizontalContentAlignment = HorizontalAlignment.Center,
                     VerticalContentAlignment = VerticalAlignment.Center,
-                    Foreground = Brushes.White,
+                    Foreground = Brushes.Black,
                     Background = GetEffBrush(1),
                     Content = "0 resist"
                 }.AddToGrid(grid, i, 8);
@@ -199,25 +199,25 @@ namespace PokePlanner.Controls
             if (mult == 0)
             {
                 // grey
-                return "#787878".ToBrush();
+                return "#DBDBDB".ToBrush();
             }
 
             if (mult == 1)
             {
                 // blue
-                return "#00AAFF".ToBrush();
+                return "#BAE8FF".ToBrush();
             }
 
             if (mult > 1)
             {
                 // red
-                return "#FF0000".ToBrush();
+                return "#FFA1A1".ToBrush();
             }
 
             if (mult < 1)
             {
                 // green
-                return "#008000".ToBrush();
+                return "#C7FFC7".ToBrush();
             }
 
             return null;
