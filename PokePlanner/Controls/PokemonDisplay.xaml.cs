@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -48,16 +49,23 @@ namespace PokePlanner.Controls
         public PokemonDisplay()
         {
             InitializeComponent();
-            SetTypes(Type.Unknown);
 
-            mainWindow = (MainWindow) Application.Current.MainWindow;
-            mainWindow.Loaded += (s, a) => FindTypeChart();
-
-            timer = new DispatcherTimer
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                Interval = TimeSpan.FromSeconds(SEARCH_DELAY)
-            };
-            timer.Tick += Update;
+                SetTypes(Type.Unknown);
+
+                mainWindow = (MainWindow) Application.Current.MainWindow;
+                if (mainWindow != null)
+                {
+                    mainWindow.Loaded += (s, a) => FindTypeChart();
+                }
+
+                timer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(SEARCH_DELAY)
+                };
+                timer.Tick += Update;
+            }
         }
 
         /// <summary>
