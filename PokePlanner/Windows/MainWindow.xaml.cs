@@ -35,8 +35,9 @@ namespace PokePlanner
 
             LoadTeam();
 
-            // set minimum window width
+            // set minimum window size
             MinWidth = Width;
+            MinHeight = Height;
         }
 
         protected override void OnClosed(EventArgs e)

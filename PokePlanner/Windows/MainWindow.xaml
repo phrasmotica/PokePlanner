@@ -7,12 +7,12 @@
         xmlns:controls="clr-namespace:PokePlanner.Controls"
         mc:Ignorable="d"
         Title="PokePlanner"
-        MinHeight="450"
+        d:DesignWidth="1200" d:DesignHeight="500"
         ResizeMode="CanResize"
         SizeToContent="WidthAndHeight">
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TabControl MinWidth="1200">
+        <TabControl MinWidth="1200" MinHeight="500">
             <!-- Pokemon selection grid -->
             <TabItem Header="Team">
                 <Grid>
