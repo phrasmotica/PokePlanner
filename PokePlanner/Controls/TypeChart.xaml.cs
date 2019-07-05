@@ -73,7 +73,7 @@ namespace PokePlanner.Controls
                 // create column for type
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
 
-                // create label for type
+                // create label for type name
                 var type = types[i - 1];
                 new Label
                 {
@@ -88,6 +88,7 @@ namespace PokePlanner.Controls
                 {
                     new Label
                     {
+                        Content = "-",
                         HorizontalContentAlignment = HorizontalAlignment.Center,
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Foreground = Brushes.Black,
@@ -123,16 +124,24 @@ namespace PokePlanner.Controls
         public void SetDefensiveMap(int row, Pokemon pokemon)
         {
             var pokemonLabel = (Label) grid.GetChild(0, row + 1);
-            pokemonLabel.Content = pokemon.Name.ToTitle();
-
-            var types = pokemon.Types.Select(t => t.Type.Name.ToEnum<Type>()).ToArray();
-            if (types.Length > 1)
+            if (pokemon == null)
             {
-                SetDefensiveMap(row, types[0], types[1]);
+                pokemonLabel.Content = "-";
+                RemoveDefensiveMap(row);
             }
             else
             {
-                SetDefensiveMap(row, types[0]);
+                pokemonLabel.Content = pokemon.Name.ToTitle();
+
+                var types = pokemon.Types.Select(t => t.Type.Name.ToEnum<Type>()).ToArray();
+                if (types.Length > 1)
+                {
+                    SetDefensiveMap(row, types[0], types[1]);
+                }
+                else
+                {
+                    SetDefensiveMap(row, types[0]);
+                }
             }
         }
 
@@ -154,20 +163,38 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
+        /// Removes the defensive effectivenesses in the given row of the chart.
+        /// </summary>
+        public void RemoveDefensiveMap(int row)
+        {
+            pokemonEff[row] = null;
+            UpdateRow(row);
+        }
+
+        /// <summary>
         /// Updates the given row of the chart.
         /// </summary>
         private void UpdateRow(int row)
         {
-            foreach (var kvp in pokemonEff[row])
+            var effMap = pokemonEff[row];
+            foreach (var type in Types.ConcreteTypes)
             {
-                var type = kvp.Key;
                 var col = typeColumns[type];
                 var effLabel = (Label) grid.GetChild(col, row + 1);
 
-                var eff = kvp.Value;
-                effLabel.FontWeight = eff > 2 || eff < 0.5 ? FontWeights.Bold : FontWeights.Normal;
-                effLabel.Content = GetEffDescription(eff);
-                effLabel.Background = GetEffBrush(eff);
+                var eff = effMap?[type];
+                if (eff.HasValue)
+                {
+                    effLabel.FontWeight = eff > 2 || eff < 0.5 ? FontWeights.Bold : FontWeights.Normal;
+                    effLabel.Content = GetEffDescription(eff.Value);
+                    effLabel.Background = GetEffBrush(eff.Value);
+                }
+                else
+                {
+                    effLabel.FontWeight = FontWeights.Normal;
+                    effLabel.Content = "-";
+                    effLabel.Background = Brushes.White;
+                }
 
                 // count up weaknesses and resistances
                 var typeEffs = pokemonEff.Select(d => d?[type] ?? 1).ToArray();

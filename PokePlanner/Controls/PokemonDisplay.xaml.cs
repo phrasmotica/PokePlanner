@@ -120,15 +120,15 @@ namespace PokePlanner.Controls
                 searchBox.Text = searchBox.Text.ToTitle();
                 shouldUpdate = true;
                 searchBox.CaretIndex = idx;
-
-                // set type chart row
-                var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
-                typeChart.SetDefensiveMap(row, pokemon);
             }
             else
             {
                 SetTypes(Type.Unknown);
             }
+
+            // set type chart row
+            var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
+            typeChart.SetDefensiveMap(row, pokemon);
         }
 
         /// <summary>
