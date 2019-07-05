@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using PokeAPI;
 
 namespace PokePlanner.Util
 {
@@ -104,6 +105,20 @@ namespace PokePlanner.Util
             }
 
             return ret;
+        }
+    }
+
+    /// <summary>
+    /// Extensions methods for PokeAPI types.
+    /// </summary>
+    public static class PokeAPIExtensions
+    {
+        /// <summary>
+        /// Returns the capitalised name of this Pokemon.
+        /// </summary>
+        public static string GetName(this Pokemon pokemon)
+        {
+            return pokemon?.Name.ToTitle();
         }
     }
 }

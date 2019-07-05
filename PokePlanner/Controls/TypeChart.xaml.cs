@@ -20,6 +20,11 @@ namespace PokePlanner.Controls
         /// Effectiveness data for all Pokemon.
         /// </summary>
         private readonly IDictionary<Type, double>[] pokemonEff;
+        
+        /// <summary>
+        /// Current Pokemon names.
+        /// </summary>
+        private readonly string[] pokemonNames;
 
         /// <summary>
         /// Map from a type to its column in the chart.
@@ -39,6 +44,7 @@ namespace PokePlanner.Controls
                 CreateTypeColumns();
 
                 pokemonEff = new IDictionary<Type, double>[6];
+                pokemonNames = new string[6];
             }
         }
 
@@ -86,14 +92,16 @@ namespace PokePlanner.Controls
                 // create labels for each row
                 for (int j = 1; j < grid.RowDefinitions.Count - 2; j++)
                 {
-                    new Label
+                    var effLabel = new Label
                     {
                         Content = "-",
                         HorizontalContentAlignment = HorizontalAlignment.Center,
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Foreground = Brushes.Black,
                         FontSize = 16
-                    }.AddToGrid(grid, i, j);
+                    };
+                    ToolTipService.SetInitialShowDelay(effLabel, 1000);
+                    effLabel.AddToGrid(grid, i, j);
                 }
 
                 // weakness count label
@@ -123,6 +131,7 @@ namespace PokePlanner.Controls
         /// </summary>
         public void SetDefensiveMap(int row, Pokemon pokemon)
         {
+            pokemonNames[row] = pokemon.GetName();
             var pokemonLabel = (Label) grid.GetChild(0, row + 1);
             if (pokemon == null)
             {
@@ -131,7 +140,7 @@ namespace PokePlanner.Controls
             }
             else
             {
-                pokemonLabel.Content = pokemon.Name.ToTitle();
+                pokemonLabel.Content = pokemon.GetName();
 
                 var types = pokemon.Types.Select(t => t.Type.Name.ToEnum<Type>()).ToArray();
                 if (types.Length > 1)
@@ -188,12 +197,17 @@ namespace PokePlanner.Controls
                     effLabel.FontWeight = eff > 2 || eff < 0.5 ? FontWeights.Bold : FontWeights.Normal;
                     effLabel.Content = GetEffDescription(eff.Value);
                     effLabel.Background = GetEffBrush(eff.Value);
+
+                    var name = pokemonNames[row];
+                    var desc = eff > 1 ? "super effective" : eff < 1 ? "not very effective" : "normal";
+                    effLabel.ToolTip = $"{name} takes {desc} damage from {type}-type moves";
                 }
                 else
                 {
                     effLabel.FontWeight = FontWeights.Normal;
                     effLabel.Content = "-";
                     effLabel.Background = Brushes.White;
+                    effLabel.ToolTip = null;
                 }
 
                 // count up weaknesses and resistances
