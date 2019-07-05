@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,14 @@ namespace PokePlanner.Util
             }
 
             return (T) Enum.Parse(typeof(T), st, true);
+        }
+
+        /// <summary>
+        /// Returns the string in title case.
+        /// </summary>
+        public static string ToTitle(this string st)
+        {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(st.ToLower());
         }
 
         /// <summary>

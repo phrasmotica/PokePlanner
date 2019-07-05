@@ -35,9 +35,28 @@ namespace PokePlanner.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
+                CreatePokemonLabels();
                 CreateTypeColumns();
 
                 pokemonEff = new IDictionary<Type, double>[6];
+            }
+        }
+
+        /// <summary>
+        /// Creates a label for each Pokemon in the grid's leftmost column.
+        /// </summary>
+        private void CreatePokemonLabels()
+        {
+            for (var i = 1; i <= 6; i++)
+            {
+                // create label for pokemon
+                new Label
+                {
+                    Content = "-",
+                    HorizontalContentAlignment = HorizontalAlignment.Right,
+                    VerticalContentAlignment = VerticalAlignment.Center,
+                    Background = Brushes.White
+                }.AddToGrid(grid, 0, i);
             }
         }
 
@@ -103,6 +122,9 @@ namespace PokePlanner.Controls
         /// </summary>
         public void SetDefensiveMap(int row, Pokemon pokemon)
         {
+            var pokemonLabel = (Label) grid.GetChild(0, row + 1);
+            pokemonLabel.Content = pokemon.Name.ToTitle();
+
             var types = pokemon.Types.Select(t => t.Type.Name.ToEnum<Type>()).ToArray();
             if (types.Length > 1)
             {
