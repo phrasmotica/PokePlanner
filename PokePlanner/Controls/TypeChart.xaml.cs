@@ -7,7 +7,6 @@ using System.Windows.Media;
 using PokeAPI;
 using PokePlanner.Mechanics;
 using PokePlanner.Util;
-using Type = PokePlanner.Mechanics.Type;
 
 namespace PokePlanner.Controls
 {
@@ -20,7 +19,7 @@ namespace PokePlanner.Controls
         /// Effectiveness data for all Pokemon.
         /// </summary>
         private readonly IDictionary<Type, double>[] pokemonEff;
-        
+
         /// <summary>
         /// Current Pokemon names.
         /// </summary>
@@ -105,24 +104,28 @@ namespace PokePlanner.Controls
                 }
 
                 // weakness count label
-                new Label
+                var weakLabel = new Label
                 {
                     HorizontalContentAlignment = HorizontalAlignment.Center,
                     VerticalContentAlignment = VerticalAlignment.Center,
                     Foreground = Brushes.Black,
                     Background = GetEffBrush(1),
                     Content = 0
-                }.AddToGrid(grid, i, 7);
+                };
+                ToolTipService.SetInitialShowDelay(weakLabel, 1000);
+                weakLabel.AddToGrid(grid, i, 7);
 
                 // resistance count label
-                new Label
+                var resistLabel = new Label
                 {
                     HorizontalContentAlignment = HorizontalAlignment.Center,
                     VerticalContentAlignment = VerticalAlignment.Center,
                     Foreground = Brushes.Black,
                     Background = GetEffBrush(1),
                     Content = 0
-                }.AddToGrid(grid, i, 8);
+                };
+                ToolTipService.SetInitialShowDelay(resistLabel, 1000);
+                resistLabel.AddToGrid(grid, i, 8);
             }
         }
 
@@ -216,6 +219,7 @@ namespace PokePlanner.Controls
                 var totalWeak = typeEffs.Count(x => x > 1);
                 var weakLabel = (Label) grid.GetChild(col, 7);
                 weakLabel.Content = totalWeak;
+                weakLabel.ToolTip = $"{totalWeak} Pokemon weak to {type}-type moves";
                 if (totalWeak > 3)
                 {
                     weakLabel.FontWeight = FontWeights.Bold;
@@ -230,6 +234,7 @@ namespace PokePlanner.Controls
                 var totalResist = typeEffs.Count(x => x < 1);
                 var resistLabel = (Label) grid.GetChild(col, 8);
                 resistLabel.Content = totalResist;
+                resistLabel.ToolTip = $"{totalResist} Pokemon resistant to {type}-type moves";
                 if (totalResist < 1)
                 {
                     resistLabel.FontWeight = FontWeights.Bold;
