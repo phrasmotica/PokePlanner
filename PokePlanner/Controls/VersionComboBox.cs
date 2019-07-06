@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using PokeAPI;
@@ -33,19 +32,7 @@ namespace PokePlanner.Controls
         /// </summary>
         public static async Task<ResourceList<NamedApiResource<VersionGroup>, VersionGroup>> GetVersionGroups()
         {
-            Console.WriteLine(@"Getting version groups...");
-            var versionGroups = await DataFetcher.GetResourceList<NamedApiResource<VersionGroup>, VersionGroup>();
-            Console.WriteLine($@"Got {versionGroups.Count} version groups.");
-
-            var groupList = versionGroups.ToList();
-            Console.WriteLine($@"Got {groupList.Count} version groups:");
-            for (var i = 0; i < groupList.Count; i++)
-            {
-                var group = groupList[i];
-                Console.WriteLine(i + " " + group.Name);
-            }
-
-            return versionGroups;
+            return await DataFetcher.GetResourceList<NamedApiResource<VersionGroup>, VersionGroup>();
         }
     }
 }
