@@ -16,6 +16,8 @@ namespace PokePlanner.Controls
         public VersionComboBox()
         {
             LoadVersionGroupData();
+            SelectedIndex = 0;
+            ScrollViewer.SetCanContentScroll(this, false);
         }
 
         /// <summary>
