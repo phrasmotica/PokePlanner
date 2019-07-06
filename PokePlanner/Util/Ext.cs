@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -122,11 +123,26 @@ namespace PokePlanner.Util
     public static class PokeAPIExtensions
     {
         /// <summary>
-        /// Returns the capitalised name of this Pokemon.
+        /// Returns the English title-case name of this API object.
         /// </summary>
-        public static string GetName(this Pokemon pokemon)
+        public static string GetName(this NamedApiObject obj)
         {
-            return pokemon?.Name.ToTitle();
+            return obj?.Names?.FirstOrDefault(n => n.Language.Name == "en").Name;
+        }
+
+        /// <summary>
+        /// Returns the name of this version group.
+        /// </summary>
+        public static async Task<string> GetName(this VersionGroup vg)
+        {
+            var versionNames = new List<string>();
+            foreach (var version in vg.Versions)
+            {
+                var gv = await version.GetObject();
+                versionNames.Add(gv.GetName());
+            }
+
+            return string.Join("/", versionNames);
         }
     }
 }

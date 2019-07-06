@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using PokeAPI;
+using PokePlanner.Util;
 
 namespace PokePlanner.Controls
 {
@@ -15,9 +18,10 @@ namespace PokePlanner.Controls
         /// </summary>
         public VersionComboBox()
         {
-            LoadVersionGroupData();
-            SelectedIndex = 0;
-            ScrollViewer.SetCanContentScroll(this, false);
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                LoadVersionGroupData();
+            }
         }
 
         /// <summary>
@@ -25,16 +29,27 @@ namespace PokePlanner.Controls
         /// </summary>
         public async void LoadVersionGroupData()
         {
+            ItemsSource = new List<string>();
+            var itemList = (List<string>) ItemsSource;
+
             var groups = await GetVersionGroups();
-            ItemsSource = groups.Select(g => g.Name);
+            foreach (var group in groups)
+            {
+                var name = await group.GetName();
+                itemList.Add(name);
+            }
+
+            SelectedIndex = 0;
         }
 
         /// <summary>
         /// Returns all version groups from PokeAPI.
         /// </summary>
-        public static async Task<ResourceList<NamedApiResource<VersionGroup>, VersionGroup>> GetVersionGroups()
+        public static async Task<IEnumerable<VersionGroup>> GetVersionGroups()
         {
-            return await DataFetcher.GetResourceList<NamedApiResource<VersionGroup>, VersionGroup>();
+            var vgResources = await DataFetcher.GetResourceList<NamedApiResource<VersionGroup>, VersionGroup>();
+            var tasks = vgResources.Select(async vg => await vg.GetObject());
+            return await Task.WhenAll(tasks);
         }
     }
 }
