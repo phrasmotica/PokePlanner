@@ -10,7 +10,7 @@
         <Label BorderThickness="2" BorderBrush="White"/>
 
         <controls:VersionComboBox Grid.Row="0" Grid.Column="0"
-                                  Width="100"
+                                  MinWidth="185"
                                   HorizontalAlignment="Center" VerticalAlignment="Center"
                                   x:Name="versionComboBox" />
     </Grid>
