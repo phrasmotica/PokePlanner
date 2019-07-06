@@ -127,7 +127,24 @@ namespace PokePlanner.Util
         /// </summary>
         public static string GetName(this NamedApiObject obj)
         {
-            return obj?.Names?.FirstOrDefault(n => n.Language.Name == "en").Name;
+            return obj.Names.GetEnglishName();
+        }
+
+        /// <summary>
+        /// Returns the name of this Pokemon.
+        /// </summary>
+        public static async Task<string> GetName(this Pokemon pokemon)
+        {
+            var species = await pokemon.Species.GetObject();
+            return species.Names.GetEnglishName();
+        }
+
+        /// <summary>
+        /// Returns the English name from the set of names.
+        /// </summary>
+        public static string GetEnglishName(this IEnumerable<ResourceName> names)
+        {
+            return names.FirstOrDefault(n => n.Language.Name == "en").Name;
         }
 
         /// <summary>

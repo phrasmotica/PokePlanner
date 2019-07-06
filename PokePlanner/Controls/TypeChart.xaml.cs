@@ -144,9 +144,10 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Set the defensive effectivenesses of the Pokemon in the given row of the chart.
         /// </summary>
-        public void SetDefensiveMap(int row, Pokemon pokemon)
+        public async void SetDefensiveMap(int row, Pokemon pokemon)
         {
-            pokemonNames[row] = pokemon.GetName();
+            var pokemonName = await pokemon.GetName();
+            pokemonNames[row] = pokemonName;
             var pokemonLabel = (Label) grid.GetChild(0, row + 1);
             if (pokemon == null)
             {
@@ -155,7 +156,7 @@ namespace PokePlanner.Controls
             }
             else
             {
-                pokemonLabel.Content = pokemon.GetName();
+                pokemonLabel.Content = pokemonName;
 
                 var types = pokemon.Types.Select(t => t.Type.Name.ToEnum<Type>()).ToArray();
                 if (types.Length > 1)
