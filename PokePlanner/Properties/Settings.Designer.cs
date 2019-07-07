@@ -94,5 +94,17 @@ namespace PokePlanner.Properties {
                 this["pokemon6"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string versionGroup {
+            get {
+                return ((string)(this["versionGroup"]));
+            }
+            set {
+                this["versionGroup"] = value;
+            }
+        }
     }
 }
