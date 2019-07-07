@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using PokePlanner.Util;
-
-namespace PokePlanner.Controls
+﻿namespace PokePlanner.Controls
 {
     /// <summary>
     /// Interaction logic for Options.xaml.
@@ -14,11 +11,6 @@ namespace PokePlanner.Controls
         public Options()
         {
             InitializeComponent();
-
-            if (!DesignerProperties.GetIsInDesignMode(this))
-            {
-                grid.Background = MyBrushes.PastelBlue;
-            }
         }
     }
 }
