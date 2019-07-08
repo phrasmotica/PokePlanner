@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using PokeAPI;
 using PokePlanner.Mechanics;
+using PokePlanner.Properties;
 using PokePlanner.Util;
 using Type = PokePlanner.Mechanics.Type;
 
@@ -159,7 +160,7 @@ namespace PokePlanner.Controls
                 try
                 {
                     Console.WriteLine($@"Retrieve '{Species}'...");
-                    return await DataFetcher.GetNamedApiObject<Pokemon>(Species);
+                    return await TryGetPokemon(Species);
                 }
                 catch (HttpRequestException e)
                 {
@@ -168,6 +169,22 @@ namespace PokePlanner.Controls
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Returns the Pokemon if it's in the local dex of the selected version group.
+        /// Otherwise returns null.
+        /// </summary>
+        private static async Task<Pokemon> TryGetPokemon(string species)
+        {
+            var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(species);
+            var versionGroup = Settings.Default.versionGroup;
+
+            var tasks = pokemon.GameIndices.Select(async gi => await gi.Version.GetObject());
+            var versions = await Task.WhenAll(tasks);
+            var valid = versions.Any(version => version.VersionGroup.Name == versionGroup);
+
+            return valid ? pokemon : null;
         }
 
         /// <summary>

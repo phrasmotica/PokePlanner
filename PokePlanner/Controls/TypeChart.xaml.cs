@@ -146,8 +146,6 @@ namespace PokePlanner.Controls
         /// </summary>
         public async void SetDefensiveMap(int row, Pokemon pokemon)
         {
-            var pokemonName = await pokemon.GetName();
-            pokemonNames[row] = pokemonName;
             var pokemonLabel = (Label) grid.GetChild(0, row + 1);
             if (pokemon == null)
             {
@@ -156,6 +154,8 @@ namespace PokePlanner.Controls
             }
             else
             {
+                var pokemonName = await pokemon.GetName();
+                pokemonNames[row] = pokemonName;
                 pokemonLabel.Content = pokemonName;
 
                 var types = pokemon.Types.Select(t => t.Type.Name.ToEnum<Type>()).ToArray();
@@ -192,6 +192,7 @@ namespace PokePlanner.Controls
         /// </summary>
         public void RemoveDefensiveMap(int row)
         {
+            pokemonNames[row] = null;
             pokemonEff[row] = null;
             UpdateRow(row);
         }
