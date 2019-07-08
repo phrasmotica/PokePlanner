@@ -12,6 +12,15 @@
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="BorderBrush" Value="White" />
         </Style>
+
+        <Style x:Key="searchBox" TargetType="TextBox">
+            <Setter Property="Width" Value="100" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -28,8 +37,7 @@
                Name="type2" />
 
         <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                 Width="100"
-                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Style="{StaticResource searchBox}"
                  x:Name="searchBox"
                  TextChanged="SearchBox_OnTextChanged" />
     </Grid>
