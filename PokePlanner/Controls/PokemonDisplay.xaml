@@ -6,15 +6,25 @@
              xmlns:local="clr-namespace:PokePlanner.Controls"
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="600">
+
+    <UserControl.Resources>
+        <Style x:Key="typeColourLabel" TargetType="Label">
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" BorderThickness="2" BorderBrush="White"
+        <Label Grid.Row="0" Grid.Column="0"
+               Style="{StaticResource typeColourLabel}"
                Name="type1" />
-        <Label Grid.Row="0" Grid.Column="1" BorderThickness="2" BorderBrush="White"
+        <Label Grid.Row="0" Grid.Column="1"
+               Style="{StaticResource typeColourLabel}"
                Name="type2" />
 
         <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
