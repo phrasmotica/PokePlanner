@@ -37,9 +37,9 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PokeApi.NET, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="PokeApi.NET, Version=1.1.1.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\GitHub\PokeApi.NET\PokeApi.NET\bin\Release\net45\PokeApi.NET.dll</HintPath>
+      <HintPath>..\..\..\..\GitHub\PokeApi.NET\PokeApi.NET\bin\Debug\net45\PokeApi.NET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
