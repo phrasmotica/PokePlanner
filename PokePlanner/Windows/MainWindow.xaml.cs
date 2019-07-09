@@ -3,6 +3,14 @@ using System.Windows;
 using PokePlanner.Mechanics;
 using PokePlanner.Properties;
 
+#if DEBUG
+using System.Collections.Generic;
+using System.Linq;
+using PokeAPI;
+using PokePlanner.Controls;
+using PokePlanner.Util;
+#endif
+
 namespace PokePlanner
 {
     /// <summary>
@@ -27,6 +35,39 @@ namespace PokePlanner
 
             Loaded += OnLoaded;
         }
+
+#if DEBUG
+        /// <summary>
+        /// Returns all PokemonDisplays in this window.
+        /// </summary>
+        private IEnumerable<PokemonDisplay> AllDisplays => new HashSet<PokemonDisplay>
+        {
+            display1, display2, display3, display4, display5, display6
+        };
+
+        /// <summary>
+        /// Refreshes the types of each Pokemon for the selected version group.
+        /// </summary>
+        public async void UpdateTeamTypes(string versionGroupName)
+        {
+            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(versionGroupName);
+            var generation = await versionGroup.Generation.GetObject();
+
+            foreach (var display in AllDisplays)
+            {
+                var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(display.Species);
+                var pastTypes = await pokemon.GetPastTypes(generation);
+                if (pastTypes.Length > 1)
+                {
+                    display.SetTypes(pastTypes[0], pastTypes[1]);
+                }
+                else if (pastTypes.Any())
+                {
+                    display.SetTypes(pastTypes[0]);
+                }
+            }
+        }
+#endif
 
         protected void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {

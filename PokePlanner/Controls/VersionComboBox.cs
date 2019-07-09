@@ -25,6 +25,13 @@ namespace PokePlanner.Controls
         /// </summary>
         private readonly Settings settings;
 
+#if DEBUG
+        /// <summary>
+        /// The main window.
+        /// </summary>
+        private readonly MainWindow mainWindow;
+#endif
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -36,6 +43,10 @@ namespace PokePlanner.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
+#if DEBUG
+                mainWindow = (MainWindow) Application.Current.MainWindow;
+#endif
+
                 LoadVersionGroupData();
                 settings = Settings.Default;
                 SelectionChanged += OnSelectionChanged;
@@ -80,6 +91,10 @@ namespace PokePlanner.Controls
         {
             var apiName = apiNames[SelectedIndex];
             settings.versionGroup = apiName;
+
+#if DEBUG
+            mainWindow.UpdateTeamTypes(apiName);
+#endif
         }
     }
 }

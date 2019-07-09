@@ -8,6 +8,10 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using PokeAPI;
 
+#if DEBUG
+using Type = PokePlanner.Mechanics.Type;
+#endif
+
 namespace PokePlanner.Util
 {
     /// <summary>
@@ -146,6 +150,36 @@ namespace PokePlanner.Util
         {
             return names.FirstOrDefault(n => n.Language.Name == "en").Name;
         }
+
+#if DEBUG
+        /// <summary>
+        /// Returns this Pokemon's types in the given generation.
+        /// </summary>
+        public static async Task<Type[]> GetPastTypes(this Pokemon pokemon, Generation generation)
+        {
+            var pastTypes = pokemon.PastTypes;
+            var tasks = pastTypes.Select(async t => await t.Generation.GetObject());
+            var pastTypeGenerations = await Task.WhenAll(tasks);
+
+            if (pastTypeGenerations.Any())
+            {
+                var genNameToUse = pastTypeGenerations.SingleOrDefault(g => g.ID >= generation.ID)?.Name;
+                if (genNameToUse != null)
+                {
+                    return pastTypes.Single(p => p.Generation.Name == genNameToUse)
+                                    .Types
+                                    .Select(t => t.Type.Name.ToEnum<Type>())
+                                    .ToArray();
+                }
+
+                return pokemon.Types
+                              .Select(t => t.Type.Name.ToEnum<Type>())
+                              .ToArray();
+            }
+
+            return new Type[0];
+        }
+#endif
 
         /// <summary>
         /// Returns the name of this version group.
