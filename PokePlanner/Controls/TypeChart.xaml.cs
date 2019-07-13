@@ -158,7 +158,7 @@ namespace PokePlanner.Controls
                 pokemonNames[row] = pokemonName;
                 pokemonLabel.Content = pokemonName;
 
-                var types = pokemon.Types.Select(t => t.Type.Name.ToEnum<Type>()).ToArray();
+                var types = pokemon.GetCurrentTypes();
                 if (types.Length > 1)
                 {
                     SetDefensiveMap(row, types[0], types[1]);

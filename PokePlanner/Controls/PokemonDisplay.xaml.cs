@@ -121,9 +121,7 @@ namespace PokePlanner.Controls
             // set types
             if (pokemon != null)
             {
-                var types = pokemon.Types.OrderBy(t => t.Slot)
-                                   .Select(t => t.Type.Name.ToEnum<Type>())
-                                   .ToArray();
+                var types = pokemon.GetCurrentTypes();
                 if (types.Length > 1)
                 {
                     SetTypes(types[0], types[1]);

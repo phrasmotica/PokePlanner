@@ -153,7 +153,7 @@ namespace PokePlanner.Util
 
 #if DEBUG
         /// <summary>
-        /// Returns this Pokemon's types in the given generation.
+        /// Returns this Pokemon's type data for the given generation, if any.
         /// </summary>
         public static async Task<Type[]> GetPastTypes(this Pokemon pokemon, Generation generation)
         {
@@ -164,22 +164,56 @@ namespace PokePlanner.Util
             if (pastTypeGenerations.Any())
             {
                 var genNameToUse = pastTypeGenerations.SingleOrDefault(g => g.ID >= generation.ID)?.Name;
-                if (genNameToUse != null)
+                if (!string.IsNullOrEmpty(genNameToUse))
                 {
                     return pastTypes.Single(p => p.Generation.Name == genNameToUse)
                                     .Types
-                                    .Select(t => t.Type.Name.ToEnum<Type>())
-                                    .ToArray();
+                                    .ToTypes();
                 }
 
-                return pokemon.Types
-                              .Select(t => t.Type.Name.ToEnum<Type>())
-                              .ToArray();
+                return pokemon.GetCurrentTypes();
             }
 
             return new Type[0];
         }
 #endif
+
+        /// <summary>
+        /// Returns this Pokemon's types in the given generation.
+        /// </summary>
+#if DEBUG
+        public static async Task<Type[]> GetTypes(this Pokemon pokemon, Generation generation)
+#else
+        public static Type[] GetTypes(this Pokemon pokemon, Generation generation)
+#endif
+        {
+#if DEBUG
+            var pastTypes = await pokemon.GetPastTypes(generation);
+            if (pastTypes.Any())
+            {
+                return pastTypes;
+            }
+#endif
+
+            return pokemon.GetCurrentTypes();
+        }
+
+        /// <summary>
+        /// Returns this Pokemon's latest type data.
+        /// </summary>
+        public static Type[] GetCurrentTypes(this Pokemon pokemon)
+        {
+            return pokemon.Types.ToTypes();
+        }
+
+        /// <summary>
+        /// Returns this type map as an array of Type enum values.
+        /// </summary>
+        public static Type[] ToTypes(this IEnumerable<PokemonTypeMap> typeMap)
+        {
+            return typeMap.Select(t => t.Type.Name.ToEnum<Type>())
+                          .ToArray();
+        }
 
         /// <summary>
         /// Returns the name of this version group.
