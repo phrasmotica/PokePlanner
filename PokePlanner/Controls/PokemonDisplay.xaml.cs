@@ -128,7 +128,14 @@ namespace PokePlanner.Controls
             // set types
             if (pokemon != null)
             {
-                var types = pokemon.GetCurrentTypes();
+                // TODO: get the Pokemon's types for the selected game!
+#if DEBUG
+                var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
+                var types = await pokemon.GetTypes(versionGroup);
+#else
+                var types = pokemon.GetTypes();
+#endif
+
                 if (types.Length > 1)
                 {
                     SetTypes(types[0], types[1]);
