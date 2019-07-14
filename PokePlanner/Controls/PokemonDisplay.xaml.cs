@@ -128,7 +128,6 @@ namespace PokePlanner.Controls
             // set types
             if (pokemon != null)
             {
-                // TODO: get the Pokemon's types for the selected game!
 #if DEBUG
                 var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
                 var types = await pokemon.GetTypes(versionGroup);
@@ -197,6 +196,32 @@ namespace PokePlanner.Controls
             var valid = versions.Any(version => version.VersionGroup.Name == versionGroup);
 
             return valid ? pokemon : null;
+        }
+
+        /// <summary>
+        /// Returns the Pokemon if it's in the local dex of the selected version group.
+        /// Otherwise returns null.
+        /// </summary>
+        public async Task<bool> TrySetPokemon(VersionGroup versionGroup)
+        {
+            var pokemon = await TryGetPokemon(Species);
+            if (pokemon != null)
+            {
+                var types = await pokemon.GetTypes(versionGroup);
+                if (types.Length > 1)
+                {
+                    SetTypes(types[0], types[1]);
+                }
+                else if (types.Any())
+                {
+                    SetTypes(types[0]);
+                }
+
+                return true;
+            }
+            
+            SetTypes(Type.Unknown);
+            return false;
         }
 
         /// <summary>

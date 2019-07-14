@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using PokePlanner.Mechanics;
 using PokePlanner.Properties;
 
 #if DEBUG
 using System.Collections.Generic;
-using System.Linq;
 using PokeAPI;
 using PokePlanner.Controls;
-using PokePlanner.Util;
 #endif
 
 namespace PokePlanner
@@ -47,25 +46,19 @@ namespace PokePlanner
 
         /// <summary>
         /// Refreshes the types of each Pokemon for the selected version group.
+        /// Returns true if a Pokemon's type was updated.
         /// </summary>
-        public async void UpdateTeamTypes(string versionGroupName)
+        public async Task<bool> UpdateTeamTypes(string versionGroupName)
         {
+            var typesUpdated = false;
             var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(versionGroupName);
-            var generation = await versionGroup.Generation.GetObject();
 
             foreach (var display in AllDisplays)
             {
-                var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(display.Species);
-                var pastTypes = await pokemon.GetPastTypes(generation);
-                if (pastTypes.Length > 1)
-                {
-                    display.SetTypes(pastTypes[0], pastTypes[1]);
-                }
-                else if (pastTypes.Any())
-                {
-                    display.SetTypes(pastTypes[0]);
-                }
+                typesUpdated |= await display.TrySetPokemon(versionGroup);
             }
+
+            return typesUpdated;
         }
 #endif
 
