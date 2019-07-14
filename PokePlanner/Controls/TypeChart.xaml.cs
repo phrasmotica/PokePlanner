@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using PokeAPI;
 using PokePlanner.Mechanics;
+using PokePlanner.Properties;
 using PokePlanner.Util;
 
 namespace PokePlanner.Controls
@@ -158,7 +159,8 @@ namespace PokePlanner.Controls
                 pokemonNames[row] = pokemonName;
                 pokemonLabel.Content = pokemonName;
 
-                var types = pokemon.GetCurrentTypes();
+                var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(Settings.Default.versionGroup);
+                var types = await pokemon.GetTypes(versionGroup);
                 if (types.Length > 1)
                 {
                     SetDefensiveMap(row, types[0], types[1]);

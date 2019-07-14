@@ -183,18 +183,19 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
-        /// Returns the Pokemon if it's in the local dex of the selected version group.
+        /// Returns the Pokemon if it's in the selected version group's Pokedex.
         /// Otherwise returns null.
         /// </summary>
         private async Task<Pokemon> TryGetPokemon(string species)
         {
             var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(species);
-            var versionGroup = settings.versionGroup;
+            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
+            var pokedices = versionGroup.Pokedices.Select(p => p.Name);
 
-            var tasks = pokemon.GameIndices.Select(async gi => await gi.Version.GetObject());
-            var versions = await Task.WhenAll(tasks);
-            var valid = versions.Any(version => version.VersionGroup.Name == versionGroup);
+            var pokemonSpecies = await pokemon.Species.GetObject();
+            var pokemonPokedices = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
 
+            var valid = pokedices.Intersect(pokemonPokedices).Any();
             return valid ? pokemon : null;
         }
 
