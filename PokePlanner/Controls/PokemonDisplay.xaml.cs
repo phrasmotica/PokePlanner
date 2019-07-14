@@ -143,11 +143,7 @@ namespace PokePlanner.Controls
                 }
 
                 // make name title case without updating display
-                var idx = searchBox.CaretIndex;
-                shouldUpdate = false;
-                searchBox.Text = searchBox.Text.ToTitle();
-                shouldUpdate = true;
-                searchBox.CaretIndex = idx;
+                SetTitleCase();
             }
             else
             {
@@ -221,11 +217,27 @@ namespace PokePlanner.Controls
                     SetTypes(types[0]);
                 }
 
+                SetTitleCase();
                 return true;
             }
             
             SetTypes(Type.Unknown);
+            SetTitleCase(false);
             return false;
+        }
+
+        /// <summary>
+        /// Sets the search box content to be in title case or lower case without triggering an update.
+        /// </summary>
+        private void SetTitleCase(bool isTitleCase = true)
+        {
+            var idx = searchBox.CaretIndex;
+            shouldUpdate = false;
+
+            searchBox.Text = isTitleCase ? searchBox.Text.ToTitle() : searchBox.Text.ToLower();
+
+            shouldUpdate = true;
+            searchBox.CaretIndex = idx;
         }
 
         /// <summary>
