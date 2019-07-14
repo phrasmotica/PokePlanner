@@ -86,6 +86,11 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
+        /// Returns the Pokemon being displayed.
+        /// </summary>
+        public async Task<Pokemon> GetPokemon() => await Retrieve();
+
+        /// <summary>
         /// Creates a reference to the type chart.
         /// </summary>
         private void FindTypeChart()

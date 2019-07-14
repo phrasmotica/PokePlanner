@@ -87,13 +87,13 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Save version group in settings file.
         /// </summary>
-        private async void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var apiName = apiNames[SelectedIndex];
             settings.versionGroup = apiName;
 
 #if DEBUG
-            await mainWindow.UpdateTeamTypes(apiName);
+            mainWindow.UpdateTypes();
 #endif
         }
     }

@@ -39,23 +39,36 @@ namespace PokePlanner
         /// <summary>
         /// Returns all PokemonDisplays in this window.
         /// </summary>
-        private IEnumerable<PokemonDisplay> AllDisplays => new HashSet<PokemonDisplay>
+        private IList<PokemonDisplay> AllDisplays => new List<PokemonDisplay>
         {
             display1, display2, display3, display4, display5, display6
         };
 
         /// <summary>
+        /// Update types in the team display and effectiveness chart.
+        /// </summary>
+        public async void UpdateTypes()
+        {
+            var updated = await UpdateTeamTypes();
+            for (var i = 0; i < updated.Length; i++)
+            {
+                var pokemon = await AllDisplays[i].GetPokemon();
+                typeChart.SetDefensiveMap(i, pokemon);
+            }
+        }
+
+        /// <summary>
         /// Refreshes the types of each Pokemon for the selected version group.
         /// Returns true if a Pokemon's type was updated.
         /// </summary>
-        public async Task<bool> UpdateTeamTypes(string versionGroupName)
+        public async Task<bool[]> UpdateTeamTypes()
         {
-            var typesUpdated = false;
-            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(versionGroupName);
-
-            foreach (var display in AllDisplays)
+            var typesUpdated = new bool[AllDisplays.Count];
+            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
+            
+            for (var i = 0; i < AllDisplays.Count; i++)
             {
-                typesUpdated |= await display.TrySetPokemon(versionGroup);
+                typesUpdated[i] = await AllDisplays[i].TrySetPokemon(versionGroup);
             }
 
             return typesUpdated;
