@@ -35,6 +35,11 @@ namespace PokePlanner.Controls
         private readonly MainWindow mainWindow;
 
         /// <summary>
+        /// The settings file.
+        /// </summary>
+        private readonly Settings settings;
+
+        /// <summary>
         /// Whether the display should be updated after the search box text changes.
         /// </summary>
         private bool shouldUpdate = true;
@@ -60,6 +65,8 @@ namespace PokePlanner.Controls
                 {
                     mainWindow.Loaded += (s, a) => FindTypeChart();
                 }
+
+                settings = Settings.Default;
 
                 timer = new DispatcherTimer
                 {
@@ -173,10 +180,10 @@ namespace PokePlanner.Controls
         /// Returns the Pokemon if it's in the local dex of the selected version group.
         /// Otherwise returns null.
         /// </summary>
-        private static async Task<Pokemon> TryGetPokemon(string species)
+        private async Task<Pokemon> TryGetPokemon(string species)
         {
             var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(species);
-            var versionGroup = Settings.Default.versionGroup;
+            var versionGroup = settings.versionGroup;
 
             var tasks = pokemon.GameIndices.Select(async gi => await gi.Version.GetObject());
             var versions = await Task.WhenAll(tasks);
