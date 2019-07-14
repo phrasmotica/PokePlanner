@@ -122,8 +122,6 @@ namespace PokePlanner.Controls
 
             // get pokemon data
             var pokemon = await Retrieve();
-            var name = pokemon?.Name ?? "nothing";
-            Console.WriteLine($@"Retrieved '{name}'.");
 
             // set types
             if (pokemon != null)
@@ -171,7 +169,13 @@ namespace PokePlanner.Controls
                 try
                 {
                     Console.WriteLine($@"Retrieve '{Species}'...");
-                    return await TryGetPokemon(Species);
+                    var pokemon = await TryGetPokemon(Species);
+
+                    Console.WriteLine(pokemon != null
+                        ? $@"Retrieved '{pokemon.Name}'."
+                        : $@"Retrieved no data for '{Species}'.");
+
+                    return pokemon;
                 }
                 catch (HttpRequestException e)
                 {
