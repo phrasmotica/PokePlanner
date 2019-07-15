@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using PokeAPI;
+using PokePlanner.Mechanics;
 
 #if DEBUG
 using Type = PokePlanner.Mechanics.Type;
@@ -89,12 +90,17 @@ namespace PokePlanner.Util
         }
 
         /// <summary>
-        /// Returns a dictionary mapping each item to its index in the collection plus an offset.
+        /// Returns a type set from a list of types with a column index offset.
         /// </summary>
-        public static IDictionary<T, int> ToIndexMap<T>(this IEnumerable<T> items, int offset = 0)
+        public static TypeSet ToTypeSet(this IEnumerable<Type> items, bool active = false, int offset = 0)
         {
-            return items.Select((item, index) => new { item, index })
-                        .ToDictionary(pair => pair.item, pair => pair.index + offset);
+            var typeSet = new TypeSet();
+            foreach (var item in items.Select((type, index) => new { type, index }))
+            {
+                typeSet[item.type] = new ActiveInfo(active, item.index + offset);
+            }
+
+            return typeSet;
         }
 
         /// <summary>
@@ -225,6 +231,16 @@ namespace PokePlanner.Util
             }
 
             return string.Join("/", versionNames);
+        }
+
+        /// <summary>
+        /// Returns true if this generation uses the given type.
+        /// </summary>
+        public static async Task<bool> HasType(this Generation generation, Type type)
+        {
+            var typeObj = await DataFetcher.GetNamedApiObject<PokemonType>(type.ToString().ToLower());
+            var generationIntroduced = await typeObj.Generation.GetObject();
+            return generationIntroduced.ID <= generation.ID;
         }
     }
 }

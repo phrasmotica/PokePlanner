@@ -29,7 +29,7 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Map from a type to its column in the chart.
         /// </summary>
-        private IDictionary<Type, int> typeColumns;
+        private TypeSet typeSet;
 
         /// <summary>
         /// Create type columns.
@@ -79,7 +79,7 @@ namespace PokePlanner.Controls
         private void CreateTypeColumns()
         {
             var types = Types.ConcreteTypes;
-            typeColumns = types.ToIndexMap(1);
+            typeSet = types.ToTypeSet(true, 1);
 
             for (var i = 1; i <= types.Count; i++)
             {
@@ -205,9 +205,9 @@ namespace PokePlanner.Controls
         private void UpdateRow(int row)
         {
             var effMap = pokemonEff[row];
-            foreach (var type in Types.ConcreteTypes)
+            foreach (var type in typeSet.ActiveTypes)
             {
-                var col = typeColumns[type];
+                var col = typeSet[type].Column;
                 var effLabel = (Label) grid.GetChild(col, row + 1);
 
                 var eff = effMap?[type];
