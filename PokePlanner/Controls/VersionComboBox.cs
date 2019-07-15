@@ -16,9 +16,9 @@ namespace PokePlanner.Controls
     public class VersionComboBox : ComboBox
     {
         /// <summary>
-        /// List of API object names for each item.
+        /// Map of version group names to generation names.
         /// </summary>
-        private List<string> apiNames;
+        private IDictionary<string, string> generationMap;
 
         /// <summary>
         /// The settings file.
@@ -54,24 +54,34 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
+        /// Returns all version group names.
+        /// </summary>
+        private IList<string> VersionGroups => generationMap.Keys.ToList();
+
+        /// <summary>
+        /// Returns all generation names.
+        /// </summary>
+        private IList<string> Generations => generationMap.Values.ToList();
+
+        /// <summary>
         /// Loads version groups into the combo box.
         /// </summary>
         public async void LoadVersionGroupData()
         {
             ItemsSource = new List<string>();
             var itemList = (List<string>) ItemsSource;
-            apiNames = new List<string>();
+            generationMap = new Dictionary<string, string>();
 
             var groups = await GetVersionGroups();
             foreach (var group in groups)
             {
-                apiNames.Add(group.Name);
+                generationMap[group.Name] = group.Generation.Name;
                 var name = await group.GetName();
                 itemList.Add(name);
             }
 
             var savedVersionGroup = settings.versionGroup;
-            SelectedIndex = string.IsNullOrEmpty(savedVersionGroup) ? 0 : apiNames.IndexOf(savedVersionGroup);
+            SelectedIndex = string.IsNullOrEmpty(savedVersionGroup) ? 0 : VersionGroups.IndexOf(savedVersionGroup);
         }
 
         /// <summary>
@@ -87,10 +97,13 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Save version group in settings file.
         /// </summary>
-        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var apiName = apiNames[SelectedIndex];
-            settings.versionGroup = apiName;
+            var vgName = VersionGroups[SelectedIndex];
+            settings.versionGroup = vgName;
+
+            var genName = Generations[SelectedIndex];
+            SessionCache.Instance.Generation = await DataFetcher.GetNamedApiObject<Generation>(genName);
 
 #if DEBUG
             mainWindow.UpdateTypes();
