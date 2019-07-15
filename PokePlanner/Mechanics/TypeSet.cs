@@ -11,7 +11,12 @@ namespace PokePlanner.Mechanics
         /// <summary>
         /// Returns all active types.
         /// </summary>
-        public Type[] ActiveTypes => Keys.Where(k => this[k].IsActive).ToArray();
+        public Type[] ActiveTypes => Keys.Where(GetActive).ToArray();
+
+        /// <summary>
+        /// Returns whether the given type is enabled.
+        /// </summary>
+        public bool GetActive(Type type) => this[type].IsActive;
     }
 
     /// <summary>
