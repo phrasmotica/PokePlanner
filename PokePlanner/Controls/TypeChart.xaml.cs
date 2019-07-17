@@ -186,6 +186,39 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
+        /// Shows active and hides inactive types' columns.
+        /// </summary>
+        public async void UpdateColumns()
+        {
+            var generation = SessionCache.Instance.Generation;
+
+            foreach (var kvp in typeSet)
+            {
+                var type = kvp.Key;
+                if (generation != null)
+                {
+                    var isActive = await generation.HasType(type);
+                    typeSet.SetActive(type, isActive);
+                }
+
+                var t = typeSet[type];
+                var col = t.Column;
+                for (int row = 1; row < grid.RowCount(); row++)
+                {
+                    var label = (TwoWayLabel) grid.GetChild(col, row);
+                    if (t.IsActive)
+                    {
+                        label.Activate();
+                    }
+                    else
+                    {
+                        label.Deactivate();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Updates the given row of the chart.
         /// </summary>
         private void UpdateRow(int row)

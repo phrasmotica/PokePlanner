@@ -49,6 +49,8 @@ namespace PokePlanner
         /// </summary>
         public async void UpdateTypes()
         {
+            typeChart.UpdateColumns();
+
             var updated = await UpdateTeamTypes();
             for (var i = 0; i < updated.Length; i++)
             {
