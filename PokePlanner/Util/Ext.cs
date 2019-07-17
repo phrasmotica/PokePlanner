@@ -8,10 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using PokeAPI;
 using PokePlanner.Mechanics;
-
-#if DEBUG
 using Type = PokePlanner.Mechanics.Type;
-#endif
 
 namespace PokePlanner.Util
 {
