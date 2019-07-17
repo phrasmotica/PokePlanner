@@ -99,7 +99,7 @@ namespace PokePlanner.Controls
                 typeLabel.AddToGrid(grid, i, 0);
 
                 // create labels for each row
-                for (int j = 1; j < grid.RowDefinitions.Count - 2; j++)
+                for (int j = 1; j < grid.RowCount() - 2; j++)
                 {
                     var effLabel = new Label
                     {

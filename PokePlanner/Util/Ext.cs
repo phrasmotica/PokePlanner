@@ -68,6 +68,11 @@ namespace PokePlanner.Util
             return grid.Children.Cast<UIElement>()
                        .FirstOrDefault(e => Grid.GetColumn(e) == col && Grid.GetRow(e) == row);
         }
+
+        /// <summary>
+        /// Returns the number of rows in the grid.
+        /// </summary>
+        public static int RowCount(this Grid grid) => grid.RowDefinitions.Count;
         
         /// <summary>
         /// Creates a brush from this colour.
