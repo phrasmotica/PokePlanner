@@ -34,7 +34,7 @@ namespace PokePlanner.Mechanics
     /// <summary>
     /// Represents the activity of a type in a type set.
     /// </summary>
-    public struct ActiveInfo
+    public class ActiveInfo
     {
         public ActiveInfo(bool isActive, int column)
         {
