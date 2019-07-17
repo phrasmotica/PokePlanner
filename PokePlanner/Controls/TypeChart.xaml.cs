@@ -101,43 +101,29 @@ namespace PokePlanner.Controls
                 // create labels for each row
                 for (int j = 1; j < grid.RowCount() - 2; j++)
                 {
-                    var effLabel = new Label
+                    var effLabel = new TwoWayLabel
                     {
-                        Content = "-",
-                        HorizontalContentAlignment = HorizontalAlignment.Center,
-                        VerticalContentAlignment = VerticalAlignment.Center,
-                        Foreground = Brushes.Black,
-                        FontSize = 16
+                        Content = "-"
                     };
-                    ToolTipService.SetInitialShowDelay(effLabel, 1000);
-                    effLabel.AddBorder();
                     effLabel.AddToGrid(grid, i, j);
                 }
 
                 // weakness count label
-                var weakLabel = new Label
+                var weakLabel = new TwoWayLabel
                 {
-                    HorizontalContentAlignment = HorizontalAlignment.Center,
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    Foreground = Brushes.Black,
+                    Content = 0,
+                    FontSize = 12,
                     Background = GetEffBrush(1),
-                    Content = 0
                 };
-                ToolTipService.SetInitialShowDelay(weakLabel, 1000);
-                weakLabel.AddBorder();
                 weakLabel.AddToGrid(grid, i, 7);
 
                 // resistance count label
-                var resistLabel = new Label
+                var resistLabel = new TwoWayLabel
                 {
-                    HorizontalContentAlignment = HorizontalAlignment.Center,
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    Foreground = Brushes.Black,
-                    Background = GetEffBrush(1),
-                    Content = 0
+                    Content = 0,
+                    FontSize = 12,
+                    Background = GetEffBrush(1)
                 };
-                ToolTipService.SetInitialShowDelay(resistLabel, 1000);
-                resistLabel.AddBorder();
                 resistLabel.AddToGrid(grid, i, 8);
             }
         }
@@ -208,7 +194,7 @@ namespace PokePlanner.Controls
             foreach (var type in typeSet.ActiveTypes)
             {
                 var col = typeSet[type].Column;
-                var effLabel = (Label) grid.GetChild(col, row + 1);
+                var effLabel = (TwoWayLabel) grid.GetChild(col, row + 1);
 
                 var eff = effMap?[type];
                 if (eff.HasValue)
@@ -236,10 +222,7 @@ namespace PokePlanner.Controls
                 }
                 else
                 {
-                    effLabel.FontWeight = FontWeights.Normal;
-                    effLabel.Content = "-";
-                    effLabel.Background = Brushes.White;
-                    effLabel.ToolTip = null;
+                    effLabel.Deactivate();
                 }
 
                 // count up weaknesses and resistances

@@ -119,6 +119,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\TwoWayLabel.cs" />
     <Compile Include="Controls\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
