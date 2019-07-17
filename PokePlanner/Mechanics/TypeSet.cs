@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PokePlanner.Mechanics
@@ -17,6 +18,17 @@ namespace PokePlanner.Mechanics
         /// Returns whether the given type is enabled.
         /// </summary>
         public bool GetActive(Type type) => this[type].IsActive;
+
+        /// <summary>
+        /// Enables/disables the given type.
+        /// </summary>
+        public void SetActive(Type type, bool active)
+        {
+            var t = this[type];
+            t.IsActive = active;
+            var desc = active ? "active" : "inactive";
+            Console.WriteLine($@"{type} type is now {desc}.");
+        }
     }
 
     /// <summary>
