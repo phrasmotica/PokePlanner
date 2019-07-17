@@ -93,7 +93,10 @@ namespace PokePlanner
         {
             base.OnClosed(e);
 
-            SaveTeam();
+            if (IsLoaded)
+            {
+                SaveTeam();
+            }
         }
 
         /// <summary>
