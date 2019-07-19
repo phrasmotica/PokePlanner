@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Windows;
 using PokeAPI;
 
@@ -10,6 +10,11 @@ namespace PokePlanner
     /// </summary>
     public partial class App
     {
+        /// <summary>
+        /// Timeout period for test connecting to PokeAPI in milliseconds.
+        /// </summary>
+        private const int HealthCheckTimeoutMillis = 1000;
+
         /// <summary>
         /// Set DataFetcher to use local instance of PokeAPI.
         /// </summary>
@@ -24,23 +29,25 @@ namespace PokePlanner
             DataFetcher.DataBackend = new HttpBackend(baseUrl, "My fork of PokeAPI.NET!");
 #endif
 
-            // ping the API
-            PingReply response = null;
-            try
+            // try to connect to the API
+            bool success;
+            var uri = new Uri(baseUrl);
+            using (var tcp = new TcpClient())
             {
-                response = new Ping().Send(baseUrl + "pokemon/");
-            }
-            catch (PingException ex)
-            {
-                Console.Error.WriteLine(ex);
+                var result = tcp.BeginConnect(uri.Host, uri.Port, null, null);
+                success = result.AsyncWaitHandle.WaitOne(HealthCheckTimeoutMillis);
             }
 
-            var status = response?.Status ?? IPStatus.DestinationUnreachable;
-            if (status != IPStatus.Success)
+            if (success)
             {
-                var code = (int) status;
-                Console.WriteLine($@"PokeAPI is not running: ping returned error {code} ({status})!");
-                Shutdown(code);
+                Console.WriteLine($@"Connected to PokeAPI at {uri.AbsoluteUri}.");
+            }
+            else
+            {
+                var msg = $@"PokeAPI is not running at {uri.AbsoluteUri}!";
+                Console.WriteLine(msg);
+                MessageBox.Show(msg, "PokePlanner", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                Shutdown(1);
             }
         }
     }
