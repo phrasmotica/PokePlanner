@@ -193,15 +193,20 @@ namespace PokePlanner.Controls
         /// </summary>
         private async Task<Pokemon> TryGetPokemon(string species)
         {
-            var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(species);
-            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
-            var pokedices = versionGroup.Pokedices.Select(p => p.Name);
+            if (!string.IsNullOrEmpty(species))
+            {
+                var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(species);
+                var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
+                var pokedices = versionGroup.Pokedices.Select(p => p.Name);
 
-            var pokemonSpecies = await pokemon.Species.GetObject();
-            var pokemonPokedices = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
+                var pokemonSpecies = await pokemon.Species.GetObject();
+                var pokemonPokedices = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
 
-            var valid = pokedices.Intersect(pokemonPokedices).Any();
-            return valid ? pokemon : null;
+                var valid = pokedices.Intersect(pokemonPokedices).Any();
+                return valid ? pokemon : null;
+            }
+
+            return null;
         }
 
         /// <summary>
