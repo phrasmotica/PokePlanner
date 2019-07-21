@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Sockets;
 using System.Windows;
 using PokeAPI;
 
@@ -11,40 +10,29 @@ namespace PokePlanner
     public partial class App
     {
         /// <summary>
-        /// Timeout period for test connecting to PokeAPI in milliseconds.
-        /// </summary>
-        private const int HealthCheckTimeoutMillis = 1000;
-
-        /// <summary>
         /// Set DataFetcher to use local instance of PokeAPI.
         /// </summary>
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
+            // try to connect to the API
             var baseUrl = "https://pokeapi.co/api/v2/";
 
 #if DEBUG
             baseUrl = "http://localhost:8000/api/v2/";
-            DataFetcher.DataBackend = new HttpBackend(baseUrl, "My fork of PokeAPI.NET!");
 #endif
 
-            // try to connect to the API
-            bool success;
-            var uri = new Uri(baseUrl);
-            using (var tcp = new TcpClient())
-            {
-                var result = tcp.BeginConnect(uri.Host, uri.Port, null, null);
-                success = result.AsyncWaitHandle.WaitOne(HealthCheckTimeoutMillis);
-            }
+            DataFetcher.DataBackend = new HttpBackend(baseUrl, "PokePlanner");
+            var success = await DataFetcher.GetApiObject<PokemonType>(1) != null;
 
             if (success)
             {
-                Console.WriteLine($@"Connected to PokeAPI at {uri.AbsoluteUri}.");
+                Console.WriteLine($@"Connected to PokeAPI at {baseUrl}.");
             }
             else
             {
-                var msg = $@"PokeAPI is not running at {uri.AbsoluteUri}!";
+                var msg = $@"PokeAPI is not running at {baseUrl}!";
                 Console.WriteLine(msg);
                 MessageBox.Show(msg, "PokePlanner", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 Shutdown(1);
