@@ -88,7 +88,7 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Returns the Pokemon being displayed.
         /// </summary>
-        public async Task<Pokemon> GetPokemon() => await Retrieve();
+        public Pokemon Pokemon { get; set; }
 
         /// <summary>
         /// Creates a reference to the type chart.
@@ -126,7 +126,7 @@ namespace PokePlanner.Controls
             timer.Stop();
 
             // get pokemon data
-            var pokemon = await Retrieve();
+            var pokemon = await GetPokemon();
 
             // set types
             if (pokemon != null)
@@ -163,20 +163,23 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Retrieve data for the Pokemon in the text box.
         /// </summary>
-        private async Task<Pokemon> Retrieve()
+        private async Task<Pokemon> GetPokemon()
         {
+            if (Pokemon?.Name == Species)
+            {
+                return Pokemon;
+            }
+
             if (!string.IsNullOrEmpty(Species))
             {
                 try
                 {
                     Console.WriteLine($@"Retrieve '{Species}'...");
-                    var pokemon = await TryGetPokemon(Species);
+                    Pokemon = await TryGetPokemon(Species);
 
-                    Console.WriteLine(pokemon != null
-                        ? $@"Retrieved '{pokemon.Name}'."
+                    Console.WriteLine(Pokemon != null
+                        ? $@"Retrieved '{Pokemon.Name}'."
                         : $@"Retrieved no data for '{Species}'.");
-
-                    return pokemon;
                 }
                 catch (HttpRequestException e)
                 {
@@ -184,7 +187,7 @@ namespace PokePlanner.Controls
                 }
             }
 
-            return null;
+            return Pokemon;
         }
 
         /// <summary>
@@ -193,20 +196,15 @@ namespace PokePlanner.Controls
         /// </summary>
         private async Task<Pokemon> TryGetPokemon(string species)
         {
-            if (!string.IsNullOrEmpty(species))
-            {
-                var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(species);
-                var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
-                var pokedices = versionGroup.Pokedices.Select(p => p.Name);
+            var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(species);
+            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
+            var pokedices = versionGroup.Pokedices.Select(p => p.Name);
 
-                var pokemonSpecies = await pokemon.Species.GetObject();
-                var pokemonPokedices = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
+            var pokemonSpecies = await pokemon.Species.GetObject();
+            var pokemonPokedices = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
 
-                var valid = pokedices.Intersect(pokemonPokedices).Any();
-                return valid ? pokemon : null;
-            }
-
-            return null;
+            var valid = pokedices.Intersect(pokemonPokedices).Any();
+            return valid ? pokemon : null;
         }
 
         /// <summary>
@@ -215,7 +213,7 @@ namespace PokePlanner.Controls
         /// </summary>
         public async Task<bool> TrySetPokemon(VersionGroup versionGroup)
         {
-            var pokemon = await TryGetPokemon(Species);
+            var pokemon = await GetPokemon();
             if (pokemon != null)
             {
 #if DEBUG
