@@ -125,39 +125,13 @@ namespace PokePlanner.Controls
         {
             timer.Stop();
 
-            // get pokemon data
-            var pokemon = await GetPokemon();
-
-            // set types
-            if (pokemon != null)
-            {
-#if DEBUG
-                var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
-                var types = await pokemon.GetTypes(versionGroup);
-#else
-                var types = pokemon.GetTypes();
-#endif
-
-                if (types.Length > 1)
-                {
-                    SetTypes(types[0], types[1]);
-                }
-                else
-                {
-                    SetTypes(types[0]);
-                }
-
-                // make name title case without updating display
-                SetTitleCase();
-            }
-            else
-            {
-                SetTypes(Type.Unknown);
-            }
+            // set the display
+            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
+            await TrySetPokemon(versionGroup);
 
             // set type chart row
             var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
-            typeChart.SetDefensiveMap(row, pokemon);
+            typeChart.SetDefensiveMap(row, Pokemon);
         }
 
         /// <summary>
@@ -208,8 +182,9 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
-        /// Returns the Pokemon if it's in the local dex of the selected version group.
-        /// Otherwise returns null.
+        /// Tries to set the display to the current Pokemon.
+        /// Returns false if unsuccessful, e.g. if the Pokemon
+        /// is not part of the version group.
         /// </summary>
         public async Task<bool> TrySetPokemon(VersionGroup versionGroup)
         {
