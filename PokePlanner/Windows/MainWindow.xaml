@@ -44,6 +44,10 @@
             <TabItem Header="Type Effectiveness">
                 <controls:TypeChart x:Name="typeChart" />
             </TabItem>
+
+            <!-- Moves tab -->
+            <TabItem Header="Moves">
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>
