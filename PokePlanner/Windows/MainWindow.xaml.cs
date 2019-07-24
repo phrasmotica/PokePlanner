@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using PokePlanner.Mechanics;
 using PokePlanner.Properties;
 
 #if DEBUG
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using PokeAPI;
 using PokePlanner.Controls;
 #endif
@@ -76,6 +76,14 @@ namespace PokePlanner
             return typesUpdated;
         }
 #endif
+
+        /// <summary>
+        /// Update the HM chart for the current version group.
+        /// </summary>
+        public void UpdateHMs()
+        {
+            hmChart?.UpdateHMs();
+        }
 
         protected void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {

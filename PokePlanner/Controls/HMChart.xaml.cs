@@ -39,5 +39,34 @@ namespace PokePlanner.Controls
                 }
             }
         }
+
+        /// <summary>
+        /// Fetch all HM moves for the version group and display them.
+        /// </summary>
+        public async void UpdateHMs()
+        {
+            var versionGroup = SessionCache.Instance.VersionGroup;
+            var vgName = await versionGroup.GetName();
+            Console.WriteLine($@"Retrieving HM moves for {vgName}...");
+
+            var hmMoves = await versionGroup.GetHMMoves();
+            var hmCount = hmMoves.Count;
+            for (var i = 0; i < NUM_HMS; i++)
+            {
+                var label = hmLabels[i];
+                if (i < hmCount)
+                {
+                    label.SetContent(hmMoves[i].GetName());
+                    label.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    label.SetContent(string.Empty);
+                    label.Visibility = Visibility.Hidden;
+                }
+            }
+
+            Console.WriteLine($@"Retrieved {hmCount} HM moves for {vgName}.");
+        }
     }
 }

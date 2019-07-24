@@ -25,12 +25,10 @@ namespace PokePlanner.Controls
         /// </summary>
         private readonly Settings settings;
 
-#if DEBUG
         /// <summary>
         /// The main window.
         /// </summary>
         private readonly MainWindow mainWindow;
-#endif
 
         /// <summary>
         /// Constructor.
@@ -43,9 +41,7 @@ namespace PokePlanner.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-#if DEBUG
                 mainWindow = (MainWindow) Application.Current.MainWindow;
-#endif
 
                 LoadVersionGroupData();
                 settings = Settings.Default;
@@ -104,6 +100,8 @@ namespace PokePlanner.Controls
 #if DEBUG
             mainWindow.UpdateTypes();
 #endif
+
+            mainWindow.UpdateHMs();
         }
     }
 }
