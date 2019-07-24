@@ -191,12 +191,7 @@ namespace PokePlanner.Controls
             var pokemon = await GetPokemon();
             if (pokemon != null)
             {
-#if DEBUG
-                var types = await pokemon.GetTypes(versionGroup);
-#else
-                var types = pokemon.GetTypes();
-#endif
-
+                var types = await pokemon.GetTypes();
                 if (types.Length > 1)
                 {
                     SetTypes(types[0], types[1]);

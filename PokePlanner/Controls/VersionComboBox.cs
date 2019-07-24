@@ -96,11 +96,8 @@ namespace PokePlanner.Controls
             var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(vgName);
             SessionCache.Instance.VersionGroup = versionGroup;
             SessionCache.Instance.Generation = await versionGroup.Generation.GetObject();
-
-#if DEBUG
+            
             mainWindow.UpdateTypes();
-#endif
-
             mainWindow.UpdateHMs();
         }
     }

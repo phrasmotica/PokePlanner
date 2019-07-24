@@ -185,24 +185,31 @@ namespace PokePlanner.Util
 
             return new Type[0];
         }
-#endif
 
         /// <summary>
-        /// Returns this Pokemon's types in the given generation.
+        /// Returns this Pokemon's types in the given version group.
         /// </summary>
-#if DEBUG
         public static async Task<Type[]> GetTypes(this Pokemon pokemon, VersionGroup versionGroup)
         {
             var generation = await versionGroup.Generation.GetObject();
             var pastTypes = await pokemon.GetPastTypes(generation);
             return pastTypes.Any() ? pastTypes : pokemon.GetCurrentTypes();
         }
-#else
-        public static Type[] GetTypes(this Pokemon pokemon)
-        {
-            return pokemon.GetCurrentTypes();
-        }
 #endif
+
+        /// <summary>
+        /// Returns this Pokemon's types in the current version group.
+        /// </summary>
+        public static async Task<Type[]> GetTypes(this Pokemon pokemon)
+        {
+#if DEBUG
+            var versionGroup = SessionCache.Instance.VersionGroup;
+            var types = await pokemon.GetTypes(versionGroup);
+#else
+            var types = pokemon.GetCurrentTypes();
+#endif
+            return types;
+        }
 
         /// <summary>
         /// Returns this Pokemon's latest type data.

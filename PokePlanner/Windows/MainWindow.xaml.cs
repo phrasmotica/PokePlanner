@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Windows;
-using PokePlanner.Mechanics;
-using PokePlanner.Properties;
-
-#if DEBUG
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows;
 using PokeAPI;
 using PokePlanner.Controls;
-#endif
+using PokePlanner.Mechanics;
+using PokePlanner.Properties;
 
 namespace PokePlanner
 {
@@ -35,7 +32,6 @@ namespace PokePlanner
             Loaded += OnLoaded;
         }
 
-#if DEBUG
         /// <summary>
         /// Returns all PokemonDisplays in this window.
         /// </summary>
@@ -75,7 +71,6 @@ namespace PokePlanner
 
             return typesUpdated;
         }
-#endif
 
         /// <summary>
         /// Update the HM chart for the current version group.

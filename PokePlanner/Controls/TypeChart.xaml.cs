@@ -144,14 +144,8 @@ namespace PokePlanner.Controls
                 var pokemonName = await pokemon.GetName();
                 pokemonNames[row] = pokemonName;
                 pokemonLabel.Content = pokemonName;
-
-#if DEBUG
-                var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(Settings.Default.versionGroup);
-                var types = await pokemon.GetTypes(versionGroup);
-#else
-                var types = pokemon.GetTypes();
-#endif
-
+                
+                var types = await pokemon.GetTypes();
                 if (types.Length > 1)
                 {
                     SetDefensiveMap(row, types[0], types[1]);
