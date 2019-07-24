@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using PokeAPI;
+using PokePlanner.Controls;
 using PokePlanner.Mechanics;
 using Type = PokePlanner.Mechanics.Type;
 
@@ -243,6 +244,29 @@ namespace PokePlanner.Util
             var typeObj = await DataFetcher.GetNamedApiObject<PokemonType>(type.ToString().ToLower());
             var generationIntroduced = await typeObj.Generation.GetObject();
             return generationIntroduced.ID <= generation.ID;
+        }
+
+        /// <summary>
+        /// Returns all HM moves present in the given version group.
+        /// </summary>
+        public static async Task<List<Move>> GetHMMoves(this VersionGroup versionGroup)
+        {
+            var hmMoves = new List<Move>();
+            for (int i = 0; i < HMChart.NUM_HMS; i++)
+            {
+                // fetch HMs by known names for now
+                var hm = await DataFetcher.GetNamedApiObject<Item>($@"hm{i+1:D2}");
+                var mvd = hm.Machines.SingleOrDefault(mch => mch.VersionGroup.Name == versionGroup.Name);
+
+                if (mvd != null)
+                {
+                    var machine1 = await mvd.Machine.GetObject();
+                    var move = await machine1.Move.GetObject();
+                    hmMoves.Add(move);
+                }
+            }
+
+            return hmMoves;
         }
     }
 }
