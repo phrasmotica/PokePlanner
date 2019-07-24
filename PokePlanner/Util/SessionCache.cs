@@ -8,7 +8,12 @@ namespace PokePlanner.Util
     public class SessionCache
     {
         /// <summary>
-        /// The selected game's generation.
+        /// The selected version group.
+        /// </summary>
+        public VersionGroup VersionGroup;
+
+        /// <summary>
+        /// The selected version group's generation.
         /// </summary>
         public Generation Generation;
 

@@ -59,11 +59,6 @@ namespace PokePlanner.Controls
         private IList<string> VersionGroups => generationMap.Keys.ToList();
 
         /// <summary>
-        /// Returns all generation names.
-        /// </summary>
-        private IList<string> Generations => generationMap.Values.ToList();
-
-        /// <summary>
         /// Loads version groups into the combo box.
         /// </summary>
         public async void LoadVersionGroupData()
@@ -102,8 +97,9 @@ namespace PokePlanner.Controls
             var vgName = VersionGroups[SelectedIndex];
             settings.versionGroup = vgName;
 
-            var genName = Generations[SelectedIndex];
-            SessionCache.Instance.Generation = await DataFetcher.GetNamedApiObject<Generation>(genName);
+            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(vgName);
+            SessionCache.Instance.VersionGroup = versionGroup;
+            SessionCache.Instance.Generation = await versionGroup.Generation.GetObject();
 
 #if DEBUG
             mainWindow.UpdateTypes();
