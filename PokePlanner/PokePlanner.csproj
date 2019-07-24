@@ -126,6 +126,7 @@
     <Compile Include="Controls\HMChart.xaml.cs">
       <DependentUpon>HMChart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PrefixLabel.cs" />
     <Compile Include="Controls\TwoWayLabel.cs" />
     <Compile Include="Controls\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
