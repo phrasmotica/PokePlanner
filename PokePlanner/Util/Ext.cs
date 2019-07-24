@@ -224,7 +224,8 @@ namespace PokePlanner.Util
         /// </summary>
         public static Type[] ToTypes(this IEnumerable<PokemonTypeMap> typeMap)
         {
-            return typeMap.Select(t => t.Type.Name.ToEnum<Type>())
+            return typeMap.OrderBy(t => t.Slot)
+                          .Select(t => t.Type.Name.ToEnum<Type>())
                           .ToArray();
         }
 
