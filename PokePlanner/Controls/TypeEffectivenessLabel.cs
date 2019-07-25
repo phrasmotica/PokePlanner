@@ -6,9 +6,9 @@ using PokePlanner.Util;
 namespace PokePlanner.Controls
 {
     /// <summary>
-    /// Label that can show activated and deactivated states.
+    /// Label for showing a type effectiveness in the type chart.
     /// </summary>
-    public class TwoWayLabel : Label, ISwitchable
+    public class TypeEffectivenessLabel : Label, ISwitchable
     {
         /// <summary>
         /// The last-used content.
@@ -38,7 +38,7 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public TwoWayLabel()
+        public TypeEffectivenessLabel()
         {
             HorizontalContentAlignment = HorizontalAlignment.Center;
             VerticalContentAlignment = VerticalAlignment.Center;
@@ -49,7 +49,7 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
-        /// Display the label as active.
+        /// Activate the label.
         /// </summary>
         public void Activate()
         {
@@ -64,7 +64,7 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
-        /// Display the label as inactive.
+        /// Deactivate the label.
         /// </summary>
         public void Deactivate()
         {

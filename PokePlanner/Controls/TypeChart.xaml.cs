@@ -101,7 +101,7 @@ namespace PokePlanner.Controls
                 // create labels for each row
                 for (int j = 1; j < grid.RowCount() - 2; j++)
                 {
-                    var effLabel = new TwoWayLabel
+                    var effLabel = new TypeEffectivenessLabel
                     {
                         Content = "-"
                     };
@@ -109,7 +109,7 @@ namespace PokePlanner.Controls
                 }
 
                 // weakness count label
-                var weakLabel = new TwoWayLabel
+                var weakLabel = new TypeEffectivenessLabel
                 {
                     Content = 0,
                     FontSize = 12,
@@ -118,7 +118,7 @@ namespace PokePlanner.Controls
                 weakLabel.AddToGrid(grid, i, 7);
 
                 // resistance count label
-                var resistLabel = new TwoWayLabel
+                var resistLabel = new TypeEffectivenessLabel
                 {
                     Content = 0,
                     FontSize = 12,
@@ -204,7 +204,7 @@ namespace PokePlanner.Controls
                 var col = t.Column;
                 for (int row = 1; row < grid.RowCount(); row++)
                 {
-                    var label = (TwoWayLabel) grid.GetChild(col, row);
+                    var label = (TypeEffectivenessLabel) grid.GetChild(col, row);
                     if (t.IsActive)
                     {
                         label.Activate();
@@ -226,7 +226,7 @@ namespace PokePlanner.Controls
             foreach (var type in typeSet.ActiveTypes)
             {
                 var col = typeSet[type].Column;
-                var effLabel = (TwoWayLabel) grid.GetChild(col, row + 1);
+                var effLabel = (TypeEffectivenessLabel) grid.GetChild(col, row + 1);
 
                 var eff = effMap?[type];
                 if (eff.HasValue)

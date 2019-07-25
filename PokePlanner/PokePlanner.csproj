@@ -129,7 +129,7 @@
     <Compile Include="Controls\HMLabel.cs" />
     <Compile Include="Controls\ISwitchable.cs" />
     <Compile Include="Controls\PrefixLabel.cs" />
-    <Compile Include="Controls\TwoWayLabel.cs" />
+    <Compile Include="Controls\TypeEffectivenessLabel.cs" />
     <Compile Include="Controls\Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
