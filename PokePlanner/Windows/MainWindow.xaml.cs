@@ -104,6 +104,7 @@ namespace PokePlanner
                     }
                 }
 
+                // TODO: fix race condition resulting from multiple PokemonDisplays calling UpdateHMCoverage()...
                 hmChart.UpdateHMCoverage(canLearn);
             }
         }
