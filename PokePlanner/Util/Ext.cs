@@ -260,7 +260,7 @@ namespace PokePlanner.Util
         public static async Task<List<Move>> GetHMMoves(this VersionGroup versionGroup)
         {
             var hmMoves = new List<Move>();
-            for (int i = 0; i < HMChart.NUM_HMS; i++)
+            for (int i = 0; i < Constants.NUMBER_OF_HMS; i++)
             {
                 // fetch HMs by known names for now
                 var hm = await DataFetcher.GetNamedApiObject<Item>($@"hm{i+1:D2}");
