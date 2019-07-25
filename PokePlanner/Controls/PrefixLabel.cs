@@ -10,16 +10,22 @@ namespace PokePlanner.Controls
         /// <summary>
         /// The prefix for the label.
         /// </summary>
-        public string Prefix;
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public PrefixLabel(string prefix)
+        public string Prefix
         {
-            Prefix = prefix;
-            Content = Prefix;
+            get => prefix;
+            set
+            {
+                var oldContent = Content as string;
+                if (!string.IsNullOrEmpty(prefix))
+                {
+                    oldContent = oldContent?.Replace(prefix, string.Empty);
+                }
+
+                prefix = value;
+                SetContent(oldContent);
+            }
         }
+        private string prefix;
 
         /// <summary>
         /// Method for setting the label text after the prefix.
