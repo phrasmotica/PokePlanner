@@ -1,4 +1,5 @@
-﻿using PokeAPI;
+﻿using System.Collections.Generic;
+using PokeAPI;
 
 namespace PokePlanner.Util
 {
@@ -16,6 +17,11 @@ namespace PokePlanner.Util
         /// The selected version group's generation.
         /// </summary>
         public Generation Generation;
+
+        /// <summary>
+        /// The selected version group's HM moves.
+        /// </summary>
+        public IList<Move> HMMoves;
 
         /// <summary>
         /// Singleton constructor;

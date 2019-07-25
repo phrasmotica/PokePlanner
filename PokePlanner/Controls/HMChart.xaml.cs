@@ -45,7 +45,9 @@ namespace PokePlanner.Controls
             var vgName = await versionGroup.GetName();
             Console.WriteLine($@"Retrieving HM moves for {vgName}...");
 
-            var hmMoves = await versionGroup.GetHMMoves();
+            SessionCache.Instance.HMMoves = await versionGroup.GetHMMoves();
+            var hmMoves = SessionCache.Instance.HMMoves;
+
             var hmCount = hmMoves.Count;
             for (var i = 0; i < AllLabels.Count; i++)
             {
