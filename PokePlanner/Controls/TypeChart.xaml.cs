@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using PokeAPI;
 using PokePlanner.Mechanics;
-using PokePlanner.Properties;
 using PokePlanner.Util;
 
 namespace PokePlanner.Controls
@@ -113,7 +112,7 @@ namespace PokePlanner.Controls
                 {
                     Content = 0,
                     FontSize = 12,
-                    Background = GetEffBrush(1),
+                    Background = GetEffBrush(1)
                 };
                 weakLabel.AddToGrid(grid, i, 7);
 
@@ -144,7 +143,7 @@ namespace PokePlanner.Controls
                 var pokemonName = await pokemon.GetName();
                 pokemonNames[row] = pokemonName;
                 pokemonLabel.Content = pokemonName;
-                
+
                 var types = await pokemon.GetTypes();
                 if (types.Length > 1)
                 {
