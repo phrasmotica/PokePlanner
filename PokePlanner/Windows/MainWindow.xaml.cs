@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using PokeAPI;
 using PokePlanner.Controls;
 using PokePlanner.Mechanics;
 using PokePlanner.Properties;
+using PokePlanner.Util;
 
 namespace PokePlanner
 {
@@ -78,6 +80,33 @@ namespace PokePlanner
         public void UpdateHMs()
         {
             hmChart?.UpdateHMs();
+        }
+
+        /// <summary>
+        /// Update move coverage in the HM chart for the current version group.
+        /// </summary>
+        public void UpdateHMCoverage()
+        {
+            var hmMoves = SessionCache.Instance.HMMoves;
+            if (hmMoves != null && hmMoves.Any())
+            {
+                var canLearn = new bool[Constants.NUMBER_OF_HMS];
+
+                var team = AllDisplays.Select(d => d.Pokemon).Where(p => p != null);
+                foreach (var pokemon in team)
+                {
+                    var moves = pokemon.Moves.Select(m => m.Move.Name).ToArray();
+                    for (var i = 0; i < hmMoves.Count; i++)
+                    {
+                        if (moves.Contains(hmMoves[i].Name))
+                        {
+                            canLearn[i] = true;
+                        }
+                    }
+                }
+
+                hmChart.UpdateHMCoverage(canLearn);
+            }
         }
 
         protected void OnLoaded(object sender, RoutedEventArgs routedEventArgs)

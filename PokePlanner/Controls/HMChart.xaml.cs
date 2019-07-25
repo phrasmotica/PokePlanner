@@ -66,5 +66,34 @@ namespace PokePlanner.Controls
 
             Console.WriteLine($@"Retrieved {hmCount} HM moves for {vgName}.");
         }
+
+        /// <summary>
+        /// Update chart according to the HMs that can be learnt by the team.
+        /// </summary>
+        public void UpdateHMCoverage(bool[] canLearn)
+        {
+            Console.WriteLine(@"Updating HM move coverage...");
+
+            var learnLength = canLearn.Length;
+            var labelCount = AllLabels.Count;
+            if (learnLength > labelCount)
+            {
+                throw new IndexOutOfRangeException($@"Have {labelCount} labels but array is length {learnLength}!");
+            }
+
+            for (var i = 0; i < learnLength; i++)
+            {
+                if (canLearn[i])
+                {
+                    AllLabels[i].Activate();
+                }
+                else
+                {
+                    AllLabels[i].Deactivate();
+                }
+            }
+
+            Console.WriteLine(@"Updated HM move coverage.");
+        }
     }
 }
