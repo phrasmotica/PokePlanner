@@ -132,6 +132,9 @@ namespace PokePlanner.Controls
             // set type chart row
             var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
             typeChart.SetDefensiveMap(row, Pokemon);
+
+            // update HM coverage
+            mainWindow.UpdateHMCoverage();
         }
 
         /// <summary>
