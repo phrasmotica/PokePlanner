@@ -159,8 +159,11 @@ namespace PokePlanner.Controls
                 {
                     Console.WriteLine(e.Message);
                 }
+                
+                return Pokemon;
             }
 
+            Pokemon = null;
             return Pokemon;
         }
 
