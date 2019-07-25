@@ -90,14 +90,16 @@ namespace PokePlanner.Controls
         /// </summary>
         private async void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var vgName = VersionGroups[SelectedIndex];
-            settings.versionGroup = vgName;
+            var oldVersionGroupName = SessionCache.Instance.VersionGroup?.Name;
 
-            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(vgName);
-            SessionCache.Instance.VersionGroup = versionGroup;
-            SessionCache.Instance.Generation = await versionGroup.Generation.GetObject();
+            var newVersionGroupName = VersionGroups[SelectedIndex];
+            settings.versionGroup = newVersionGroupName;
+            var newVersionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(newVersionGroupName);
+            SessionCache.Instance.VersionGroup = newVersionGroup;
+
+            SessionCache.Instance.Generation = await newVersionGroup.Generation.GetObject();
             
-            mainWindow.UpdateTypes();
+            mainWindow.UpdateTypes(oldVersionGroupName, newVersionGroupName);
             mainWindow.UpdateHMs();
         }
     }

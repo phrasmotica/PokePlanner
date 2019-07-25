@@ -126,8 +126,7 @@ namespace PokePlanner.Controls
             timer.Stop();
 
             // set the display
-            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
-            await TrySetPokemon(versionGroup);
+            await TrySetPokemon(settings.versionGroup, settings.versionGroup);
 
             // set type chart row
             var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
@@ -140,9 +139,9 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Retrieve data for the Pokemon in the text box.
         /// </summary>
-        private async Task<Pokemon> GetPokemon()
+        private async Task<Pokemon> GetPokemon(string oldVersionGroup, string newVersionGroup)
         {
-            if (Pokemon?.Name == Species)
+            if (oldVersionGroup == newVersionGroup && Pokemon?.Name == Species)
             {
                 return Pokemon;
             }
@@ -192,9 +191,9 @@ namespace PokePlanner.Controls
         /// Returns false if unsuccessful, e.g. if the Pokemon
         /// is not part of the version group.
         /// </summary>
-        public async Task<bool> TrySetPokemon(VersionGroup versionGroup)
+        public async Task<bool> TrySetPokemon(string oldVersionGroup, string newVersionGroup)
         {
-            var pokemon = await GetPokemon();
+            var pokemon = await GetPokemon(oldVersionGroup, newVersionGroup);
             if (pokemon != null)
             {
                 var types = await pokemon.GetTypes();

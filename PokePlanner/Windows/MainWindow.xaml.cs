@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using PokeAPI;
 using PokePlanner.Controls;
 using PokePlanner.Mechanics;
 using PokePlanner.Properties;
@@ -45,11 +44,11 @@ namespace PokePlanner
         /// <summary>
         /// Update types in the team display and effectiveness chart.
         /// </summary>
-        public async void UpdateTypes()
+        public async void UpdateTypes(string oldVersionGroup, string newVersionGroup)
         {
             typeChart.UpdateColumns();
 
-            var updated = await UpdateTeamTypes();
+            var updated = await UpdateTeamTypes(oldVersionGroup, newVersionGroup);
             for (var i = 0; i < updated.Length; i++)
             {
                 var pokemon = AllDisplays[i].Pokemon;
@@ -61,14 +60,13 @@ namespace PokePlanner
         /// Refreshes the types of each Pokemon for the selected version group.
         /// Returns true if a Pokemon's type was updated.
         /// </summary>
-        public async Task<bool[]> UpdateTeamTypes()
+        public async Task<bool[]> UpdateTeamTypes(string oldVersionGroup, string newVersionGroup)
         {
             var typesUpdated = new bool[AllDisplays.Count];
-            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
             
             for (var i = 0; i < AllDisplays.Count; i++)
             {
-                typesUpdated[i] = await AllDisplays[i].TrySetPokemon(versionGroup);
+                typesUpdated[i] = await AllDisplays[i].TrySetPokemon(oldVersionGroup, newVersionGroup);
             }
 
             return typesUpdated;
