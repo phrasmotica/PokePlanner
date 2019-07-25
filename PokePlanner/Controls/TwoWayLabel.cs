@@ -8,7 +8,7 @@ namespace PokePlanner.Controls
     /// <summary>
     /// Label that can show activated and deactivated states.
     /// </summary>
-    public class TwoWayLabel : Label
+    public class TwoWayLabel : Label, ISwitchable
     {
         /// <summary>
         /// The last-used content.
