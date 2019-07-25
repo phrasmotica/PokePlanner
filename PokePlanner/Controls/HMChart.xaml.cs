@@ -12,14 +12,12 @@ namespace PokePlanner.Controls
     public partial class HMChart
     {
         /// <summary>
-        /// The number of HM items across all games.
+        /// Returns all HM labels.
         /// </summary>
-        public const int NUM_HMS = 8;
-
-        /// <summary>
-        /// Collection of labels for displaying each HM.
-        /// </summary>
-        private readonly IList<PrefixLabel> hmLabels;
+        private IList<HMLabel> AllLabels => new List<HMLabel>
+        {
+            hmLabel1, hmLabel2, hmLabel3, hmLabel4, hmLabel5, hmLabel6, hmLabel7, hmLabel8
+        };
 
         /// <summary>
         /// Create a label for each HM move.
@@ -30,12 +28,10 @@ namespace PokePlanner.Controls
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                hmLabels = new List<PrefixLabel>();
-                for (int i = 0; i < NUM_HMS; i++)
+                for (int i = 0; i < AllLabels.Count; i++)
                 {
-                    var label = new PrefixLabel($@"HM{i + 1:D2}: ");
-                    panel.Children.Add(label);
-                    hmLabels.Add(label);
+                    var label = AllLabels[i];
+                    label.Prefix = $@"HM{i + 1:D2}: ";
                 }
             }
         }
@@ -51,9 +47,9 @@ namespace PokePlanner.Controls
 
             var hmMoves = await versionGroup.GetHMMoves();
             var hmCount = hmMoves.Count;
-            for (var i = 0; i < NUM_HMS; i++)
+            for (var i = 0; i < AllLabels.Count; i++)
             {
-                var label = hmLabels[i];
+                var label = AllLabels[i];
                 if (i < hmCount)
                 {
                     label.SetContent(hmMoves[i].GetName());
