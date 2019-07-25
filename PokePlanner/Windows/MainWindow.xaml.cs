@@ -80,6 +80,7 @@ namespace PokePlanner
         public void UpdateHMs()
         {
             hmChart?.UpdateHMs();
+            UpdateHMCoverage();
         }
 
         /// <summary>
