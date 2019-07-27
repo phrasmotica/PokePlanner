@@ -222,11 +222,13 @@ namespace PokePlanner.Controls
                 }
 
                 SetTitleCase();
+                ToolTip = null;
                 return true;
             }
 
             SetTypes(Type.Unknown);
             SetTitleCase(false);
+            ToolTip = "Unobtainable in this game version!";
             return false;
         }
 
