@@ -18,14 +18,6 @@ namespace PokePlanner.Controls
         private readonly MainWindow mainWindow;
 
         /// <summary>
-        /// Returns all HM labels.
-        /// </summary>
-        private IList<HMLabel> AllLabels => new List<HMLabel>
-        {
-            hmLabel1, hmLabel2, hmLabel3, hmLabel4, hmLabel5, hmLabel6, hmLabel7, hmLabel8
-        };
-
-        /// <summary>
         /// Matrix indicating whether the pokemon in each slot can learn each HM.
         /// FIrst index (col) for a Pokemon, second index (row) for an HM.
         /// </summary>
@@ -57,6 +49,14 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
+        /// Returns all HM labels.
+        /// </summary>
+        private IList<HMLabel> AllLabels => new List<HMLabel>
+        {
+            hmLabel1, hmLabel2, hmLabel3, hmLabel4, hmLabel5, hmLabel6, hmLabel7, hmLabel8
+        };
+
+        /// <summary>
         /// Fetch all HM moves for the version group and display them.
         /// </summary>
         public async void UpdateHMs()
@@ -85,7 +85,7 @@ namespace PokePlanner.Controls
             }
 
             Console.WriteLine($@"Retrieved {hmCount} HM moves for {vgName}.");
-            
+
             // set columns of learn matrix
             var team = mainWindow.AllDisplays.Select(d => d.Pokemon).ToArray();
             var moveNames = hmMoves.Select(m => m.Name).ToArray();

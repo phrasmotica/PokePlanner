@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using PokeAPI;
-using PokePlanner.Controls;
 using PokePlanner.Mechanics;
 using Type = PokePlanner.Mechanics.Type;
 
@@ -160,43 +159,6 @@ namespace PokePlanner.Util
             return names.FirstOrDefault(n => n.Language.Name == "en").Name;
         }
 
-#if DEBUG
-        /// <summary>
-        /// Returns this Pokemon's type data for the given generation, if any.
-        /// </summary>
-        public static async Task<Type[]> GetPastTypes(this Pokemon pokemon, Generation generation)
-        {
-            var pastTypes = pokemon.PastTypes;
-            var tasks = pastTypes.Select(async t => await t.Generation.GetObject());
-            var pastTypeGenerations = await Task.WhenAll(tasks);
-
-            if (pastTypeGenerations.Any())
-            {
-                var genNameToUse = pastTypeGenerations.SingleOrDefault(g => g.ID >= generation.ID)?.Name;
-                if (!string.IsNullOrEmpty(genNameToUse))
-                {
-                    return pastTypes.Single(p => p.Generation.Name == genNameToUse)
-                                    .Types
-                                    .ToTypes();
-                }
-
-                return pokemon.GetCurrentTypes();
-            }
-
-            return new Type[0];
-        }
-
-        /// <summary>
-        /// Returns this Pokemon's types in the given version group.
-        /// </summary>
-        public static async Task<Type[]> GetTypes(this Pokemon pokemon, VersionGroup versionGroup)
-        {
-            var generation = await versionGroup.Generation.GetObject();
-            var pastTypes = await pokemon.GetPastTypes(generation);
-            return pastTypes.Any() ? pastTypes : pokemon.GetCurrentTypes();
-        }
-#endif
-
         /// <summary>
         /// Returns this Pokemon's types in the current version group.
         /// </summary>
@@ -288,7 +250,7 @@ namespace PokePlanner.Util
             for (int i = 0; i < Constants.NUMBER_OF_HMS; i++)
             {
                 // fetch HMs by known names for now
-                var hm = await DataFetcher.GetNamedApiObject<Item>($@"hm{i+1:D2}");
+                var hm = await DataFetcher.GetNamedApiObject<Item>($@"hm{i + 1:D2}");
                 var mvd = hm.Machines.SingleOrDefault(mch => mch.VersionGroup.Name == versionGroup.Name);
 
                 if (mvd != null)
@@ -301,5 +263,42 @@ namespace PokePlanner.Util
 
             return hmMoves;
         }
+
+#if DEBUG
+        /// <summary>
+        /// Returns this Pokemon's type data for the given generation, if any.
+        /// </summary>
+        public static async Task<Type[]> GetPastTypes(this Pokemon pokemon, Generation generation)
+        {
+            var pastTypes = pokemon.PastTypes;
+            var tasks = pastTypes.Select(async t => await t.Generation.GetObject());
+            var pastTypeGenerations = await Task.WhenAll(tasks);
+
+            if (pastTypeGenerations.Any())
+            {
+                var genNameToUse = pastTypeGenerations.SingleOrDefault(g => g.ID >= generation.ID)?.Name;
+                if (!string.IsNullOrEmpty(genNameToUse))
+                {
+                    return pastTypes.Single(p => p.Generation.Name == genNameToUse)
+                                    .Types
+                                    .ToTypes();
+                }
+
+                return pokemon.GetCurrentTypes();
+            }
+
+            return new Type[0];
+        }
+
+        /// <summary>
+        /// Returns this Pokemon's types in the given version group.
+        /// </summary>
+        public static async Task<Type[]> GetTypes(this Pokemon pokemon, VersionGroup versionGroup)
+        {
+            var generation = await versionGroup.Generation.GetObject();
+            var pastTypes = await pokemon.GetPastTypes(generation);
+            return pastTypes.Any() ? pastTypes : pokemon.GetCurrentTypes();
+        }
+#endif
     }
 }

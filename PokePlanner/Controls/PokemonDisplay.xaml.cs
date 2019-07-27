@@ -25,11 +25,6 @@ namespace PokePlanner.Controls
         public const int SEARCH_DELAY = 1;
 
         /// <summary>
-        /// Timer for updating the display.
-        /// </summary>
-        private readonly DispatcherTimer timer;
-
-        /// <summary>
         /// The main window.
         /// </summary>
         private readonly MainWindow mainWindow;
@@ -40,6 +35,16 @@ namespace PokePlanner.Controls
         private readonly Settings settings;
 
         /// <summary>
+        /// Timer for updating the display.
+        /// </summary>
+        private readonly DispatcherTimer timer;
+
+        /// <summary>
+        /// The HM chart control.
+        /// </summary>
+        private HMChart hmChart;
+
+        /// <summary>
         /// Whether the display should be updated after the search box text changes.
         /// </summary>
         private bool shouldUpdate = true;
@@ -48,11 +53,6 @@ namespace PokePlanner.Controls
         /// The type chart control.
         /// </summary>
         private TypeChart typeChart;
-
-        /// <summary>
-        /// The HM chart control.
-        /// </summary>
-        private HMChart hmChart;
 
         /// <summary>
         /// Initialise types.
@@ -175,7 +175,7 @@ namespace PokePlanner.Controls
                 {
                     Console.WriteLine(e.Message);
                 }
-                
+
                 return Pokemon;
             }
 
@@ -223,7 +223,7 @@ namespace PokePlanner.Controls
                 SetTitleCase();
                 return true;
             }
-            
+
             SetTypes(Type.Unknown);
             SetTitleCase(false);
             return false;

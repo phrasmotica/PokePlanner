@@ -61,7 +61,7 @@ namespace PokePlanner
         public async Task<bool[]> UpdateTeamTypes(string oldVersionGroup, string newVersionGroup)
         {
             var typesUpdated = new bool[AllDisplays.Count];
-            
+
             for (var i = 0; i < AllDisplays.Count; i++)
             {
                 typesUpdated[i] = await AllDisplays[i].TrySetPokemon(oldVersionGroup, newVersionGroup);
