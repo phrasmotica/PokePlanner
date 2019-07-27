@@ -116,13 +116,13 @@ namespace PokePlanner.Controls
             type1.Background = prim;
             if (t2 != null)
             {
-                Grid.SetColumnSpan(type1, 1);
+                Grid.SetColumnSpan(type1, 3);
                 type2.Visibility = Visibility.Visible;
                 type2.Background = Types.Instance.TypeColours[t2.Value];
             }
             else
             {
-                Grid.SetColumnSpan(type1, 2);
+                Grid.SetColumnSpan(type1, 6);
                 type2.Visibility = Visibility.Hidden;
             }
         }
@@ -221,10 +221,14 @@ namespace PokePlanner.Controls
                     SetTypes(types[0]);
                 }
 
+                // TODO: show sprite
+
                 SetTitleCase();
                 ToolTip = null;
                 return true;
             }
+
+            // TODO: hide sprite
 
             SetTypes(Type.Unknown);
             SetTitleCase(false);
