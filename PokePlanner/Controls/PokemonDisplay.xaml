@@ -64,7 +64,7 @@
             </Label>
 
             <TextBox Style="{StaticResource searchBox}"
-                     x:Name="searchBox"
+                     x:Name="searchBox" TextAlignment="Center"
                      TextChanged="SearchBox_OnTextChanged" />
         </StackPanel>
     </Grid>
