@@ -147,6 +147,7 @@ namespace PokePlanner.Controls
             {
                 var canLearn = Pokemon.CanLearn(hmMoves.Select(m => m.Name).ToArray());
                 hmChart.SetCanLearn(row, canLearn);
+                hmChart.UpdateHMCoverage(hmMoves.Count);
             }
         }
 

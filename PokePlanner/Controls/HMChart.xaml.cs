@@ -92,11 +92,11 @@ namespace PokePlanner.Controls
             for (var col = 0; col < team.Length; col++)
             {
                 var canLearn = team[col].CanLearn(moveNames);
-                SetCanLearn(col, canLearn, false);
+                SetCanLearn(col, canLearn);
             }
 
             // update coverage once, after every matrix column has been updated
-            UpdateHMCoverage();
+            UpdateHMCoverage(hmCount);
         }
 
         /// <summary>
@@ -110,25 +110,20 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Sets the given column in the learn matrix and updates the HM labels accordingly.
         /// </summary>
-        public void SetCanLearn(int pokemonColIndex, bool[] canLearn, bool updateChart = true)
+        public void SetCanLearn(int pokemonColIndex, bool[] canLearn)
         {
             CanLearnMatrix[pokemonColIndex] = canLearn;
-
-            if (updateChart)
-            {
-                UpdateHMCoverage();
-            }
         }
 
         /// <summary>
         /// Update chart according to the HMs that can be learnt by the team.
         /// </summary>
-        private void UpdateHMCoverage()
+        public void UpdateHMCoverage(int hmCount)
         {
             Console.WriteLine(@"Updating HM move coverage...");
 
             // activate/deactivate labels accordingly
-            for (var hmRowIndex = 0; hmRowIndex < AllLabels.Count; hmRowIndex++)
+            for (var hmRowIndex = 0; hmRowIndex < hmCount; hmRowIndex++)
             {
                 if (GetCanLearn(hmRowIndex))
                 {
