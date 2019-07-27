@@ -50,6 +50,11 @@ namespace PokePlanner.Controls
         private TypeChart typeChart;
 
         /// <summary>
+        /// The HM chart control.
+        /// </summary>
+        private HMChart hmChart;
+
+        /// <summary>
         /// Initialise types.
         /// </summary>
         public PokemonDisplay()
@@ -63,7 +68,11 @@ namespace PokePlanner.Controls
                 mainWindow = (MainWindow) Application.Current.MainWindow;
                 if (mainWindow != null)
                 {
-                    mainWindow.Loaded += (s, a) => FindTypeChart();
+                    mainWindow.Loaded += (s, a) =>
+                    {
+                        FindTypeChart();
+                        hmChart = mainWindow.hmChart;
+                    };
                 }
 
                 settings = Settings.Default;
@@ -133,7 +142,12 @@ namespace PokePlanner.Controls
             typeChart.SetDefensiveMap(row, Pokemon);
 
             // update HM coverage
-            mainWindow.UpdateHMCoverage();
+            var hmMoves = SessionCache.Instance.HMMoves;
+            if (hmMoves != null)
+            {
+                var canLearn = Pokemon.CanLearn(hmMoves.Select(m => m.Name).ToArray());
+                hmChart.SetCanLearn(row, canLearn);
+            }
         }
 
         /// <summary>

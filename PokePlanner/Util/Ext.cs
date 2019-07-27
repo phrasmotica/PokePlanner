@@ -71,7 +71,7 @@ namespace PokePlanner.Util
         /// Returns the number of rows in the grid.
         /// </summary>
         public static int RowCount(this Grid grid) => grid.RowDefinitions.Count;
-        
+
         /// <summary>
         /// Creates a brush from this colour.
         /// </summary>
@@ -252,6 +252,31 @@ namespace PokePlanner.Util
             var typeObj = await DataFetcher.GetNamedApiObject<PokemonType>(type.ToString().ToLower());
             var generationIntroduced = await typeObj.Generation.GetObject();
             return generationIntroduced.ID <= generation.ID;
+        }
+
+        /// <summary>
+        /// Returns an array indicating whether the Pokemon can learn the given moves.
+        /// </summary>
+        public static bool[] CanLearn(this Pokemon pokemon, string[] moveNames)
+        {
+            var moveCount = moveNames.Length;
+            var ret = new bool[moveCount];
+
+            if (pokemon == null)
+            {
+                return ret;
+            }
+
+            var moves = pokemon.Moves.Select(m => m.Move.Name).ToArray();
+            for (var i = 0; i < moveCount; i++)
+            {
+                if (moves.Contains(moveNames[i]))
+                {
+                    ret[i] = true;
+                }
+            }
+
+            return ret;
         }
 
         /// <summary>
