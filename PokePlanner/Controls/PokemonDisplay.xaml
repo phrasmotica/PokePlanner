@@ -17,46 +17,55 @@
         <Style x:Key="spriteBackground" TargetType="Label">
             <Setter Property="Width" Value="150" />
             <Setter Property="Height" Value="150" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Background" Value="{Binding Source={x:Static util:TypeBrushes.Unknown}}" />
-            <Setter Property="Padding" Value="2" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="BorderBrush" Value="White" />
         </Style>
 
         <Style x:Key="searchBox" TargetType="TextBox">
             <Setter Property="Width" Value="150" />
+            <Setter Property="Height" Value="18" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Padding" Value="2" />
-            <Setter Property="BorderThickness" Value="2" />
             <Setter Property="BorderBrush" Value="White" />
         </Style>
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="176" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
+            <ColumnDefinition Width="79" />
+            <ColumnDefinition Width="79" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0"
+        <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="2"
                Style="{StaticResource typeColourLabel}"
                Name="type1" />
-        <Label Grid.Row="0" Grid.Column="1"
+        <Label Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" Grid.ColumnSpan="2"
                Style="{StaticResource typeColourLabel}"
                Name="type2" />
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                    HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label Style="{StaticResource spriteBackground}"
-                   Name="spriteBackground"
-                   HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <Image Name="spriteImage" />
-            </Label>
+        <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                Background="White" BorderBrush="White" BorderThickness="4" CornerRadius="2">
+            <StackPanel
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label Style="{StaticResource spriteBackground}"
+                       Name="spriteBackground"
+                       HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                    <Image Name="spriteImage" />
+                </Label>
 
-            <TextBox Style="{StaticResource searchBox}"
-                     x:Name="searchBox" TextAlignment="Center"
-                     TextChanged="SearchBox_OnTextChanged" />
-        </StackPanel>
+                <TextBox Style="{StaticResource searchBox}"
+                         x:Name="searchBox" TextAlignment="Center"
+                         TextChanged="SearchBox_OnTextChanged" />
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>
