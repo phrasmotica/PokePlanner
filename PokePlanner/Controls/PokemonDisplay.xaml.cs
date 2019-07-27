@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 using PokeAPI;
 using PokePlanner.Mechanics;
@@ -98,6 +99,14 @@ namespace PokePlanner.Controls
         /// Returns the Pokemon being displayed.
         /// </summary>
         public Pokemon Pokemon { get; set; }
+
+        /// <summary>
+        /// Returns the sprite of the Pokemon being displayed.
+        /// </summary>
+        public ImageSource Sprite
+        {
+            get => Pokemon.GetSprite();
+        }
 
         /// <summary>
         /// Creates a reference to the type chart.
@@ -220,20 +229,35 @@ namespace PokePlanner.Controls
                 {
                     SetTypes(types[0]);
                 }
-
-                // TODO: show sprite
-
+                
                 SetTitleCase();
+                ShowSprite();
                 ToolTip = null;
                 return true;
             }
-
-            // TODO: hide sprite
-
+            
             SetTypes(Type.Unknown);
             SetTitleCase(false);
+            ShowSprite(false);
             ToolTip = "Unobtainable in this game version!";
             return false;
+        }
+
+        /// <summary>
+        /// Show or hide the Pokemon's sprite.
+        /// </summary>
+        private void ShowSprite(bool show = true)
+        {
+            if (show)
+            {
+                spriteImage.Source = Sprite;
+                spriteBackground.Background = Brushes.White;
+            }
+            else
+            {
+                spriteImage.Source = null;
+                spriteBackground.Background = TypeBrushes.Unknown;
+            }
         }
 
         /// <summary>

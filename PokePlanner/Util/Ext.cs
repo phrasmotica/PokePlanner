@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using PokeAPI;
 using PokePlanner.Mechanics;
 using Type = PokePlanner.Mechanics.Type;
@@ -189,6 +192,27 @@ namespace PokePlanner.Util
             return typeMap.OrderBy(t => t.Slot)
                           .Select(t => t.Type.Name.ToEnum<Type>())
                           .ToArray();
+        }
+
+        /// <summary>
+        /// Returns this Pokemon's sprite.
+        /// </summary>
+        public static ImageSource GetSprite(this Pokemon pokemon)
+        {
+            var path = $@"{SpriteManager.Instance.SpriteDir}\{pokemon.ID:D5}.png";
+            if (File.Exists(path))
+            {
+                Console.WriteLine($@"Using downloaded sprite for {pokemon.Name}.");
+            }
+            else
+            {
+                Console.WriteLine($@"No sprite saved for {pokemon.Name}, downloading...");
+                var client = new WebClient();
+                client.DownloadFile(pokemon.Sprites.FrontMale, path);
+                Console.WriteLine($@"{pokemon.Name} sprite finished downloading.");
+            }
+            
+            return new BitmapImage(new Uri(path));
         }
 
         /// <summary>

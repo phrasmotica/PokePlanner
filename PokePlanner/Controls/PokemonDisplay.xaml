@@ -14,7 +14,7 @@
             <Setter Property="BorderBrush" Value="White" />
         </Style>
 
-        <Style x:Key="sprite" TargetType="Label">
+        <Style x:Key="spriteBackground" TargetType="Label">
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="100" />
             <Setter Property="Background" Value="{Binding Source={x:Static util:TypeBrushes.Unknown}}" />
@@ -57,8 +57,11 @@
 
         <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2"
                     HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label Style="{StaticResource sprite}"
-                   x:Name="sprite"/>
+            <Label Style="{StaticResource spriteBackground}"
+                   Name="spriteBackground"
+                   HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <Image Name="spriteImage" />
+            </Label>
 
             <TextBox Style="{StaticResource searchBox}"
                      x:Name="searchBox"
