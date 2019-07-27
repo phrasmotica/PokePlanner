@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:PokePlanner.Controls"
              xmlns:util="clr-namespace:PokePlanner.Util"
              mc:Ignorable="d"
-             d:DesignHeight="400" d:DesignWidth="600">
+             d:DesignHeight="250" d:DesignWidth="300">
 
     <UserControl.Resources>
         <Style x:Key="typeColourLabel" TargetType="Label">
@@ -15,8 +15,8 @@
         </Style>
 
         <Style x:Key="spriteBackground" TargetType="Label">
-            <Setter Property="Width" Value="100" />
-            <Setter Property="Height" Value="100" />
+            <Setter Property="Width" Value="150" />
+            <Setter Property="Height" Value="150" />
             <Setter Property="Background" Value="{Binding Source={x:Static util:TypeBrushes.Unknown}}" />
             <Setter Property="Padding" Value="2" />
             <Setter Property="BorderThickness" Value="2" />
@@ -24,7 +24,7 @@
         </Style>
 
         <Style x:Key="searchBox" TargetType="TextBox">
-            <Setter Property="Width" Value="100" />
+            <Setter Property="Width" Value="150" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Padding" Value="2" />
@@ -34,28 +34,19 @@
     </UserControl.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3"
+        <Label Grid.Row="0" Grid.Column="0"
                Style="{StaticResource typeColourLabel}"
                Name="type1" />
-        <Label Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Grid.ColumnSpan="3"
+        <Label Grid.Row="0" Grid.Column="1"
                Style="{StaticResource typeColourLabel}"
                Name="type2" />
 
-        <StackPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2"
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                     HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label Style="{StaticResource spriteBackground}"
                    Name="spriteBackground"
