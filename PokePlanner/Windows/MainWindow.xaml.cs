@@ -75,7 +75,7 @@ namespace PokePlanner
         /// </summary>
         public void UpdateHMs()
         {
-            hmChart?.UpdateHMs();
+            optionsPanel.hmChart?.UpdateHMs();
         }
 
         protected void OnLoaded(object sender, RoutedEventArgs routedEventArgs)

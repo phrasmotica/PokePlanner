@@ -30,14 +30,14 @@ namespace PokePlanner.Controls
         {
             InitializeComponent();
 
+            for (int i = 0; i < AllLabels.Count; i++)
+            {
+                var hmLabel = AllLabels[i];
+                hmLabel.Prefix = $@"HM{i + 1:D2}: ";
+            }
+
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                for (int i = 0; i < AllLabels.Count; i++)
-                {
-                    var label = AllLabels[i];
-                    label.Prefix = $@"HM{i + 1:D2}: ";
-                }
-
                 CanLearnMatrix = new bool[Constants.TEAM_SIZE][];
                 for (int i = 0; i < CanLearnMatrix.Length; i++)
                 {

@@ -35,8 +35,7 @@
                     <controls:PokemonDisplay Grid.Row="1" Grid.Column="1" x:Name="display5" />
                     <controls:PokemonDisplay Grid.Row="1" Grid.Column="2" x:Name="display6" />
 
-                    <!-- TODO: create options panel for setting game/generation/etc. -->
-                    <controls:Options Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" />
+                    <controls:Options x:Name="optionsPanel" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" />
                 </Grid>
             </TabItem>
 
@@ -47,7 +46,7 @@
 
             <!-- Moves tab -->
             <TabItem Header="Moves">
-                <controls:HMChart x:Name="hmChart" />
+
             </TabItem>
         </TabControl>
     </Grid>

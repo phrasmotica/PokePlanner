@@ -20,7 +20,6 @@ namespace PokePlanner.Controls
         {
             Prefix = "HM00: ";
             Foreground = Brushes.Black;
-            Background = MyBrushes.PastelGreen;
         }
 
         /// <summary>

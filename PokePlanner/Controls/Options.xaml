@@ -13,6 +13,8 @@
             <!-- Game version selector -->
             <Label Content="Game Version" FontWeight="Bold" />
             <controls:VersionComboBox x:Name="versionComboBox" />
+
+            <controls:HMChart x:Name="hmChart"/>
         </StackPanel>
     </Label>
 </UserControl>

@@ -6,21 +6,19 @@
              xmlns:controls="clr-namespace:PokePlanner.Controls"
              xmlns:util="clr-namespace:PokePlanner.Util"
              mc:Ignorable="d"
-             d:DesignHeight="500" d:DesignWidth="500">
+             d:DesignHeight="250" d:DesignWidth="250">
 
-    <Label Background="{Binding Source={x:Static util:MyBrushes.PastelGreen}}" BorderThickness="2" BorderBrush="White">
-        <StackPanel x:Name="panel">
-            <Label Content="Hidden machine coverage" FontWeight="Bold" />
-            
-            <!-- labels for each HM -->
-            <controls:HMLabel x:Name="hmLabel1" />
-            <controls:HMLabel x:Name="hmLabel2" />
-            <controls:HMLabel x:Name="hmLabel3" />
-            <controls:HMLabel x:Name="hmLabel4" />
-            <controls:HMLabel x:Name="hmLabel5" />
-            <controls:HMLabel x:Name="hmLabel6" />
-            <controls:HMLabel x:Name="hmLabel7" />
-            <controls:HMLabel x:Name="hmLabel8" />
-        </StackPanel>
-    </Label>
+    <StackPanel Background="{Binding Source={x:Static util:MyBrushes.PastelBlue}}">
+        <Label Content="Hidden Machine Coverage" FontWeight="Bold" />
+        
+        <!-- labels for each HM -->
+        <controls:HMLabel x:Name="hmLabel1" />
+        <controls:HMLabel x:Name="hmLabel2" />
+        <controls:HMLabel x:Name="hmLabel3" />
+        <controls:HMLabel x:Name="hmLabel4" />
+        <controls:HMLabel x:Name="hmLabel5" />
+        <controls:HMLabel x:Name="hmLabel6" />
+        <controls:HMLabel x:Name="hmLabel7" />
+        <controls:HMLabel x:Name="hmLabel8" />
+    </StackPanel>
 </UserControl>

@@ -71,7 +71,7 @@ namespace PokePlanner.Controls
                     mainWindow.Loaded += (s, a) =>
                     {
                         FindTypeChart();
-                        hmChart = mainWindow.hmChart;
+                        hmChart = mainWindow.optionsPanel.hmChart;
                     };
                 }
 
