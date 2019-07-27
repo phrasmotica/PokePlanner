@@ -1,5 +1,5 @@
-﻿using System.Windows.Media;
-using PokePlanner.Util;
+﻿using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace PokePlanner.Controls
 {
@@ -20,7 +20,13 @@ namespace PokePlanner.Controls
         {
             Prefix = "HM00: ";
             Foreground = Brushes.Black;
+            ToolTipService.SetInitialShowDelay(this, 1000);
         }
+
+        /// <summary>
+        /// Returns the name of the HM move.
+        /// </summary>
+        public string MoveName => (Content as string)?.Replace(Prefix, string.Empty) ?? string.Empty;
 
         /// <summary>
         /// Display the label as active.

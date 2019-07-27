@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using PokeAPI;
 using PokePlanner.Util;
 
 namespace PokePlanner.Controls
@@ -57,6 +59,11 @@ namespace PokePlanner.Controls
         };
 
         /// <summary>
+        /// Returns all team members.
+        /// </summary>
+        private Pokemon[] Team => mainWindow.AllDisplays.Select(d => d.Pokemon).ToArray();
+
+        /// <summary>
         /// Fetch all HM moves for the version group and display them.
         /// </summary>
         public async void UpdateHMs()
@@ -87,11 +94,10 @@ namespace PokePlanner.Controls
             Console.WriteLine($@"Retrieved {hmCount} HM moves for {vgName}.");
 
             // set columns of learn matrix
-            var team = mainWindow.AllDisplays.Select(d => d.Pokemon).ToArray();
             var moveNames = hmMoves.Select(m => m.Name).ToArray();
-            for (var col = 0; col < team.Length; col++)
+            for (var col = 0; col < Team.Length; col++)
             {
-                var canLearn = team[col].CanLearn(moveNames);
+                var canLearn = Team[col].CanLearn(moveNames);
                 SetCanLearn(col, canLearn);
             }
 
@@ -116,22 +122,71 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
+        /// Returns the names of all team members.
+        /// </summary>
+        private async Task<string[]> GetTeamNames()
+        {
+            var tasks = Team.Select(async p => p == null ? string.Empty : await p.GetName()).ToArray();
+            return await Task.WhenAll(tasks);
+        }
+
+        /// <summary>
+        /// Returns the names of team members that can learn the given HM.
+        /// </summary>
+        private async Task<IEnumerable<string>> GetLearners(int hmRowIndex)
+        {
+            var ret = new List<string>();
+            var teamNames = await GetTeamNames();
+            for (int pokemonColIndex = 0; pokemonColIndex < Constants.TEAM_SIZE; pokemonColIndex++)
+            {
+                if (CanLearnMatrix[pokemonColIndex][hmRowIndex])
+                {
+                    ret.Add(teamNames[pokemonColIndex]);
+                }
+            }
+
+            return ret;
+        }
+
+        /// <summary>
         /// Update chart according to the HMs that can be learnt by the team.
         /// </summary>
-        public void UpdateHMCoverage(int hmCount)
+        public async void UpdateHMCoverage(int hmCount)
         {
             Console.WriteLine(@"Updating HM move coverage...");
 
             // activate/deactivate labels accordingly
             for (var hmRowIndex = 0; hmRowIndex < hmCount; hmRowIndex++)
             {
+                var hmLabel = AllLabels[hmRowIndex];
                 if (GetCanLearn(hmRowIndex))
                 {
-                    AllLabels[hmRowIndex].Activate();
+                    hmLabel.Activate();
+
+                    string toolTip;
+                    var learners = (await GetLearners(hmRowIndex)).ToList();
+                    var learnersCount = learners.Count;
+                    if (learnersCount == 1)
+                    {
+                        toolTip = $"{learners[0]} can learn {hmLabel.MoveName}";
+                    }
+                    else if (learnersCount <= 3)
+                    {
+                        toolTip = string.Join(", ", learners.Take(learnersCount - 1))
+                                  + $" and {learners.Last()} can learn {hmLabel.MoveName}";
+                    }
+                    else
+                    {
+                        toolTip = string.Join(", ", learners.Take(3))
+                                  + $" and {learnersCount - 3} more\ncan learn {hmLabel.MoveName}";
+                    }
+
+                    hmLabel.ToolTip = toolTip;
                 }
                 else
                 {
-                    AllLabels[hmRowIndex].Deactivate();
+                    hmLabel.Deactivate();
+                    hmLabel.ToolTip = $"None of your team can learn {hmLabel.MoveName}!";
                 }
             }
 
