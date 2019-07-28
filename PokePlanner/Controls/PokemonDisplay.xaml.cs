@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
-using PokeAPI;
+using PokeApiNet.Models;
 using PokePlanner.Mechanics;
 using PokePlanner.Properties;
 using PokePlanner.Util;
@@ -199,11 +199,11 @@ namespace PokePlanner.Controls
         /// </summary>
         private async Task<Pokemon> TryGetPokemon(string species)
         {
-            var pokemon = await DataFetcher.GetNamedApiObject<Pokemon>(species);
-            var versionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(settings.versionGroup);
-            var pokedices = versionGroup.Pokedices.Select(p => p.Name);
+            var pokemon = await SessionCache.Client.GetResourceAsync<Pokemon>(species);
+            var versionGroup = await SessionCache.Client.GetResourceAsync<VersionGroup>(settings.versionGroup);
+            var pokedices = versionGroup.Pokedexes.Select(p => p.Name);
 
-            var pokemonSpecies = await pokemon.Species.GetObject();
+            var pokemonSpecies = await SessionCache.Client.GetResourceAsync(pokemon.Species);
             var pokemonPokedices = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
 
             var valid = pokedices.Intersect(pokemonPokedices).Any();

@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using PokeAPI;
+using PokeApiNet.Models;
 using PokePlanner.Mechanics;
 using Type = PokePlanner.Mechanics.Type;
 
@@ -140,7 +140,7 @@ namespace PokePlanner.Util
         /// <summary>
         /// Returns the English title-case name of this API object.
         /// </summary>
-        public static string GetName(this NamedApiObject obj)
+        public static string GetName(this NamedApiResource obj)
         {
             return obj.Names.GetEnglishName();
         }
@@ -150,14 +150,14 @@ namespace PokePlanner.Util
         /// </summary>
         public static async Task<string> GetName(this Pokemon pokemon)
         {
-            var species = await pokemon.Species.GetObject();
+            var species = await SessionCache.Client.GetResourceAsync(pokemon.Species);
             return species.Names.GetEnglishName();
         }
 
         /// <summary>
         /// Returns the English name from the set of names.
         /// </summary>
-        public static string GetEnglishName(this IEnumerable<ResourceName> names)
+        public static string GetEnglishName(this IEnumerable<Names> names)
         {
             return names.FirstOrDefault(n => n.Language.Name == "en").Name;
         }
@@ -187,7 +187,7 @@ namespace PokePlanner.Util
         /// <summary>
         /// Returns this type map as an array of Type enum values.
         /// </summary>
-        public static Type[] ToTypes(this IEnumerable<PokemonTypeMap> typeMap)
+        public static Type[] ToTypes(this IEnumerable<PokemonType> typeMap)
         {
             return typeMap.OrderBy(t => t.Slot)
                           .Select(t => t.Type.Name.ToEnum<Type>())
@@ -199,7 +199,7 @@ namespace PokePlanner.Util
         /// </summary>
         public static ImageSource GetSprite(this Pokemon pokemon)
         {
-            var path = $@"{SpriteManager.Instance.SpriteDir}\{pokemon.ID:D5}.png";
+            var path = $@"{SpriteManager.Instance.SpriteDir}\{pokemon.Id:D5}.png";
             if (File.Exists(path))
             {
                 Console.WriteLine($@"Using downloaded sprite for {pokemon.Name}.");
@@ -208,7 +208,7 @@ namespace PokePlanner.Util
             {
                 Console.WriteLine($@"No sprite saved for {pokemon.Name}, downloading...");
                 var client = new WebClient();
-                client.DownloadFile(pokemon.Sprites.FrontMale, path);
+                client.DownloadFile(pokemon.Sprites.FrontDefault, path);
                 Console.WriteLine($@"{pokemon.Name} sprite finished downloading.");
             }
             
@@ -223,7 +223,7 @@ namespace PokePlanner.Util
             var versionNames = new List<string>();
             foreach (var version in vg.Versions)
             {
-                var gv = await version.GetObject();
+                var gv = await SessionCache.Client.GetResourceAsync(version);
                 versionNames.Add(gv.GetName());
             }
 
@@ -235,9 +235,9 @@ namespace PokePlanner.Util
         /// </summary>
         public static async Task<bool> HasType(this Generation generation, Type type)
         {
-            var typeObj = await DataFetcher.GetNamedApiObject<PokemonType>(type.ToString().ToLower());
-            var generationIntroduced = await typeObj.Generation.GetObject();
-            return generationIntroduced.ID <= generation.ID;
+            var typeObj = await SessionCache.Client.GetResourceAsync<PokeApiNet.Models.Type>(type.ToString().ToLower());
+            var generationIntroduced = await SessionCache.Client.GetResourceAsync(typeObj.Generation);
+            return generationIntroduced.Id <= generation.Id;
         }
 
         /// <summary>
@@ -274,13 +274,13 @@ namespace PokePlanner.Util
             for (int i = 0; i < Constants.NUMBER_OF_HMS; i++)
             {
                 // fetch HMs by known names for now
-                var hm = await DataFetcher.GetNamedApiObject<Item>($@"hm{i + 1:D2}");
+                var hm = await SessionCache.Client.GetResourceAsync<Item>($@"hm{i + 1:D2}");
                 var mvd = hm.Machines.SingleOrDefault(mch => mch.VersionGroup.Name == versionGroup.Name);
 
                 if (mvd != null)
                 {
-                    var machine1 = await mvd.Machine.GetObject();
-                    var move = await machine1.Move.GetObject();
+                    var machine1 = await SessionCache.Client.GetResourceAsync(mvd.Machine);
+                    var move = await SessionCache.Client.GetResourceAsync(machine1.Move);
                     hmMoves.Add(move);
                 }
             }
@@ -295,12 +295,11 @@ namespace PokePlanner.Util
         public static async Task<Type[]> GetPastTypes(this Pokemon pokemon, Generation generation)
         {
             var pastTypes = pokemon.PastTypes;
-            var tasks = pastTypes.Select(async t => await t.Generation.GetObject());
-            var pastTypeGenerations = await Task.WhenAll(tasks);
+            var pastTypeGenerations = await SessionCache.Client.GetResourceAsync(pastTypes.Select(t => t.Generation));
 
             if (pastTypeGenerations.Any())
             {
-                var genNameToUse = pastTypeGenerations.SingleOrDefault(g => g.ID >= generation.ID)?.Name;
+                var genNameToUse = pastTypeGenerations.SingleOrDefault(g => g.Id >= generation.Id)?.Name;
                 if (!string.IsNullOrEmpty(genNameToUse))
                 {
                     return pastTypes.Single(p => p.Generation.Name == genNameToUse)
@@ -319,7 +318,7 @@ namespace PokePlanner.Util
         /// </summary>
         public static async Task<Type[]> GetTypes(this Pokemon pokemon, VersionGroup versionGroup)
         {
-            var generation = await versionGroup.Generation.GetObject();
+            var generation = await SessionCache.Client.GetResourceAsync(versionGroup.Generation);
             var pastTypes = await pokemon.GetPastTypes(generation);
             return pastTypes.Any() ? pastTypes : pokemon.GetCurrentTypes();
         }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using PokeAPI;
 using PokePlanner.Util;
 
 namespace PokePlanner.Mechanics
@@ -80,7 +79,7 @@ namespace PokePlanner.Mechanics
                 // retrieve type object from PokeAPI
                 var typeName = defType.ToString().ToLower();
                 Console.WriteLine($@"Getting {typeName} type data...");
-                var typeObj = await DataFetcher.GetNamedApiObject<PokemonType>(typeName);
+                var typeObj = await SessionCache.Client.GetResourceAsync<PokeApiNet.Models.Type>(typeName);
                 Console.WriteLine($@"Got {typeName} type data.");
             
                 // now set its defensive effectivenesses

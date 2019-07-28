@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using PokeAPI;
+using PokeApiNet.Models;
 using PokePlanner.Properties;
 using PokePlanner.Util;
 
@@ -80,9 +80,8 @@ namespace PokePlanner.Controls
         /// </summary>
         public static async Task<IEnumerable<VersionGroup>> GetVersionGroups()
         {
-            var vgResources = await DataFetcher.GetResourceList<NamedApiResource<VersionGroup>, VersionGroup>();
-            var tasks = vgResources.Select(async vg => await vg.GetObject());
-            return await Task.WhenAll(tasks);
+            var vgResources = await SessionCache.Client.GetNamedResourcePageAsync<VersionGroup>();
+            return await SessionCache.Client.GetResourceAsync(vgResources.Results);
         }
 
         /// <summary>
@@ -94,10 +93,10 @@ namespace PokePlanner.Controls
 
             var newVersionGroupName = VersionGroups[SelectedIndex];
             settings.versionGroup = newVersionGroupName;
-            var newVersionGroup = await DataFetcher.GetNamedApiObject<VersionGroup>(newVersionGroupName);
+            var newVersionGroup = await SessionCache.Client.GetResourceAsync<VersionGroup>(newVersionGroupName);
             SessionCache.Instance.VersionGroup = newVersionGroup;
 
-            SessionCache.Instance.Generation = await newVersionGroup.Generation.GetObject();
+            SessionCache.Instance.Generation = await SessionCache.Client.GetResourceAsync(newVersionGroup.Generation);
             
             mainWindow.UpdateTypes(oldVersionGroupName, newVersionGroupName);
             mainWindow.UpdateHMs();

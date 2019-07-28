@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using PokeAPI;
+using PokePlanner.Util;
 
 namespace PokePlanner
 {
@@ -16,23 +16,15 @@ namespace PokePlanner
         {
             base.OnStartup(e);
 
-            // try to connect to the API
-            var baseUrl = "https://pokeapi.co/api/v2/";
-
-#if DEBUG
-            baseUrl = "http://localhost:8000/api/v2/";
-#endif
-
-            DataFetcher.DataBackend = new HttpBackend(baseUrl, "PokePlanner");
-            var success = await DataFetcher.GetApiObject<PokemonType>(1) != null;
-
+            var baseUri = SessionCache.Client.BaseUri.AbsoluteUri;
+            var success = await SessionCache.Client.GetResourceAsync<PokeApiNet.Models.Type>(1) != null;
             if (success)
             {
-                Console.WriteLine($@"Connected to PokeAPI at {baseUrl}.");
+                Console.WriteLine($@"Connected to PokeAPI at {baseUri}.");
             }
             else
             {
-                var msg = $@"PokeAPI is not running at {baseUrl}!";
+                var msg = $@"PokeAPI is not running at {baseUri}!";
                 Console.WriteLine(msg);
                 MessageBox.Show(msg, "PokePlanner", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 Shutdown(1);

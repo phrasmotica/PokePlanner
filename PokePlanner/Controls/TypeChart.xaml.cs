@@ -4,9 +4,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using PokeAPI;
+using PokeApiNet.Models;
 using PokePlanner.Mechanics;
 using PokePlanner.Util;
+using Type = PokePlanner.Mechanics.Type;
 
 namespace PokePlanner.Controls
 {

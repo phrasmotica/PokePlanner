@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using PokeAPI;
+using PokeApiNet.Data;
+using PokeApiNet.Models;
 
 namespace PokePlanner.Util
 {
@@ -32,5 +33,10 @@ namespace PokePlanner.Util
         /// Singleton instance.
         /// </summary>
         public static SessionCache Instance { get; set; } = new SessionCache();
+
+        /// <summary>
+        /// Client for PokeApi.
+        /// </summary>
+        public static PokeApiClient Client { get; } = new PokeApiClient();
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using PokeAPI;
+using PokeApiNet.Models;
 using PokePlanner.Util;
 
 namespace PokePlanner.Controls
