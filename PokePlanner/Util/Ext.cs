@@ -179,7 +179,7 @@ namespace PokePlanner.Util
         /// <summary>
         /// Returns this Pokemon's latest type data.
         /// </summary>
-        public static Type[] GetCurrentTypes(this Pokemon pokemon)
+        private static Type[] GetCurrentTypes(this Pokemon pokemon)
         {
             return pokemon.Types.ToTypes();
         }
@@ -187,7 +187,7 @@ namespace PokePlanner.Util
         /// <summary>
         /// Returns this type map as an array of Type enum values.
         /// </summary>
-        public static Type[] ToTypes(this IEnumerable<PokemonType> typeMap)
+        private static Type[] ToTypes(this IEnumerable<PokemonType> typeMap)
         {
             return typeMap.OrderBy(t => t.Slot)
                           .Select(t => t.Type.Name.ToEnum<Type>())
@@ -292,7 +292,7 @@ namespace PokePlanner.Util
         /// <summary>
         /// Returns this Pokemon's type data for the given generation, if any.
         /// </summary>
-        public static async Task<Type[]> GetPastTypes(this Pokemon pokemon, Generation generation)
+        private static async Task<Type[]> GetPastTypes(this Pokemon pokemon, Generation generation)
         {
             var pastTypes = pokemon.PastTypes;
             var pastTypeGenerations = await SessionCache.Client.GetResourceAsync(pastTypes.Select(t => t.Generation));
@@ -314,7 +314,7 @@ namespace PokePlanner.Util
         /// <summary>
         /// Returns this Pokemon's types in the given version group.
         /// </summary>
-        public static async Task<Type[]> GetTypes(this Pokemon pokemon, VersionGroup versionGroup)
+        private static async Task<Type[]> GetTypes(this Pokemon pokemon, VersionGroup versionGroup)
         {
             var generation = await SessionCache.Client.GetResourceAsync(versionGroup.Generation);
             var pastTypes = await pokemon.GetPastTypes(generation);
