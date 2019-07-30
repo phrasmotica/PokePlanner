@@ -306,8 +306,6 @@ namespace PokePlanner.Util
                                     .Types
                                     .ToTypes();
                 }
-
-                return pokemon.GetCurrentTypes();
             }
 
             return new Type[0];
