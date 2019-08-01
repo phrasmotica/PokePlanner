@@ -80,8 +80,8 @@ namespace PokePlanner.Controls
         /// </summary>
         public static async Task<IEnumerable<VersionGroup>> GetVersionGroups()
         {
-            var vgResources = await SessionCache.Client.GetNamedResourcePageAsync<VersionGroup>();
-            return await SessionCache.Client.GetResourceAsync(vgResources.Results);
+            var vgResources = await SessionCache.GetPage<VersionGroup>();
+            return await SessionCache.Get(vgResources.Results);
         }
 
         /// <summary>
@@ -93,10 +93,10 @@ namespace PokePlanner.Controls
 
             var newVersionGroupName = VersionGroups[SelectedIndex];
             settings.versionGroup = newVersionGroupName;
-            var newVersionGroup = await SessionCache.Client.GetResourceAsync<VersionGroup>(newVersionGroupName);
+            var newVersionGroup = await SessionCache.Get<VersionGroup>(newVersionGroupName);
             SessionCache.Instance.VersionGroup = newVersionGroup;
 
-            SessionCache.Instance.Generation = await SessionCache.Client.GetResourceAsync(newVersionGroup.Generation);
+            SessionCache.Instance.Generation = await SessionCache.Get(newVersionGroup.Generation);
             Types.Instance.LoadTypeData();
             
             mainWindow.UpdateTypes(oldVersionGroupName, newVersionGroupName);

@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using PokePlanner.Util;
@@ -25,16 +24,8 @@ namespace PokePlanner
         private async Task CheckPokeAPIRunning()
         {
             var baseUri = SessionCache.Client.BaseUri.AbsoluteUri;
-            var success = false;
-            try
-            {
-                success = await SessionCache.Client.GetResourceAsync<PokeApiNet.Models.Type>(1) != null;
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine(ex);
-            }
 
+            var success = await SessionCache.Get<PokeApiNet.Models.Type>(1) != null;
             if (success)
             {
                 Console.WriteLine($@"Connected to PokeAPI at {baseUri}.");

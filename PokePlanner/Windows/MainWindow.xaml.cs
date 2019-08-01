@@ -42,7 +42,7 @@ namespace PokePlanner
         /// </summary>
         public async Task ValidateTeam(string newVersionGroup)
         {
-            var versionGroup = await SessionCache.Client.GetResourceAsync<VersionGroup>(newVersionGroup);
+            var versionGroup = await SessionCache.Get<VersionGroup>(newVersionGroup);
             foreach (var display in AllDisplays)
             {
                 var valid = await display.Pokemon.IsValid(versionGroup);

@@ -150,7 +150,7 @@ namespace PokePlanner.Util
         /// </summary>
         public static async Task<string> GetName(this Pokemon pokemon)
         {
-            var species = await SessionCache.Client.GetResourceAsync(pokemon.Species);
+            var species = await SessionCache.Get(pokemon.Species);
             return species.Names.GetEnglishName();
         }
 
@@ -245,7 +245,7 @@ namespace PokePlanner.Util
             var versionNames = new List<string>();
             foreach (var version in vg.Versions)
             {
-                var gv = await SessionCache.Client.GetResourceAsync(version);
+                var gv = await SessionCache.Get(version);
                 versionNames.Add(gv.GetName());
             }
 
@@ -257,8 +257,8 @@ namespace PokePlanner.Util
         /// </summary>
         public static async Task<bool> HasType(this Generation generation, Type type)
         {
-            var typeObj = await SessionCache.Client.GetResourceAsync<PokeApiNet.Models.Type>(type.ToString().ToLower());
-            var generationIntroduced = await SessionCache.Client.GetResourceAsync(typeObj.Generation);
+            var typeObj = await SessionCache.Get<PokeApiNet.Models.Type>(type.ToString().ToLower());
+            var generationIntroduced = await SessionCache.Get(typeObj.Generation);
             return generationIntroduced.Id <= generation.Id;
         }
 
@@ -269,7 +269,7 @@ namespace PokePlanner.Util
         {
             var pokedexes = versionGroup.Pokedexes.Select(p => p.Name);
 
-            var pokemonSpecies = await SessionCache.Client.GetResourceAsync(pokemon.Species);
+            var pokemonSpecies = await SessionCache.Get(pokemon.Species);
             var pokemonPokedexes = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
 
             return pokedexes.Intersect(pokemonPokedexes).Any();
@@ -309,13 +309,13 @@ namespace PokePlanner.Util
             for (int i = 0; i < Constants.NUMBER_OF_HMS; i++)
             {
                 // fetch HMs by known names for now
-                var hm = await SessionCache.Client.GetResourceAsync<Item>($@"hm{i + 1:D2}");
+                var hm = await SessionCache.Get<Item>($@"hm{i + 1:D2}");
                 var mvd = hm.Machines.SingleOrDefault(mch => mch.VersionGroup.Name == versionGroup.Name);
 
                 if (mvd != null)
                 {
-                    var machine1 = await SessionCache.Client.GetResourceAsync(mvd.Machine);
-                    var move = await SessionCache.Client.GetResourceAsync(machine1.Move);
+                    var machine1 = await SessionCache.Get(mvd.Machine);
+                    var move = await SessionCache.Get(machine1.Move);
                     hmMoves.Add(move);
                 }
             }
@@ -330,7 +330,7 @@ namespace PokePlanner.Util
         private static async Task<Type[]> GetPastTypes(this Pokemon pokemon, Generation generation)
         {
             var pastTypes = pokemon.PastTypes;
-            var pastTypeGenerations = await SessionCache.Client.GetResourceAsync(pastTypes.Select(t => t.Generation));
+            var pastTypeGenerations = await SessionCache.Get(pastTypes.Select(t => t.Generation));
 
             if (pastTypeGenerations.Any())
             {
@@ -353,7 +353,7 @@ namespace PokePlanner.Util
         /// </summary>
         private static async Task<Type[]> GetTypes(this Pokemon pokemon, VersionGroup versionGroup)
         {
-            var generation = await SessionCache.Client.GetResourceAsync(versionGroup.Generation);
+            var generation = await SessionCache.Get(versionGroup.Generation);
             var pastTypes = await pokemon.GetPastTypes(generation);
             return pastTypes.Any() ? pastTypes : pokemon.GetCurrentTypes();
         }
@@ -364,7 +364,7 @@ namespace PokePlanner.Util
         private static async Task<TypeRelations> GetPastDamageRelations(this PokeApiNet.Models.Type type, Generation generation)
         {
             var pastDamageRelations = type.PastDamageRelations;
-            var pastGenerations = await SessionCache.Client.GetResourceAsync(pastDamageRelations.Select(t => t.Generation));
+            var pastGenerations = await SessionCache.Get(pastDamageRelations.Select(t => t.Generation));
 
             if (pastGenerations.Any())
             {
@@ -386,7 +386,7 @@ namespace PokePlanner.Util
         /// </summary>
         private static async Task<TypeRelations> GetDamageRelations(this PokeApiNet.Models.Type type, VersionGroup versionGroup)
         {
-            var generation = await SessionCache.Client.GetResourceAsync(versionGroup.Generation);
+            var generation = await SessionCache.Get(versionGroup.Generation);
             var pastDamageRelations = await type.GetPastDamageRelations(generation);
             return pastDamageRelations ?? type.GetCurrentDamageRelations();
         }

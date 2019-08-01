@@ -199,10 +199,10 @@ namespace PokePlanner.Controls
         /// </summary>
         private async Task<Pokemon> TryGetPokemon(string species)
         {
-            var pokemon = await SessionCache.Client.GetResourceAsync<Pokemon>(species);
+            var pokemon = await SessionCache.Get<Pokemon>(species);
             if (settings.restrictToVersion)
             {
-                var versionGroup = await SessionCache.Client.GetResourceAsync<VersionGroup>(settings.versionGroup);
+                var versionGroup = await SessionCache.Get<VersionGroup>(settings.versionGroup);
                 var isValid = await pokemon.IsValid(versionGroup);
                 return isValid ? pokemon : null;
             }

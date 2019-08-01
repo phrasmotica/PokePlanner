@@ -79,7 +79,7 @@ namespace PokePlanner.Mechanics
                 // retrieve type object from PokeAPI
                 var typeName = defType.ToString().ToLower();
                 Console.WriteLine($@"Getting {typeName} type data...");
-                var typeObj = await SessionCache.Client.GetResourceAsync<PokeApiNet.Models.Type>(typeName);
+                var typeObj = await SessionCache.Get<PokeApiNet.Models.Type>(typeName);
                 Console.WriteLine($@"Got {typeName} type data.");
             
                 // now set its defensive effectivenesses
