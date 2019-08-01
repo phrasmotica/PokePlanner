@@ -268,8 +268,6 @@ namespace PokePlanner.Util
         /// </summary>
         public static async Task<bool> HasValidPokemon(this PokemonDisplay display, VersionGroup versionGroup)
         {
-            var pokedexes = versionGroup.Pokedexes.Select(p => p.Name);
-
             PokemonSpecies pokemonSpecies;
             if (display.Pokemon != null)
             {
