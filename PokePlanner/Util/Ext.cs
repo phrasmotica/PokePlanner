@@ -195,6 +195,28 @@ namespace PokePlanner.Util
         }
 
         /// <summary>
+        /// Returns this type's damage relations in the current version group.
+        /// </summary>
+        public static async Task<TypeRelations> GetDamageRelations(this PokeApiNet.Models.Type type)
+        {
+#if DEBUG
+            var versionGroup = SessionCache.Instance.VersionGroup;
+            var relations = await type.GetDamageRelations(versionGroup);
+#else
+            var relations = type.GetCurrentDamageRelations();
+#endif
+            return relations;
+        }
+
+        /// <summary>
+        /// Returns this type's latest damage relations.
+        /// </summary>
+        private static TypeRelations GetCurrentDamageRelations(this PokeApiNet.Models.Type type)
+        {
+            return type.DamageRelations;
+        }
+
+        /// <summary>
         /// Returns this Pokemon's sprite.
         /// </summary>
         public static ImageSource GetSprite(this Pokemon pokemon)
@@ -319,6 +341,37 @@ namespace PokePlanner.Util
             var generation = await SessionCache.Client.GetResourceAsync(versionGroup.Generation);
             var pastTypes = await pokemon.GetPastTypes(generation);
             return pastTypes.Any() ? pastTypes : pokemon.GetCurrentTypes();
+        }
+
+        /// <summary>
+        /// Returns this type's damage relations data for the given generation, if any.
+        /// </summary>
+        private static async Task<TypeRelations> GetPastDamageRelations(this PokeApiNet.Models.Type type, Generation generation)
+        {
+            var pastDamageRelations = type.PastDamageRelations;
+            var pastGenerations = await SessionCache.Client.GetResourceAsync(pastDamageRelations.Select(t => t.Generation));
+
+            if (pastGenerations.Any())
+            {
+                var genNameToUse = pastGenerations.SingleOrDefault(g => g.Id >= generation.Id)?.Name;
+                if (!string.IsNullOrEmpty(genNameToUse))
+                {
+                    return pastDamageRelations.Single(p => p.Generation.Name == genNameToUse)
+                                              .DamageRelations;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Returns this type's damage relations in the given version group.
+        /// </summary>
+        private static async Task<TypeRelations> GetDamageRelations(this PokeApiNet.Models.Type type, VersionGroup versionGroup)
+        {
+            var generation = await SessionCache.Client.GetResourceAsync(versionGroup.Generation);
+            var pastDamageRelations = await type.GetPastDamageRelations(generation);
+            return pastDamageRelations ?? type.GetCurrentDamageRelations();
         }
 #endif
     }
