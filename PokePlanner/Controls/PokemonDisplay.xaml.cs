@@ -242,6 +242,15 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
+        /// Shows the Pokemon regardless of its validity.
+        /// </summary>
+        public async Task ShowPokemon()
+        {
+            Pokemon = await TryGetPokemon(Species);
+            await SetPokemon(Pokemon);
+        }
+
+        /// <summary>
         /// Tries to set the display to the current species.
         /// Returns false if unsuccessful, e.g. if the Pokemon
         /// is not part of the version group.

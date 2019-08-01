@@ -45,8 +45,12 @@ namespace PokePlanner
             var versionGroup = await SessionCache.Get<VersionGroup>(newVersionGroup);
             foreach (var display in AllDisplays)
             {
-                var valid = await display.HasValidPokemon(versionGroup);
-                if (!valid)
+                var valid = !settings.restrictToVersion || await display.HasValidPokemon(versionGroup);
+                if (valid)
+                {
+                    await display.ShowPokemon();
+                }
+                else
                 {
                     await display.SetPokemon(null);
                 }
