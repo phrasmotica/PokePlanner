@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using PokePlanner.Controls;
-using PokePlanner.Mechanics;
 using PokePlanner.Properties;
 
 namespace PokePlanner
@@ -24,9 +23,6 @@ namespace PokePlanner
         public MainWindow()
         {
             InitializeComponent();
-
-            // load type data
-            Types.Instance.LoadTypeData();
 
             Loaded += OnLoaded;
         }

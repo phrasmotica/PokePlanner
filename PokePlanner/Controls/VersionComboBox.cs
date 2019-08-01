@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using PokeApiNet.Models;
+using PokePlanner.Mechanics;
 using PokePlanner.Properties;
 using PokePlanner.Util;
 
@@ -97,6 +98,7 @@ namespace PokePlanner.Controls
             SessionCache.Instance.VersionGroup = newVersionGroup;
 
             SessionCache.Instance.Generation = await SessionCache.Client.GetResourceAsync(newVersionGroup.Generation);
+            Types.Instance.LoadTypeData();
             
             mainWindow.UpdateTypes(oldVersionGroupName, newVersionGroupName);
             mainWindow.UpdateHMs();

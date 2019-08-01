@@ -90,7 +90,7 @@ namespace PokePlanner.Mechanics
                 DefensiveEff[defType].Initialise(ConcreteTypes, 1);
 
                 // populate defensive damage relations
-                var damageRelations = typeObj.DamageRelations;
+                var damageRelations = await typeObj.GetDamageRelations();
 
                 foreach (var x in damageRelations.DoubleDamageFrom)
                 {
