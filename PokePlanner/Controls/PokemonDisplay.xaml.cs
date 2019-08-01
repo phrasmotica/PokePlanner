@@ -200,24 +200,22 @@ namespace PokePlanner.Controls
         private async Task<Pokemon> TryGetPokemon(string species)
         {
             var pokemon = await SessionCache.Client.GetResourceAsync<Pokemon>(species);
-            var versionGroup = await SessionCache.Client.GetResourceAsync<VersionGroup>(settings.versionGroup);
-            var pokedices = versionGroup.Pokedexes.Select(p => p.Name);
+            if (settings.restrictToVersion)
+            {
+                var versionGroup = await SessionCache.Client.GetResourceAsync<VersionGroup>(settings.versionGroup);
+                var isValid = await pokemon.IsValid(versionGroup);
+                return isValid ? pokemon : null;
+            }
 
-            var pokemonSpecies = await SessionCache.Client.GetResourceAsync(pokemon.Species);
-            var pokemonPokedices = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
-
-            var valid = pokedices.Intersect(pokemonPokedices).Any();
-            return valid ? pokemon : null;
+            return pokemon;
         }
 
         /// <summary>
-        /// Tries to set the display to the current Pokemon.
-        /// Returns false if unsuccessful, e.g. if the Pokemon
-        /// is not part of the version group.
+        /// Tries to set the display to the given Pokemon.
+        /// Returns false if the Pokemon set is null.
         /// </summary>
-        public async Task<bool> TrySetPokemon(string oldVersionGroup, string newVersionGroup)
+        public async Task<bool> SetPokemon(Pokemon pokemon)
         {
-            var pokemon = await GetPokemon(oldVersionGroup, newVersionGroup);
             if (pokemon != null)
             {
                 var types = await pokemon.GetTypes();
@@ -241,6 +239,17 @@ namespace PokePlanner.Controls
             ShowSprite(false);
             ToolTip = "Unobtainable in this game version!";
             return false;
+        }
+
+        /// <summary>
+        /// Tries to set the display to the current species.
+        /// Returns false if unsuccessful, e.g. if the Pokemon
+        /// is not part of the version group.
+        /// </summary>
+        public async Task<bool> TrySetPokemon(string oldVersionGroup, string newVersionGroup)
+        {
+            var pokemon = await GetPokemon(oldVersionGroup, newVersionGroup);
+            return await SetPokemon(pokemon);
         }
 
         /// <summary>

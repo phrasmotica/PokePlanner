@@ -263,6 +263,19 @@ namespace PokePlanner.Util
         }
 
         /// <summary>
+        /// Returns true if this Pokemon can be obtained in the given version group.
+        /// </summary>
+        public static async Task<bool> IsValid(this Pokemon pokemon, VersionGroup versionGroup)
+        {
+            var pokedexes = versionGroup.Pokedexes.Select(p => p.Name);
+
+            var pokemonSpecies = await SessionCache.Client.GetResourceAsync(pokemon.Species);
+            var pokemonPokedexes = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
+
+            return pokedexes.Intersect(pokemonPokedexes).Any();
+        }
+
+        /// <summary>
         /// Returns an array indicating whether the Pokemon can learn the given moves.
         /// </summary>
         public static bool[] CanLearn(this Pokemon pokemon, string[] moveNames)

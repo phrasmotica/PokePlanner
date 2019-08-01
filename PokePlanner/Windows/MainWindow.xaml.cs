@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
+using PokeApiNet.Models;
 using PokePlanner.Controls;
 using PokePlanner.Properties;
+using PokePlanner.Util;
 
 namespace PokePlanner
 {
@@ -34,6 +36,22 @@ namespace PokePlanner
         {
             display1, display2, display3, display4, display5, display6
         };
+
+        /// <summary>
+        /// Update types in the team display and effectiveness chart.
+        /// </summary>
+        public async Task ValidateTeam(string newVersionGroup)
+        {
+            var versionGroup = await SessionCache.Client.GetResourceAsync<VersionGroup>(newVersionGroup);
+            foreach (var display in AllDisplays)
+            {
+                var valid = await display.Pokemon.IsValid(versionGroup);
+                if (!valid)
+                {
+                    await display.SetPokemon(null);
+                }
+            }
+        }
 
         /// <summary>
         /// Update types in the team display and effectiveness chart.

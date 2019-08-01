@@ -14,6 +14,10 @@
             <Label Content="Game Version" FontWeight="Bold" />
             <controls:VersionComboBox x:Name="versionComboBox" />
 
+            <CheckBox Name="restrictCheckBox" Click="RestrictCheckBox_OnClick"
+                      Content="Restrict team members to game version"
+                      Margin="0 4 0 0" />
+
             <controls:HMChart x:Name="hmChart"/>
         </StackPanel>
     </Label>
