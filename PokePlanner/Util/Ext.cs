@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PokeApiNet.Models;
+using PokePlanner.Controls;
 using PokePlanner.Mechanics;
 using Type = PokePlanner.Mechanics.Type;
 
@@ -265,14 +266,40 @@ namespace PokePlanner.Util
         /// <summary>
         /// Returns true if this Pokemon can be obtained in the given version group.
         /// </summary>
-        public static async Task<bool> IsValid(this Pokemon pokemon, VersionGroup versionGroup)
+        public static async Task<bool> HasValidPokemon(this PokemonDisplay display, VersionGroup versionGroup)
         {
             var pokedexes = versionGroup.Pokedexes.Select(p => p.Name);
 
-            var pokemonSpecies = await SessionCache.Get(pokemon.Species);
-            var pokemonPokedexes = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
+            PokemonSpecies pokemonSpecies;
+            if (display.Pokemon != null)
+            {
+                pokemonSpecies = await SessionCache.Get(display.Pokemon.Species);
+            }
+            else
+            {
+                pokemonSpecies = await SessionCache.Get<PokemonSpecies>(display.Species);
+            }
 
-            return pokedexes.Intersect(pokemonPokedexes).Any();
+            return pokemonSpecies.IsValid(versionGroup);
+        }
+
+        /// <summary>
+        /// Returns true if this Pokemon can be obtained in the given version group.
+        /// </summary>
+        public static async Task<bool> IsValid(this Pokemon pokemon, VersionGroup versionGroup)
+        {
+            var pokemonSpecies = await SessionCache.Get(pokemon.Species);
+            return pokemonSpecies.IsValid(versionGroup);
+        }
+
+        /// <summary>
+        /// Returns true if this Pokemon can be obtained in the given version group.
+        /// </summary>
+        public static bool IsValid(this PokemonSpecies pokemonSpecies, VersionGroup versionGroup)
+        {
+            var versionGroupPokedexes = versionGroup.Pokedexes.Select(p => p.Name);
+            var pokemonPokedexes = pokemonSpecies.PokedexNumbers.Select(pn => pn.Pokedex.Name);
+            return versionGroupPokedexes.Intersect(pokemonPokedexes).Any();
         }
 
         /// <summary>
