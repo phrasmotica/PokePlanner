@@ -37,7 +37,6 @@ namespace PokePlanner.Controls
         public VersionComboBox()
         {
             MinWidth = 185;
-            HorizontalAlignment = HorizontalAlignment.Center;
             VerticalAlignment = VerticalAlignment.Center;
 
             if (!DesignerProperties.GetIsInDesignMode(this))
