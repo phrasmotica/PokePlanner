@@ -45,8 +45,11 @@ namespace PokePlanner
             var updated = await UpdateTeamTypes(oldVersionGroup, newVersionGroup);
             for (var i = 0; i < updated.Length; i++)
             {
-                var pokemon = AllDisplays[i].Pokemon;
-                typeChart.SetDefensiveMap(i, pokemon);
+                if (updated[i])
+                {
+                    var pokemon = AllDisplays[i].Pokemon;
+                    typeChart.SetDefensiveMap(i, pokemon);
+                }
             }
         }
 
