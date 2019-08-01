@@ -106,5 +106,17 @@ namespace PokePlanner.Properties {
                 this["versionGroup"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool restrictToVersion {
+            get {
+                return ((bool)(this["restrictToVersion"]));
+            }
+            set {
+                this["restrictToVersion"] = value;
+            }
+        }
     }
 }
