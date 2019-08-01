@@ -334,10 +334,12 @@ namespace PokePlanner.Util
 
             if (pastTypeGenerations.Any())
             {
-                var genNameToUse = pastTypeGenerations.SingleOrDefault(g => g.Id >= generation.Id)?.Name;
-                if (!string.IsNullOrEmpty(genNameToUse))
+                // use the earliest generation after the given one with past type data, if it exists
+                var laterGens = pastTypeGenerations.Where(g => g.Id >= generation.Id).ToList();
+                if (laterGens.Any())
                 {
-                    return pastTypes.Single(p => p.Generation.Name == genNameToUse)
+                    var genToUse = laterGens.Aggregate((g, h) => g.Id < h.Id ? g : h);
+                    return pastTypes.Single(p => p.Generation.Name == genToUse.Name)
                                     .Types
                                     .ToTypes();
                 }
@@ -366,10 +368,12 @@ namespace PokePlanner.Util
 
             if (pastGenerations.Any())
             {
-                var genNameToUse = pastGenerations.SingleOrDefault(g => g.Id >= generation.Id)?.Name;
-                if (!string.IsNullOrEmpty(genNameToUse))
+                // use the earliest generation after the given one with past damage relation data, if it exists
+                var laterGens = pastGenerations.Where(g => g.Id >= generation.Id).ToList();
+                if (laterGens.Any())
                 {
-                    return pastDamageRelations.Single(p => p.Generation.Name == genNameToUse)
+                    var genToUse = laterGens.Aggregate((g, h) => g.Id < h.Id ? g : h);
+                    return pastDamageRelations.Single(p => p.Generation.Name == genToUse.Name)
                                               .DamageRelations;
                 }
             }
