@@ -159,7 +159,7 @@ namespace PokePlanner.Util
         /// </summary>
         public static string GetEnglishName(this IEnumerable<Names> names)
         {
-            return names.FirstOrDefault(n => n.Language.Name == "en").Name;
+            return names.FirstOrDefault(n => n.Language.Name == "en")?.Name;
         }
 
         /// <summary>
