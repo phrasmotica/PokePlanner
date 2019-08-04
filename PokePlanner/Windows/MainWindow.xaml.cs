@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using PokeApiNet.Models;
@@ -36,6 +37,11 @@ namespace PokePlanner
         {
             display1, display2, display3, display4, display5, display6
         };
+
+        /// <summary>
+        /// Returns all team members.
+        /// </summary>
+        public Pokemon[] Team => AllDisplays.Select(d => d.TeamMember).ToArray();
 
         /// <summary>
         /// Update types in the team display and effectiveness chart.

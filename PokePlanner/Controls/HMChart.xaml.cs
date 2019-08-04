@@ -59,11 +59,6 @@ namespace PokePlanner.Controls
         };
 
         /// <summary>
-        /// Returns all team members.
-        /// </summary>
-        private Pokemon[] Team => mainWindow.AllDisplays.Select(d => d.TeamMember).ToArray();
-
-        /// <summary>
         /// Fetch all HM moves for the version group and display them.
         /// </summary>
         public async void UpdateHMs()
@@ -95,9 +90,10 @@ namespace PokePlanner.Controls
 
             // set columns of learn matrix
             var moveNames = hmMoves.Select(m => m.Name).ToArray();
-            for (var col = 0; col < Team.Length; col++)
+            var team = mainWindow.Team;
+            for (var col = 0; col < team.Length; col++)
             {
-                var canLearn = Team[col].CanLearn(moveNames);
+                var canLearn = team[col].CanLearn(moveNames);
                 SetCanLearn(col, canLearn);
             }
 
@@ -126,7 +122,7 @@ namespace PokePlanner.Controls
         /// </summary>
         private async Task<string[]> GetTeamNames()
         {
-            var tasks = Team.Select(async p => p == null ? string.Empty : await p.GetName()).ToArray();
+            var tasks = mainWindow.Team.Select(async p => p == null ? string.Empty : await p.GetName()).ToArray();
             return await Task.WhenAll(tasks);
         }
 

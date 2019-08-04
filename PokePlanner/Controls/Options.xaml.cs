@@ -46,10 +46,10 @@ namespace PokePlanner.Controls
                 if (hmMoves != null)
                 {
                     var moveNames = hmMoves.Select(m => m.Name).ToArray();
-                    for (var row = 0; row < mainWindow.AllDisplays.Count; row++)
+                    var team = mainWindow.Team;
+                    for (var row = 0; row < team.Length; row++)
                     {
-                        var display = mainWindow.AllDisplays[row];
-                        var canLearn = display.TeamMember.CanLearn(moveNames);
+                        var canLearn = team[row].CanLearn(moveNames);
                         hmChart.SetCanLearn(row, canLearn);
                     }
 
