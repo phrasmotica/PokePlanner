@@ -268,6 +268,11 @@ namespace PokePlanner.Util
         /// </summary>
         public static async Task<bool> IsValid(this Pokemon pokemon, VersionGroup versionGroup)
         {
+            if (pokemon == null)
+            {
+                return false;
+            }
+
             var pokemonSpecies = await SessionCache.Get(pokemon.Species);
             return pokemonSpecies.IsValid(versionGroup);
         }
