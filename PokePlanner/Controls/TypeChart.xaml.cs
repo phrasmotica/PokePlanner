@@ -160,7 +160,7 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Set the defensive effectivenesses of the types in the given row of the chart.
         /// </summary>
-        public void SetDefensiveMap(int row, Type type1, Type? type2 = null)
+        private void SetDefensiveMap(int row, Type type1, Type? type2 = null)
         {
             if (type2 != null)
             {
