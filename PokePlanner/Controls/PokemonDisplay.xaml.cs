@@ -101,6 +101,16 @@ namespace PokePlanner.Controls
         public Pokemon Pokemon { get; set; }
 
         /// <summary>
+        /// Returns whether the Pokemon is valid.
+        /// </summary>
+        public bool PokemonIsValid { get; set; }
+
+        /// <summary>
+        /// Returns the effective team member in this display.
+        /// </summary>
+        public Pokemon TeamMember => PokemonIsValid ? Pokemon : null;
+
+        /// <summary>
         /// Returns the sprite of the Pokemon being displayed.
         /// </summary>
         public ImageSource Sprite
@@ -148,7 +158,7 @@ namespace PokePlanner.Controls
 
             // set type chart row
             var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
-            typeChart.SetDefensiveMap(row, Pokemon);
+            typeChart.SetDefensiveMap(row, TeamMember);
 
             // update HM coverage
             var hmMoves = SessionCache.Instance.HMMoves;

@@ -61,7 +61,7 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Returns all team members.
         /// </summary>
-        private Pokemon[] Team => mainWindow.AllDisplays.Select(d => d.Pokemon).ToArray();
+        private Pokemon[] Team => mainWindow.AllDisplays.Select(d => d.TeamMember).ToArray();
 
         /// <summary>
         /// Fetch all HM moves for the version group and display them.

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
@@ -43,9 +43,12 @@ namespace PokePlanner
         public async Task ValidateTeam(string newVersionGroup)
         {
             var versionGroup = await SessionCache.Get<VersionGroup>(newVersionGroup);
-            foreach (var display in AllDisplays)
+            for (var i = 0; i < AllDisplays.Count; i++)
             {
+                var display = AllDisplays[i];
+
                 var valid = !settings.restrictToVersion || await display.HasValidPokemon(versionGroup);
+                display.PokemonIsValid = valid;
                 if (valid)
                 {
                     await display.ShowPokemon();
@@ -54,6 +57,8 @@ namespace PokePlanner
                 {
                     await display.SetPokemon(null);
                 }
+
+                typeChart.SetDefensiveMap(i, display.TeamMember);
             }
         }
 
@@ -67,8 +72,7 @@ namespace PokePlanner
             var updated = await UpdateTeamTypes(oldVersionGroup, newVersionGroup);
             for (var i = 0; i < updated.Length; i++)
             {
-                var pokemon = AllDisplays[i].Pokemon;
-                typeChart.SetDefensiveMap(i, pokemon);
+                typeChart.SetDefensiveMap(i, AllDisplays[i].TeamMember);
             }
         }
 
