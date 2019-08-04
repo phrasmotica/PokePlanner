@@ -55,7 +55,7 @@ namespace PokePlanner
                 }
                 else
                 {
-                    await display.SetPokemon(null);
+                    await display.HidePokemon();
                 }
 
                 typeChart.SetDefensiveMap(i, display.TeamMember);
@@ -86,7 +86,7 @@ namespace PokePlanner
 
             for (var i = 0; i < AllDisplays.Count; i++)
             {
-                typesUpdated[i] = await AllDisplays[i].TrySetPokemon(oldVersionGroup, newVersionGroup);
+                typesUpdated[i] = await AllDisplays[i].SetPokemon(oldVersionGroup, newVersionGroup);
             }
 
             return typesUpdated;

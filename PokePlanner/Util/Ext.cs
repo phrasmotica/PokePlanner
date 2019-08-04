@@ -266,24 +266,6 @@ namespace PokePlanner.Util
         /// <summary>
         /// Returns true if this Pokemon can be obtained in the given version group.
         /// </summary>
-        public static async Task<bool> HasValidPokemon(this PokemonDisplay display, VersionGroup versionGroup)
-        {
-            PokemonSpecies pokemonSpecies;
-            if (display.Pokemon != null)
-            {
-                pokemonSpecies = await SessionCache.Get(display.Pokemon.Species);
-            }
-            else
-            {
-                pokemonSpecies = await SessionCache.Get<PokemonSpecies>(display.Species);
-            }
-
-            return pokemonSpecies.IsValid(versionGroup);
-        }
-
-        /// <summary>
-        /// Returns true if this Pokemon can be obtained in the given version group.
-        /// </summary>
         public static async Task<bool> IsValid(this Pokemon pokemon, VersionGroup versionGroup)
         {
             var pokemonSpecies = await SessionCache.Get(pokemon.Species);

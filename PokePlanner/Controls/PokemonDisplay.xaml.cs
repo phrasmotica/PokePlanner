@@ -26,11 +26,6 @@ namespace PokePlanner.Controls
         public const int SEARCH_DELAY = 1;
 
         /// <summary>
-        /// The main window.
-        /// </summary>
-        private readonly MainWindow mainWindow;
-
-        /// <summary>
         /// The settings file.
         /// </summary>
         private readonly Settings settings;
@@ -66,12 +61,12 @@ namespace PokePlanner.Controls
             {
                 SetTypes(Type.Unknown);
 
-                mainWindow = (MainWindow) Application.Current.MainWindow;
+                var mainWindow = (MainWindow) Application.Current.MainWindow;
                 if (mainWindow != null)
                 {
                     mainWindow.Loaded += (s, a) =>
                     {
-                        FindTypeChart();
+                        typeChart = mainWindow.typeChart;
                         hmChart = mainWindow.optionsPanel.hmChart;
                     };
                 }
@@ -96,7 +91,7 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
-        /// Returns the Pokemon being displayed.
+        /// Returns the Pokemon.
         /// </summary>
         public Pokemon Pokemon { get; set; }
 
@@ -113,37 +108,54 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Returns the sprite of the Pokemon being displayed.
         /// </summary>
-        public ImageSource Sprite
+        private ImageSource Sprite
         {
             get => Pokemon.GetSprite();
         }
 
         /// <summary>
-        /// Creates a reference to the type chart.
+        /// Tries to set the display to the Pokemon named in the search box.
+        /// Returns true if an update was needed.
         /// </summary>
-        private void FindTypeChart()
+        public async Task<bool> SetPokemon(string oldVersionGroup = null, string newVersionGroup = null)
         {
-            typeChart = mainWindow.typeChart;
+            var updated = await GetPokemon(oldVersionGroup, newVersionGroup);
+            await SetDisplay(Pokemon);
+            return updated;
         }
 
         /// <summary>
-        /// Set the types in the display.
+        /// Displays the Pokemon regardless of validity.
         /// </summary>
-        public void SetTypes(Type t1, Type? t2 = null)
+        public async Task ShowPokemon()
         {
-            var prim = Types.Instance.TypeColours[t1];
-            type1.Background = prim;
-            if (t2 != null)
+            await SetDisplay(Pokemon);
+        }
+
+        /// <summary>
+        /// Hides the Pokemon regardless of validity.
+        /// </summary>
+        public async Task HidePokemon()
+        {
+            await SetDisplay(null);
+        }
+        
+        /// <summary>
+        /// Returns true if the Pokemon can be obtained in the given version group.
+        /// </summary>
+        public async Task<bool> HasValidPokemon(VersionGroup versionGroup)
+        {
+            PokemonSpecies pokemonSpecies;
+            if (Pokemon != null)
             {
-                Grid.SetColumnSpan(type1, 2);
-                type2.Visibility = Visibility.Visible;
-                type2.Background = Types.Instance.TypeColours[t2.Value];
+                pokemonSpecies = await SessionCache.Get(Pokemon.Species);
             }
             else
             {
-                Grid.SetColumnSpan(type1, 4);
-                type2.Visibility = Visibility.Hidden;
+                pokemonSpecies = await SessionCache.Get<PokemonSpecies>(Species);
             }
+
+            return pokemonSpecies.IsValid(versionGroup);
         }
 
         /// <summary>
@@ -154,7 +166,7 @@ namespace PokePlanner.Controls
             timer.Stop();
 
             // set the display
-            await TrySetPokemon(settings.versionGroup, settings.versionGroup);
+            await SetPokemon();
 
             // set type chart row
             var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
@@ -171,104 +183,108 @@ namespace PokePlanner.Controls
         }
 
         /// <summary>
-        /// Retrieve data for the Pokemon in the text box.
+        /// Retrieve data for the Pokemon in the search box.
+        /// Returns true if a new Pokemon was retrieved.
         /// </summary>
-        private async Task<Pokemon> GetPokemon(string oldVersionGroup, string newVersionGroup)
+        private async Task<bool> GetPokemon(string oldVersionGroup = null, string newVersionGroup = null)
         {
             if (oldVersionGroup == newVersionGroup && Pokemon?.Name == Species)
             {
-                return Pokemon;
+                return false;
             }
-
+            
             if (!string.IsNullOrEmpty(Species))
             {
                 try
                 {
                     Console.WriteLine($@"Retrieve '{Species}'...");
-                    Pokemon = await TryGetPokemon(Species);
 
-                    Console.WriteLine(Pokemon != null
-                        ? $@"Retrieved '{Pokemon.Name}'."
-                        : $@"Retrieved no data for '{Species}'.");
+                    Pokemon = await SessionCache.Get<Pokemon>(Species);
+                    if (settings.restrictToVersion)
+                    {
+                        PokemonIsValid = await Pokemon.IsValid(SessionCache.Instance.VersionGroup);
+                        if (PokemonIsValid)
+                        {
+                            await ShowPokemon();
+                        }
+                    }
+                    else
+                    {
+                        PokemonIsValid = true;
+                        await ShowPokemon();
+                    }
                 }
                 catch (HttpRequestException e)
                 {
                     Console.WriteLine(e.Message);
                 }
 
-                return Pokemon;
+                Console.WriteLine(Pokemon != null
+                    ? $@"Retrieved '{Pokemon.Name}'."
+                    : $@"Retrieved no data for '{Species}'.");
             }
 
-            Pokemon = null;
-            return Pokemon;
+            return true;
         }
 
         /// <summary>
-        /// Returns the Pokemon if it's in the selected version group's Pokedex.
-        /// Otherwise returns null.
+        /// Displays the given Pokemon.
         /// </summary>
-        private async Task<Pokemon> TryGetPokemon(string species)
-        {
-            var pokemon = await SessionCache.Get<Pokemon>(species);
-            if (settings.restrictToVersion)
-            {
-                var versionGroup = await SessionCache.Get<VersionGroup>(settings.versionGroup);
-                var isValid = await pokemon.IsValid(versionGroup);
-                return isValid ? pokemon : null;
-            }
-
-            return pokemon;
-        }
-
-        /// <summary>
-        /// Tries to set the display to the given Pokemon.
-        /// Returns false if the Pokemon set is null.
-        /// </summary>
-        public async Task<bool> SetPokemon(Pokemon pokemon)
+        private async Task SetDisplay(Pokemon pokemon)
         {
             if (pokemon != null)
             {
-                var types = await pokemon.GetTypes();
-                if (types.Length > 1)
+                if (!settings.restrictToVersion || PokemonIsValid)
                 {
-                    SetTypes(types[0], types[1]);
+                    var types = await pokemon.GetTypes();
+                    if (types.Length > 1)
+                    {
+                        SetTypes(types[0], types[1]);
+                    }
+                    else if (types.Any())
+                    {
+                        SetTypes(types[0]);
+                    }
+
+                    SetTitleCase();
+                    ShowSprite();
+                    ToolTip = null;
                 }
-                else if (types.Any())
+                else
                 {
-                    SetTypes(types[0]);
+                    SetTypes(Type.Unknown);
+                    SetTitleCase(false);
+                    ShowSprite(false);
+                    ToolTip = "Unobtainable in this game version!";
                 }
-                
-                SetTitleCase();
-                ShowSprite();
-                ToolTip = null;
-                return true;
             }
-            
-            SetTypes(Type.Unknown);
-            SetTitleCase(false);
-            ShowSprite(false);
-            ToolTip = "Unobtainable in this game version!";
-            return false;
+            else
+            {
+                SetTypes(Type.Unknown);
+                SetTitleCase(false);
+                ShowSprite(false);
+                ToolTip = "Unobtainable in this game version!";
+            }
         }
 
         /// <summary>
-        /// Shows the Pokemon regardless of its validity.
+        /// Set the types in the display.
         /// </summary>
-        public async Task ShowPokemon()
+        private void SetTypes(Type t1, Type? t2 = null)
         {
-            Pokemon = await TryGetPokemon(Species);
-            await SetPokemon(Pokemon);
-        }
-
-        /// <summary>
-        /// Tries to set the display to the current species.
-        /// Returns false if unsuccessful, e.g. if the Pokemon
-        /// is not part of the version group.
-        /// </summary>
-        public async Task<bool> TrySetPokemon(string oldVersionGroup, string newVersionGroup)
-        {
-            var pokemon = await GetPokemon(oldVersionGroup, newVersionGroup);
-            return await SetPokemon(pokemon);
+            var prim = Types.Instance.TypeColours[t1];
+            type1.Background = prim;
+            if (t2 != null)
+            {
+                Grid.SetColumnSpan(type1, 2);
+                type2.Visibility = Visibility.Visible;
+                type2.Background = Types.Instance.TypeColours[t2.Value];
+            }
+            else
+            {
+                Grid.SetColumnSpan(type1, 4);
+                type2.Visibility = Visibility.Hidden;
+            }
         }
 
         /// <summary>
