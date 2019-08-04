@@ -176,7 +176,7 @@ namespace PokePlanner.Controls
             var hmMoves = SessionCache.Instance.HMMoves;
             if (hmMoves != null)
             {
-                var canLearn = Pokemon.CanLearn(hmMoves.Select(m => m.Name).ToArray());
+                var canLearn = TeamMember.CanLearn(hmMoves.Select(m => m.Name).ToArray());
                 hmChart.SetCanLearn(row, canLearn);
                 hmChart.UpdateHMCoverage(hmMoves.Count);
             }
