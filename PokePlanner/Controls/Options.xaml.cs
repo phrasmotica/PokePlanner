@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using PokePlanner.Properties;
+using PokePlanner.Util;
 
 namespace PokePlanner.Controls
 {
@@ -38,6 +40,21 @@ namespace PokePlanner.Controls
             if (mainWindow != null)
             {
                 await mainWindow.ValidateTeam(Settings.Default.versionGroup);
+
+                // update HM coverage
+                var hmMoves = SessionCache.Instance.HMMoves;
+                if (hmMoves != null)
+                {
+                    var moveNames = hmMoves.Select(m => m.Name).ToArray();
+                    for (var row = 0; row < mainWindow.AllDisplays.Count; row++)
+                    {
+                        var display = mainWindow.AllDisplays[row];
+                        var canLearn = display.TeamMember.CanLearn(moveNames);
+                        hmChart.SetCanLearn(row, canLearn);
+                    }
+
+                    hmChart.UpdateHMCoverage(hmMoves.Count);
+                }
             }
         }
 
