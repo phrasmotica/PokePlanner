@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using PokeApiNet.Models;
-using PokePlanner.Controls;
 using PokePlanner.Mechanics;
 using Type = PokePlanner.Mechanics.Type;
 
