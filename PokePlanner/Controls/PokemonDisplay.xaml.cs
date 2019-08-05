@@ -26,6 +26,11 @@ namespace PokePlanner.Controls
         public const int SEARCH_DELAY = 1;
 
         /// <summary>
+        /// The team member slot this display represents.
+        /// </summary>
+        public int Slot;
+
+        /// <summary>
         /// The settings file.
         /// </summary>
         private readonly Settings settings;
@@ -103,15 +108,17 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Returns the effective team member in this display.
         /// </summary>
-        public Pokemon TeamMember => PokemonIsValid ? Pokemon : null;
+        public TeamMember TeamMember => new TeamMember
+        {
+            Pokemon = Pokemon,
+            IsValid = PokemonIsValid,
+            Slot = Slot
+        };
 
         /// <summary>
         /// Returns the sprite of the Pokemon being displayed.
         /// </summary>
-        private ImageSource Sprite
-        {
-            get => Pokemon.GetSprite();
-        }
+        private ImageSource Sprite => Pokemon.GetSprite();
 
         /// <summary>
         /// Tries to set the display to the Pokemon named in the search box.
@@ -170,13 +177,13 @@ namespace PokePlanner.Controls
 
             // set type chart row
             var row = 3 * Grid.GetRow(this) + Grid.GetColumn(this);
-            typeChart.SetDefensiveMap(row, TeamMember);
+            typeChart.SetDefensiveMap(row, TeamMember.Pokemon);
 
             // update HM coverage
             var hmMoves = SessionCache.Instance.HMMoves;
             if (hmMoves != null)
             {
-                var canLearn = TeamMember.CanLearn(hmMoves.Select(m => m.Name).ToArray());
+                var canLearn = TeamMember.Pokemon.CanLearn(hmMoves.Select(m => m.Name).ToArray());
                 hmChart.SetCanLearn(row, canLearn);
                 hmChart.UpdateHMCoverage(hmMoves.Count);
             }
@@ -224,6 +231,7 @@ namespace PokePlanner.Controls
                     : $@"Retrieved no data for '{Species}'.");
             }
 
+            TeamManager.Instance.Team[Slot] = TeamMember;
             return true;
         }
 

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using PokeApiNet.Models;
 using PokePlanner.Util;
 
 namespace PokePlanner.Controls
@@ -14,11 +13,6 @@ namespace PokePlanner.Controls
     /// </summary>
     public partial class HMChart
     {
-        /// <summary>
-        /// The main window.
-        /// </summary>
-        private readonly MainWindow mainWindow;
-
         /// <summary>
         /// Matrix indicating whether the pokemon in each slot can learn each HM.
         /// FIrst index (col) for a Pokemon, second index (row) for an HM.
@@ -45,8 +39,6 @@ namespace PokePlanner.Controls
                 {
                     CanLearnMatrix[i] = new bool[Constants.NUMBER_OF_HMS];
                 }
-
-                mainWindow = (MainWindow) Application.Current.MainWindow;
             }
         }
 
@@ -90,10 +82,10 @@ namespace PokePlanner.Controls
 
             // set columns of learn matrix
             var moveNames = hmMoves.Select(m => m.Name).ToArray();
-            var team = mainWindow.Team;
+            var team = TeamManager.Instance.Team;
             for (var col = 0; col < team.Length; col++)
             {
-                var canLearn = team[col].CanLearn(moveNames);
+                var canLearn = team[col].Pokemon.CanLearn(moveNames);
                 SetCanLearn(col, canLearn);
             }
 
@@ -120,9 +112,9 @@ namespace PokePlanner.Controls
         /// <summary>
         /// Returns the names of all team members.
         /// </summary>
-        private async Task<string[]> GetTeamNames()
+        private static async Task<string[]> GetTeamNames()
         {
-            var tasks = mainWindow.Team.Select(async p => p == null ? string.Empty : await p.GetName()).ToArray();
+            var tasks = TeamManager.Instance.Team.Select(async tm => await tm.GetName()).ToArray();
             return await Task.WhenAll(tasks);
         }
 

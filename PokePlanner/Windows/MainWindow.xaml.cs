@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using PokeApiNet.Models;
 using PokePlanner.Controls;
 using PokePlanner.Properties;
 using PokePlanner.Util;
@@ -27,6 +25,11 @@ namespace PokePlanner
         {
             InitializeComponent();
 
+            for (int i = 0; i < Constants.TEAM_SIZE; i++)
+            {
+                AllDisplays[i].Slot = i;
+            }
+
             Loaded += OnLoaded;
         }
 
@@ -39,21 +42,15 @@ namespace PokePlanner
         };
 
         /// <summary>
-        /// Returns all team members.
-        /// </summary>
-        public Pokemon[] Team => AllDisplays.Select(d => d.TeamMember).ToArray();
-
-        /// <summary>
         /// Update types in the team display and effectiveness chart.
         /// </summary>
         public async Task ValidateTeam(string newVersionGroup)
         {
-            var versionGroup = await SessionCache.Get<VersionGroup>(newVersionGroup);
-            for (var i = 0; i < AllDisplays.Count; i++)
+            for (var slot = 0; slot < AllDisplays.Count; slot++)
             {
-                var display = AllDisplays[i];
+                var display = AllDisplays[slot];
 
-                var valid = !settings.restrictToVersion || await display.HasValidPokemon(versionGroup);
+                var valid = await TeamManager.Instance.Validate(slot, newVersionGroup);
                 display.PokemonIsValid = valid;
                 if (valid)
                 {
@@ -64,7 +61,7 @@ namespace PokePlanner
                     await display.HidePokemon();
                 }
 
-                typeChart.SetDefensiveMap(i, display.TeamMember);
+                typeChart.SetDefensiveMap(slot, TeamManager.Instance.Team[slot].Pokemon);
             }
         }
 
@@ -76,9 +73,9 @@ namespace PokePlanner
             typeChart.UpdateColumns();
 
             var updated = await UpdateTeamTypes(oldVersionGroup, newVersionGroup);
-            for (var i = 0; i < updated.Length; i++)
+            for (var slot = 0; slot < updated.Length; slot++)
             {
-                typeChart.SetDefensiveMap(i, AllDisplays[i].TeamMember);
+                typeChart.SetDefensiveMap(slot, TeamManager.Instance.Team[slot].Pokemon);
             }
         }
 
@@ -88,9 +85,9 @@ namespace PokePlanner
         /// </summary>
         public async Task<bool[]> UpdateTeamTypes(string oldVersionGroup, string newVersionGroup)
         {
-            var typesUpdated = new bool[AllDisplays.Count];
+            var typesUpdated = new bool[Constants.TEAM_SIZE];
 
-            for (var i = 0; i < AllDisplays.Count; i++)
+            for (var i = 0; i < Constants.TEAM_SIZE; i++)
             {
                 typesUpdated[i] = await AllDisplays[i].SetPokemon(oldVersionGroup, newVersionGroup);
             }
