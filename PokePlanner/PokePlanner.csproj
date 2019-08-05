@@ -150,6 +150,7 @@
     <Compile Include="Util\SessionCache.cs" />
     <Compile Include="Util\SpriteManager.cs" />
     <Compile Include="Util\TeamManager.cs" />
+    <Compile Include="Util\TeamMember.cs" />
     <Compile Include="Util\TypeBrushes.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
